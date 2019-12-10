@@ -13,7 +13,7 @@ export default (options) => {
         screenshot: false,
         hotkey: true,
         preload: 'metadata',
-        volume: 0.7,
+        volume: 1.0,
         apiBackend: defaultApiBackend,
         video: {},
         contextmenu: [],
@@ -54,12 +54,8 @@ export default (options) => {
             },
         },
         {
-            text: 'About author',
-            link: 'https://diygod.me',
-        },
-        {
             text: `DPlayer v${DPLAYER_VERSION}`,
-            link: 'https://github.com/MoePlayer/DPlayer',
+            link: 'https://github.com/tsukumijima/DPlayer',
         },
     ]);
 

@@ -10,6 +10,7 @@ class Danmaku {
             bottom: {},
         };
         this.danIndex = 0;
+        this.danFontSize = '24px';
         this.dan = [];
         this.showing = true;
         this._opacity = this.options.opacity;
@@ -151,7 +152,10 @@ class Danmaku {
      */
     draw(dan) {
         if (this.showing) {
-            const itemHeight = this.options.height;
+            this.tablet = this.container.offsetWidth <= 768;
+            this.mobile = this.container.offsetWidth <= 500;
+            const itemHeight = this.tablet ? (this.mobile ? this.options.heightMobile : this.options.heightTablet) : this.options.height;
+            const itemFontSize = this.tablet ? (this.mobile ? this.options.heightMobile - 3 : this.options.heightTablet - 5) : this.options.height - 6;
             const danWidth = this.container.offsetWidth;
             const danHeight = this.container.offsetHeight;
             const itemY = parseInt(danHeight / itemHeight);
@@ -222,7 +226,7 @@ class Danmaku {
                     this.container.removeChild(item);
                 });
 
-                const itemWidth = this._measure(dan[i].text);
+                const itemWidth = this._measure(dan[i].text, itemFontSize);
                 let tunnel;
 
                 // adjust
@@ -230,21 +234,27 @@ class Danmaku {
                     case 'right':
                         tunnel = getTunnel(item, dan[i].type, itemWidth);
                         if (tunnel >= 0) {
+                            item.style.fontSize = itemFontSize + 'px';
                             item.style.width = itemWidth + 1 + 'px';
-                            item.style.top = itemHeight * tunnel + 'px';
+                            item.style.top = itemHeight * tunnel + 8 + 'px';
                             item.style.transform = `translateX(-${danWidth}px)`;
+                            item.style.willChange = 'transform';
                         }
                         break;
                     case 'top':
                         tunnel = getTunnel(item, dan[i].type);
                         if (tunnel >= 0) {
-                            item.style.top = itemHeight * tunnel + 'px';
+                            item.style.fontSize = itemFontSize + 'px';
+                            item.style.top = itemHeight * tunnel + 8 + 'px';
+                            item.style.willChange = 'visibility';
                         }
                         break;
                     case 'bottom':
                         tunnel = getTunnel(item, dan[i].type);
                         if (tunnel >= 0) {
-                            item.style.bottom = itemHeight * tunnel + 'px';
+                            item.style.fontSize = itemFontSize + 'px';
+                            item.style.bottom = itemHeight * tunnel + 8 + 'px';
+                            item.style.willChange = 'visibility';
                         }
                         break;
                     default:
@@ -274,11 +284,11 @@ class Danmaku {
         this.paused = true;
     }
 
-    _measure(text) {
-        if (!this.context) {
-            const measureStyle = getComputedStyle(this.container.getElementsByClassName('dplayer-danmaku-item')[0], null);
+    _measure(text, itemFontSize) {
+        if (!this.context || this.danFontSize !== itemFontSize) {
+            this.danFontSize = itemFontSize;
             this.context = document.createElement('canvas').getContext('2d');
-            this.context.font = measureStyle.getPropertyValue('font');
+            this.context.font = 'bold ' + this.danFontSize + 'px ' + '"Segoe UI", Arial';
         }
         return this.context.measureText(text).width;
     }

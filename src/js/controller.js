@@ -26,7 +26,9 @@ class Controller {
         this.initThumbnails();
         this.initPlayedBar();
         this.initFullButton();
+        this.initPiPButton();
         this.initQualityButton();
+        this.initSyncButton();
         this.initScreenshotButton();
         this.initSubtitleButton();
         this.initHighlights();
@@ -96,12 +98,19 @@ class Controller {
     }
 
     initPlayedBar() {
+        let paused;
+
         const thumbMove = (e) => {
             let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.playedBarWrap)) / this.player.template.playedBarWrap.clientWidth;
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
             this.player.bar.set('played', percentage, 'width');
-            this.player.template.ptime.innerHTML = utils.secondToTime(percentage * this.player.video.duration);
+            const duration = utils.getVideoDuration(this.player.video, this.player.template);
+            this.player.template.ptime.innerHTML = utils.secondToTime(percentage * duration);
+            this.player.container.classList.add('dplayer-seeking');
+            if (!this.player.video.paused) {
+                this.player.video.pause();
+            }
         };
 
         const thumbUp = (e) => {
@@ -111,24 +120,31 @@ class Controller {
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
             this.player.bar.set('played', percentage, 'width');
-            this.player.seek(this.player.bar.get('played') * this.player.video.duration);
+            const duration = utils.getVideoDuration(this.player.video, this.player.template);
+            this.player.seek(this.player.bar.get('played') * duration);
             this.player.timer.enable('progress');
+            if (!paused) {
+                this.player.video.play();
+            }
+            this.player.container.classList.remove('dplayer-seeking');
         };
 
         this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragStart, () => {
             this.player.timer.disable('progress');
+            paused = this.player.video.paused;
             document.addEventListener(utils.nameMap.dragMove, thumbMove);
             document.addEventListener(utils.nameMap.dragEnd, thumbUp);
         });
 
         this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragMove, (e) => {
-            if (this.player.video.duration) {
+            const duration = utils.getVideoDuration(this.player.video, this.player.template);
+            if (duration) {
                 const px = this.player.template.playedBarWrap.getBoundingClientRect().left;
                 const tx = (e.clientX || e.changedTouches[0].clientX) - px;
                 if (tx < 0 || tx > this.player.template.playedBarWrap.offsetWidth) {
                     return;
                 }
-                const time = this.player.video.duration * (tx / this.player.template.playedBarWrap.offsetWidth);
+                const time = duration * (tx / this.player.template.playedBarWrap.offsetWidth);
                 if (utils.isMobile) {
                     this.thumbnails && this.thumbnails.show();
                 }
@@ -170,6 +186,20 @@ class Controller {
         this.player.template.webFullButton.addEventListener('click', () => {
             this.player.fullScreen.toggle('web');
         });
+    }
+
+    initPiPButton() {
+        if (document.pictureInPictureEnabled) {
+            this.player.template.PiPButton.addEventListener('click', () => {
+                if (!document.pictureInPictureElement) {
+                    this.player.video.requestPictureInPicture();
+                } else {
+                    document.exitPictureInPicture();
+                }
+            });
+        } else {
+            this.player.template.PiPButton.style.display = 'none';
+        }
     }
 
     initVolumeButton() {
@@ -219,6 +249,14 @@ class Controller {
         }
     }
 
+    initSyncButton() {
+        if (this.player.options.live) {
+            this.player.template.SyncButton.addEventListener('click', () => {
+                this.player.sync();
+            });
+        }
+    }
+
     initScreenshotButton() {
         if (this.player.options.screenshot) {
             this.player.template.camareButton.addEventListener('click', () => {
@@ -232,7 +270,14 @@ class Controller {
                     dataURL = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = dataURL;
-                    link.download = 'DPlayer.png';
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+                    const day = ('0' + today.getDate()).slice(-2);
+                    const hour = ('0' + today.getHours()).slice(-2);
+                    const min = ('0' + today.getMinutes()).slice(-2);
+                    const sec = ('0' + today.getSeconds()).slice(-2);
+                    link.download = 'Capture_' + year + month + day + '-' + hour + min + sec + '.png';
                     link.style.display = 'none';
                     document.body.appendChild(link);
                     link.click();

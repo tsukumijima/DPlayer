@@ -2,6 +2,7 @@
     position: relative;
     overflow: hidden;
     user-select: none;
+    -webkit-user-select: none;
     line-height: 1;
 
     * {
@@ -19,8 +20,8 @@
     }
 
     &:-webkit-full-screen {
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         background: #000;
         position: fixed;
         z-index: 100000;
@@ -78,6 +79,10 @@
         }
         .dplayer-setting-loop {
             display: none;
+        }
+        .dplayer-controller .dplayer-icons .dplayer-setting-box {
+            height: auto;
+            overflow-y: hidden;
         }
 
         &.dplayer-no-danmaku {
@@ -156,12 +161,12 @@
         }
     }
     &.dplayer-fulled {
-        position: fixed;
+        position: fixed !important;
         z-index: 100000;
         left: 0;
         top: 0;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
     }
     &.dplayer-mobile {
         .dplayer-controller .dplayer-icons {
@@ -170,6 +175,10 @@
                 display: none;
             }
             .dplayer-full .dplayer-full-in-icon {
+                position: static;
+                display: inline-block;
+            }
+            .dplayer-full .dplayer-pip-icon {
                 position: static;
                 display: inline-block;
             }

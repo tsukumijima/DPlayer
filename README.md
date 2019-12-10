@@ -5,6 +5,24 @@
 
 > 🍭 Wow, such a lovely HTML5 danmaku video player
 
+この Fork は、
+
+-   日本語への対応
+-   Danmaku（コメント）描画周りの修正
+-   スマホ・タブレットや日本語対応により崩れる CSS の修正
+-   早送り・巻き戻し周りの不具合の修正
+-   Live 再生時の同期ボタンの追加
+-   Picture-in-Picture (PiP) ボタンの追加
+-   キーボードショートカット（ホットキー）の追加
+-   スクリーンショット時のファイル名の変更
+-   b24.js を利用した字幕表示の対応
+
+等、TVRemotePlus 向けに多くの不具合改善や変更を加えた DPlayer です。
+
+恐らく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
+是非日本でももっと広まって欲しいと思っています（コメントを流さない場合でも非常に優秀なプレイヤーだと思います）。  
+TVRemotePlus 向けではありますが、出来るだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
+
 [![npm](https://img.shields.io/npm/v/dplayer.svg?style=flat-square)](https://www.npmjs.com/package/dplayer)
 [![npm](https://img.shields.io/npm/l/dplayer.svg?style=flat-square)](https://github.com/MoePlayer/DPlayer/blob/master/LICENSE)
 [![npm](https://img.shields.io/npm/dt/dplayer.svg?style=flat-square)](https://www.npmjs.com/package/dplayer)
@@ -14,7 +32,7 @@
 
 ## Introduction
 
-![image](http://i.imgur.com/207ch36.jpg)
+![image](https://i.imgur.com/207ch36.jpg)
 
 DPlayer is a lovely HTML5 danmaku video player to help people build video and danmaku easily.
 

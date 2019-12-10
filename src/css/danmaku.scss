@@ -4,15 +4,18 @@
     right: 0;
     top: 0;
     bottom: 0;
-    font-size: 22px;
+    font-size: 29px;
+    font-family: 'Segoe UI', Arial, sans-serif;
     color: #fff;
     .dplayer-danmaku-item {
         display: inline-block;
         pointer-events: none;
         user-select: none;
+        -webkit-user-select: none;
         cursor: default;
         white-space: nowrap;
-        text-shadow: .5px .5px .5px rgba(0, 0, 0, .5);
+        font-weight: bold;
+        text-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.9);
         &--demo {
             position: absolute;
             visibility: hidden;
@@ -23,7 +26,6 @@
         right: 0;
         transform: translateX(100%);
         &.dplayer-danmaku-move {
-            will-change: transform;
             animation: danmaku 5s linear;
             animation-play-state: paused;
         }
@@ -40,7 +42,6 @@
         text-align: center;
         visibility: hidden;
         &.dplayer-danmaku-move {
-            will-change: visibility;
             animation: danmaku-center 4s linear;
             animation-play-state: paused;
         }

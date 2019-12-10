@@ -27,16 +27,27 @@ export default {
                     options.error && options.error(data && data.msg);
                     return;
                 }
-                options.success &&
-                    options.success(
-                        data.data.map((item) => ({
-                            time: item[0],
-                            type: item[1],
-                            color: item[2],
-                            author: item[3],
-                            text: item[4],
-                        }))
-                    );
+                if (data.data) {
+                    options.success &&
+                        options.success(
+                            data.data.map((item) => ({
+                                time: item[0],
+                                type: item[1],
+                                color: item[2],
+                                author: item[3],
+                                text: item[4],
+                            }))
+                        );
+                } else {
+                    options.success &&
+                        options.success({
+                            time: 0,
+                            type: 0,
+                            color: 16777215,
+                            author: '',
+                            text: '',
+                        });
+                }
             })
             .catch((e) => {
                 console.error(e);

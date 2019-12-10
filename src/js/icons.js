@@ -5,6 +5,7 @@ import volumeDown from '../assets/volume-down.svg';
 import volumeOff from '../assets/volume-off.svg';
 import full from '../assets/full.svg';
 import fullWeb from '../assets/full-web.svg';
+import pip from '../assets/pip.svg';
 import setting from '../assets/setting.svg';
 import right from '../assets/right.svg';
 import comment from '../assets/comment.svg';
@@ -23,6 +24,7 @@ const Icons = {
     volumeOff: volumeOff,
     full: full,
     fullWeb: fullWeb,
+    pip: pip,
     setting: setting,
     right: right,
     comment: comment,

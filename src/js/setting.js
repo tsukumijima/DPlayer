@@ -11,6 +11,17 @@ class Setting {
             this.show();
         });
 
+        this.player.video.addEventListener('loadedmetadata', () => {
+            if (this.player.container.offsetWidth <= 500) {
+                this.player.template.settingBox.style.maxHeight = this.player.container.offsetHeight - 55 + 'px';
+            }
+        });
+        window.addEventListener('resize', () => {
+            if (this.player.container.offsetWidth <= 500) {
+                this.player.template.settingBox.style.maxHeight = this.player.container.offsetHeight - 55 + 'px';
+            }
+        });
+
         // loop
         this.loop = this.player.options.loop;
         this.player.template.loopToggle.checked = this.loop;

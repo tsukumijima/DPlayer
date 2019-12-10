@@ -77,6 +77,8 @@ class FullScreen {
                 } else if (this.player.container.msRequestFullscreen) {
                     this.player.container.msRequestFullscreen();
                 }
+                // Lock the screen landscape
+                screen.orientation.lock('landscape').catch(function() {});
                 break;
             case 'web':
                 this.player.container.classList.add('dplayer-fulled');
@@ -105,6 +107,12 @@ class FullScreen {
                     document.msCancelFullScreen();
                 } else if (document.msExitFullscreen) {
                     document.msExitFullscreen();
+                }
+                try {
+                    // Unlock the screen
+                    screen.orientation.unlock();
+                } catch (e) {
+                    // Error (underfined)
                 }
                 break;
             case 'web':

@@ -1,4 +1,5 @@
 import Promise from 'promise-polyfill';
+import * as b24js from 'b24.js';
 
 import utils from './utils';
 import handleOption from './options';
@@ -94,7 +95,9 @@ class DPlayer {
                 },
                 apiBackend: this.options.apiBackend,
                 borderColor: this.options.theme,
-                height: this.arrow ? 24 : 30,
+                height: this.options.danmaku.height || 35,
+                heightTablet: (this.options.danmaku.height || 35) - 7.5,
+                heightMobile: (this.options.danmaku.height || 35) - 16,
                 time: () => this.video.currentTime,
                 unlimited: this.user.get('unlimited'),
                 api: {
@@ -155,8 +158,9 @@ class DPlayer {
      */
     seek(time) {
         time = Math.max(time, 0);
-        if (this.video.duration) {
-            time = Math.min(time, this.video.duration);
+        const duration = utils.getVideoDuration(this.video, this.template);
+        if (duration) {
+            time = Math.min(time, duration);
         }
         if (this.video.currentTime < time) {
             this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
@@ -170,7 +174,23 @@ class DPlayer {
             this.danmaku.seek();
         }
 
-        this.bar.set('played', time / this.video.duration, 'width');
+        this.bar.set('played', time / duration, 'width');
+        this.template.ptime.innerHTML = utils.secondToTime(time);
+    }
+
+    /**
+     * Sync video (live only)
+     */
+    sync() {
+        const time = utils.getVideoDuration(this.video, this.template);
+        this.video.currentTime = time;
+
+        this.notice(this.tran('Synchronized'));
+
+        if (this.danmaku) {
+            this.danmaku.seek();
+        }
+
         this.template.ptime.innerHTML = utils.secondToTime(time);
     }
 
@@ -334,10 +354,6 @@ class DPlayer {
                 }
             }
 
-            if (this.type === 'hls' && (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))) {
-                this.type = 'normal';
-            }
-
             switch (this.type) {
                 // https://github.com/video-dev/hls.js
                 case 'hls':
@@ -352,6 +368,23 @@ class DPlayer {
                                 hls.destroy();
                                 delete this.plugins.hls;
                             });
+
+                            // https://github.com/xqq/b24.js
+                            if (this.options.subtitle) {
+                                const b24Renderer = new b24js.WebVTTRenderer();
+                                b24Renderer.init().then(function() {
+                                    b24Renderer.attachMedia(video);
+                                    b24Renderer.show();
+                                });
+                                hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, function(event, data) {
+                                    for (const sample of data.samples) {
+                                        b24Renderer.pushData(sample.pid, sample.data, sample.pts);
+                                    }
+                                });
+                            }
+                        } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
+                            // Normal playback
+                            break;
                         } else {
                             this.notice('Error: Hls is not supported.');
                         }
@@ -455,7 +488,8 @@ class DPlayer {
 
         // show video loaded bar: to inform interested parties of progress downloading the media
         this.on('progress', () => {
-            const percentage = video.buffered.length ? video.buffered.end(video.buffered.length - 1) / video.duration : 0;
+            const duration = utils.getVideoDuration(this.video, this.template);
+            const percentage = video.buffered.length ? video.buffered.end(video.buffered.length - 1) / duration : 0;
             this.bar.set('loaded', percentage, 'width');
         });
 
@@ -483,19 +517,20 @@ class DPlayer {
         });
 
         this.on('play', () => {
-            if (this.paused) {
+            if (this.paused && !this.container.classList.contains('dplayer-seeking')) {
                 this.play();
             }
         });
 
         this.on('pause', () => {
-            if (!this.paused) {
+            if (!this.paused && !this.container.classList.contains('dplayer-seeking')) {
                 this.pause();
             }
         });
 
         this.on('timeupdate', () => {
-            this.bar.set('played', this.video.currentTime / this.video.duration, 'width');
+            const duration = utils.getVideoDuration(this.video, this.template);
+            this.bar.set('played', this.video.currentTime / duration, 'width');
             const currentTime = utils.secondToTime(this.video.currentTime);
             if (this.template.ptime.innerHTML !== currentTime) {
                 this.template.ptime.innerHTML = currentTime;

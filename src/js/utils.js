@@ -20,6 +20,24 @@ const utils = {
     },
 
     /**
+     * Get video duration
+     * compatibility: Measures against video length becoming Infinity during HLS playback on iOS Safari
+     */
+    getVideoDuration: (video, template) => {
+        let duration = video.duration;
+        if (duration === Infinity) {
+            try {
+                template.dtime.innerHTML = utils.secondToTime(video.seekable.end(0));
+                duration = video.seekable.end(0);
+            } catch (e) {
+                template.dtime.innerHTML = utils.secondToTime(video.buffered.end(0));
+                duration = video.buffered.end(0);
+            }
+        }
+        return duration;
+    },
+
+    /**
      * control play progress
      */
     // get element's view position
