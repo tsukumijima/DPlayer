@@ -140,18 +140,6 @@
         }
     }
 
-    &.dplayer-hide-controller {
-        cursor: none;
-
-        .dplayer-controller-mask {
-            opacity: 0;
-            transform: translateY(100%);
-        }
-        .dplayer-controller {
-            opacity: 0;
-            transform: translateY(100%);
-        }
-    }
     &.dplayer-show-controller {
         .dplayer-controller-mask {
             opacity: 1;
@@ -160,6 +148,7 @@
             opacity: 1;
         }
     }
+
     &.dplayer-fulled {
         position: fixed !important;
         z-index: 100000;
@@ -168,6 +157,7 @@
         width: 100% !important;
         height: 100% !important;
     }
+
     &.dplayer-mobile {
         .dplayer-controller .dplayer-icons {
             .dplayer-volume,
@@ -181,6 +171,17 @@
             .dplayer-full .dplayer-pip-icon {
                 position: static;
                 display: inline-block;
+            }
+        }
+
+        &.dplayer-hide-controller {
+            .dplayer-controller-mask {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            .dplayer-controller {
+                opacity: 0;
+                transform: translateY(100%);
             }
         }
 
