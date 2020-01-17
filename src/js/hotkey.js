@@ -52,6 +52,24 @@ class HotKey {
                                 player.volume(percentage);
                             }
                             break;
+                        case 87:
+                            event.preventDefault();
+                            player.fullScreen.toggle('web');
+                            break;
+                        case 70:
+                            event.preventDefault();
+                            player.fullScreen.toggle('browser');
+                            break;
+                        case 67:
+                            event.preventDefault();
+                            player.template.commentButton.click();
+                            break;
+                        case 83:
+                            if (player.options.live) {
+                                event.preventDefault();
+                                player.sync();
+                            }
+                            break;
                     }
                 }
             });
