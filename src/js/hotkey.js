@@ -60,6 +60,12 @@ class HotKey {
                             event.preventDefault();
                             player.fullScreen.toggle('browser');
                             break;
+                        case 80:
+                            if (document.pictureInPictureEnabled) {
+                                event.preventDefault();
+                                player.template.PiPButton.click();
+                            }
+                            break;
                         case 67:
                             event.preventDefault();
                             player.template.commentButton.click();
