@@ -182,6 +182,9 @@
                     </div>
                 </div>
                 <div class="dplayer-setting-speed-panel">
+                    <div class="dplayer-setting-speed-item" data-speed="0.25">
+                        <span class="dplayer-label">0.25</span>
+                    </div>
                     <div class="dplayer-setting-speed-item" data-speed="0.5">
                         <span class="dplayer-label">0.5</span>
                     </div>
@@ -196,6 +199,9 @@
                     </div>
                     <div class="dplayer-setting-speed-item" data-speed="1.5">
                         <span class="dplayer-label">1.5</span>
+                    </div>
+                    <div class="dplayer-setting-speed-item" data-speed="1.75">
+                        <span class="dplayer-label">1.75</span>
                     </div>
                     <div class="dplayer-setting-speed-item" data-speed="2">
                         <span class="dplayer-label">2</span>

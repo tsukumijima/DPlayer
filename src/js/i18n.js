@@ -116,7 +116,7 @@ const tranTxt = {
         Loop: 'リピート再生',
         Speed: '再生速度',
         'Opacity for danmaku': 'コメントの透明度',
-        Normal: '通常',
+        Normal: '標準',
         'Please input danmaku content!': 'コメント内容を入力して下さい！',
         'Set danmaku color': 'コメントの色',
         'Set danmaku type': 'コメントの位置',
