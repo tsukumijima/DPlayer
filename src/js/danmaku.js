@@ -152,12 +152,14 @@ class Danmaku {
      */
     draw(dan) {
         if (this.showing) {
-            this.tablet = this.container.offsetWidth <= 768;
-            this.mobile = this.container.offsetWidth <= 500;
+            this.offsetWidth = this.container.offsetWidth;
+            this.offsetHeight = this.container.offsetHeight;
+            this.tablet = this.offsetWidth <= 768;
+            this.mobile = this.offsetWidth <= 500;
             const itemHeight = this.tablet ? (this.mobile ? this.options.heightMobile : this.options.heightTablet) : this.options.height;
             const itemFontSize = this.tablet ? (this.mobile ? this.options.heightMobile - 3 : this.options.heightTablet - 5) : this.options.height - 6;
-            const danWidth = this.container.offsetWidth;
-            const danHeight = this.container.offsetHeight;
+            const danWidth = this.offsetWidth;
+            const danHeight = this.offsetHeight;
             const itemY = parseInt(danHeight / itemHeight);
 
             const danItemRight = (ele) => {
