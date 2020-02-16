@@ -266,7 +266,7 @@
                 border: none;
                 padding: 8px 42px;
                 font-size: 14px;
-                font-family: 'Segoe UI','Arial';
+                font-family: inherit;
                 line-height: 18px;
                 text-align: center;
                 border-radius: 4px;
@@ -337,7 +337,7 @@
             text-shadow: 0 0 2px rgba(0, 0, 0, .5);
             vertical-align: middle;
             font-size: 13px;
-            font-family: 'Segoe UI','Arial';
+            font-family: inherit;
         }
         @media (max-width: 500px){
             .dplayer-time {
@@ -356,7 +356,7 @@
             vertical-align: middle;
             font-size: 13px;
             cursor: pointer;
-            font-family: 'Segoe UI','Arial';
+            font-family: inherit;
             height: 100%;
             display: inline-flex;
             align-items: center;
