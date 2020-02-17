@@ -89,6 +89,7 @@ class Comment {
             () => {
                 this.player.template.commentInput.value = '';
                 this.hide();
+                this.player.controller.setAutoHide(750);
             }
         );
     }

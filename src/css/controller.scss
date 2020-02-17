@@ -264,7 +264,7 @@
             .dplayer-comment-input {
                 outline: none;
                 border: none;
-                padding: 8px 42px;
+                padding: 8px 0px;
                 font-size: 14px;
                 font-family: inherit;
                 line-height: 18px;
@@ -322,7 +322,7 @@
             }
             @media (max-width: 500px){
                 .dplayer-icon {
-                    padding: 7.5px;
+                    padding: 7px;
                 }
             }
             @media (max-width: 350px){
@@ -338,16 +338,6 @@
             vertical-align: middle;
             font-size: 13px;
             font-family: inherit;
-        }
-        @media (max-width: 500px){
-            .dplayer-time {
-                line-height: 40px;
-            }
-        }
-        @media (max-width: 350px){
-            .dplayer-time {
-                line-height: 37px;
-            }
         }
         .dplayer-live-badge {
             line-height: 18px;
@@ -375,6 +365,7 @@
             height: 100%;
             border: none;
             background-color: transparent;
+            -webkit-tap-highlight-color: transparent;
             line-height: 18px;
             outline: none;
             cursor: pointer;
@@ -400,10 +391,17 @@
                 font-size: 14px;
             }
             &.dplayer-comment-icon {
-                padding: 10px 9px 9px;
+                padding: 10.5px 9.5px 8px;
             }
-            &.dplayer-setting-icon {
-                padding-top: 8.5px;
+            @media (max-width: 500px){
+                &.dplayer-comment-icon {
+                    padding: 9.5px 9.5px 8px;
+                }
+            }
+            @media (max-width: 350px){
+                &.dplayer-comment-icon {
+                    padding: 9px 8px 8px;
+                }
             }
             &.dplayer-volume-icon {
                 width: 43px;
@@ -425,37 +423,10 @@
                     left: 14%;
                 }
             }
-            @media (max-width: 500px){
-                &.dplayer-comment-icon {
-                    padding: 10px 8.5px 8.5px;
-                }
-                &.dplayer-setting-icon {
-                    padding-top: 9px;
-                }
-            }
-            @media (max-width: 350px){
-                &.dplayer-comment-icon {
-                    padding: 9.5px 8px 8px;
-                }
-                &.dplayer-setting-icon {
-                    padding-top: 6px;
-                }
-            }
-        }
-        @media (max-width: 500px){
-            .dplayer-time {
-                font-size: 12.5px;
-            }
-            .dplayer-icon {
-                width: 37px;
-            }
         }
         @media (max-width: 350px){
-            .dplayer-time {
-                font-size: 11px;
-            }
             .dplayer-icon {
-                width: 32px;
+                width: 35px;
             }
         }
         .dplayer-volume {
@@ -775,19 +746,22 @@
 }
 
 .dplayer-mobile-play {
-    display: none;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
     width: 50px;
     height: 50px;
     border: none;
     background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
     outline: none;
     cursor: pointer;
     box-sizing: border-box;
     position: absolute;
     bottom: 0;
-    opacity: 0.8;
     position: absolute;
     left: 50%;
     top: 50%;
+    transition: all 0.28s ease;
     transform: translate(-50%, -50%);
 }

@@ -14,13 +14,17 @@ class Controller {
             this.player.container.addEventListener('click', () => {
                 this.setAutoHide();
             });
-            this.player.on('play', () => {
-                this.setAutoHide();
-            });
-            this.player.on('pause', () => {
+        } else { 
+            this.player.container.addEventListener('touchmove', () => {
                 this.setAutoHide();
             });
         }
+        this.player.on('play', () => {
+            this.setAutoHide();
+        });
+        this.player.on('pause', () => {
+            this.setAutoHide();
+        });
 
         this.initPlayButton();
         this.initThumbnails();
@@ -56,9 +60,15 @@ class Controller {
         } else {
             this.player.template.videoWrap.addEventListener('click', () => {
                 this.toggle();
+                if (this.isShow()) {
+                    this.setAutoHide();
+                }
             });
             this.player.template.controllerMask.addEventListener('click', () => {
                 this.toggle();
+                if (this.isShow()) {
+                    this.setAutoHide();
+                }
             });
         }
     }
@@ -313,14 +323,14 @@ class Controller {
         }
     }
 
-    setAutoHide() {
+    setAutoHide(time = 3000) {
         this.show();
         clearTimeout(this.autoHideTimer);
         this.autoHideTimer = setTimeout(() => {
             if (this.player.video.played.length && !this.player.paused && !this.disableAutoHide) {
                 this.hide();
             }
-        }, 3000);
+        }, time);
     }
 
     show() {
