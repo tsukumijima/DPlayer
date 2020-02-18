@@ -90,8 +90,8 @@
             </div>
         </div>
         <span class="dplayer-time">
-            <span class="dplayer-ptime">0:00</span> /
-            <span class="dplayer-dtime">0:00</span>
+            <span class="dplayer-ptime">00:00</span> /
+            <span class="dplayer-dtime">00:00</span>
         </span>
         {{ if options.live }}
         <span class="dplayer-live-badge" data-balloon="{{ tran('Synchronize') }}" data-balloon-pos="up">

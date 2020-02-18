@@ -14,7 +14,7 @@ class Controller {
             this.player.container.addEventListener('click', () => {
                 this.setAutoHide();
             });
-        } else { 
+        } else {
             this.player.container.addEventListener('touchmove', () => {
                 this.setAutoHide();
             });
