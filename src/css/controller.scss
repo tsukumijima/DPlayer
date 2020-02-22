@@ -157,6 +157,7 @@
         height: 38px;
         position: absolute;
         bottom: 0;
+        -webkit-tap-highlight-color: transparent;
         &.dplayer-comment-box {
             display: none;
             position: absolute;
@@ -365,7 +366,6 @@
             height: 100%;
             border: none;
             background-color: transparent;
-            -webkit-tap-highlight-color: transparent;
             line-height: 18px;
             outline: none;
             cursor: pointer;
