@@ -745,7 +745,7 @@
     }
 }
 
-.dplayer-mobile-play {
+.dplayer-mobile-icon {
     display: block;
     visibility: hidden;
     opacity: 0;
@@ -760,8 +760,21 @@
     position: absolute;
     bottom: 0;
     position: absolute;
-    left: 50%;
     top: 50%;
     transition: all 0.28s ease;
     transform: translate(-50%, -50%);
+}
+
+.dplayer-mobile-backward {
+    left: 23%;
+    padding: 12px;
+}
+
+.dplayer-mobile-play {
+    left: 50%;
+}
+
+.dplayer-mobile-forward {
+    left: 77%;
+    padding: 12px;
 }

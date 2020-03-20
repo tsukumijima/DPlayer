@@ -7,6 +7,9 @@ class Controller {
         this.player = player;
 
         this.autoHideTimer = 0;
+        this.mobileSkipTimer = 0;
+        this.mobileBackwardTime = 0;
+        this.mobileForwardTime = 0;
         if (!utils.isMobile) {
             this.player.container.addEventListener('mousemove', () => {
                 this.setAutoHide();
@@ -71,6 +74,34 @@ class Controller {
                 }
             });
         }
+        
+        // REW 10s
+        this.player.template.mobileBackwardButton.addEventListener('click', () => {
+            this.mobileBackwardTime += 10;
+            this.player.seek(this.player.video.currentTime - 10);
+            this.player.notice(`${this.player.tran('REW')} ${this.mobileBackwardTime.toFixed(0)} ${this.player.tran('s')}`);
+            // カウントリセットを延長
+            // 1秒間ボタンが押されなかったら自動でリセットされる
+            clearTimeout(this.mobileSkipTimer);
+            this.mobileSkipTimer = setTimeout(() => {
+                this.mobileBackwardTime = 0;
+            }, 1000);
+            this.setAutoHide();
+        });
+        
+        // FF 10s
+        this.player.template.mobileForwardButton.addEventListener('click', () => {
+            this.mobileForwardTime += 10;
+            this.player.seek(this.player.video.currentTime + 10);
+            this.player.notice(`${this.player.tran('FF')} ${this.mobileForwardTime.toFixed(0)} ${this.player.tran('s')}`);
+            // カウントリセットを延長
+            // 1秒間ボタンが押されなかったら自動でリセットされる
+            clearTimeout(this.mobileSkipTimer);
+            this.mobileSkipTimer = setTimeout(() => {
+                this.mobileForwardTime = 0;
+            }, 1000);
+            this.setAutoHide();
+        });
     }
 
     initHighlights() {

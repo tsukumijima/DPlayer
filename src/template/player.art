@@ -281,6 +281,12 @@
     {{ /each }}
 </div>
 <div class="dplayer-notice"></div>
-<button class="dplayer-mobile-play">
+<button class="dplayer-mobile-icon dplayer-mobile-backward">
+    {{@ icons.backward }}
+</button>
+<button class="dplayer-mobile-icon dplayer-mobile-play">
     {{@ icons.play }}
+</button>
+<button class="dplayer-mobile-icon dplayer-mobile-forward">
+    {{@ icons.forward }}
 </button>

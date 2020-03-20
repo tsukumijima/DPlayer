@@ -84,6 +84,9 @@
             height: auto;
             overflow-y: hidden;
         }
+        .dplayer-mobile-backward, .dplayer-mobile-forward {
+            display: none;
+        }
 
         &.dplayer-no-danmaku {
             .dplayer-setting {
@@ -107,21 +110,19 @@
             animation-play-state: running;
         }
 
-        @media (min-width: 900px) {
+        .dplayer-controller-mask {
+            opacity: 0;
+        }
+        .dplayer-controller {
+            opacity: 0;
+        }
+
+        &:hover {
             .dplayer-controller-mask {
-                opacity: 0;
+                opacity: 1;
             }
             .dplayer-controller {
-                opacity: 0;
-            }
-
-            &:hover {
-                .dplayer-controller-mask {
-                    opacity: 1;
-                }
-                .dplayer-controller {
-                    opacity: 1;
-                }
+                opacity: 1;
             }
         }
     }
@@ -180,6 +181,15 @@
             height: 100%;
         }
 
+        &.dplayer-playing {
+            .dplayer-controller-mask {
+                opacity: 1;
+            }
+            .dplayer-controller {
+                opacity: 1;
+            }
+        }
+
         &.dplayer-hide-controller {
             .dplayer-controller-mask {
                 opacity: 0;
@@ -195,13 +205,13 @@
         }
 
         &.dplayer-hide-controller {
-            .dplayer-mobile-play {
+            .dplayer-mobile-icon {
                 visibility: hidden;
                 opacity: 0;
             }
         }
 
-        .dplayer-mobile-play {
+        .dplayer-mobile-icon {
             visibility: visible;
             opacity: 0.7;
         }

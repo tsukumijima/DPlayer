@@ -43,7 +43,9 @@ class Template {
         this.video = this.container.querySelector('.dplayer-video-current');
         this.bezel = this.container.querySelector('.dplayer-bezel-icon');
         this.playButton = this.container.querySelector('.dplayer-play-icon');
+        this.mobileBackwardButton = this.container.querySelector('.dplayer-mobile-backward');
         this.mobilePlayButton = this.container.querySelector('.dplayer-mobile-play');
+        this.mobileForwardButton = this.container.querySelector('.dplayer-mobile-forward');
         this.videoWrap = this.container.querySelector('.dplayer-video-wrap');
         this.controllerMask = this.container.querySelector('.dplayer-controller-mask');
         this.ptime = this.container.querySelector('.dplayer-ptime');

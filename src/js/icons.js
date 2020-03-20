@@ -1,5 +1,7 @@
 import play from '../assets/play.svg';
 import pause from '../assets/pause.svg';
+import backward from '../assets/backward.svg';
+import forward from '../assets/forward.svg';
 import volumeUp from '../assets/volume-up.svg';
 import volumeDown from '../assets/volume-down.svg';
 import volumeOff from '../assets/volume-off.svg';
@@ -19,6 +21,8 @@ import loading from '../assets/loading.svg';
 const Icons = {
     play: play,
     pause: pause,
+    backward: backward,
+    forward: forward,
     volumeUp: volumeUp,
     volumeDown: volumeDown,
     volumeOff: volumeOff,
