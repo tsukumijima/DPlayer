@@ -70,15 +70,13 @@ class FullScreen {
                 } else if (this.player.container.webkitRequestFullscreen) {
                     this.player.container.webkitRequestFullscreen();
                 } else if (this.player.video.webkitEnterFullscreen) {
-                    // Safari for iOS
-                    this.player.video.webkitEnterFullscreen();
-                } else if (this.player.video.webkitEnterFullScreen) {
-                    this.player.video.webkitEnterFullScreen();
+                    this.player.video.webkitEnterFullscreen(); // Safari for iOS
                 } else if (this.player.container.msRequestFullscreen) {
                     this.player.container.msRequestFullscreen();
                 }
                 // Lock the screen landscape
                 screen.orientation.lock('landscape').catch(function() {});
+                this.player.container.classList.add('dplayer-fulled-browser');
                 break;
             case 'web':
                 this.player.container.classList.add('dplayer-fulled');
@@ -101,8 +99,6 @@ class FullScreen {
                     document.mozCancelFullScreen();
                 } else if (document.webkitCancelFullScreen) {
                     document.webkitCancelFullScreen();
-                } else if (document.webkitCancelFullscreen) {
-                    document.webkitCancelFullscreen();
                 } else if (document.msCancelFullScreen) {
                     document.msCancelFullScreen();
                 } else if (document.msExitFullscreen) {
@@ -114,6 +110,7 @@ class FullScreen {
                 } catch (e) {
                     // Error (underfined)
                 }
+                this.player.container.classList.remove('dplayer-fulled-browser');
                 break;
             case 'web':
                 this.player.container.classList.remove('dplayer-fulled');

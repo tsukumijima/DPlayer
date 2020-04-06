@@ -74,7 +74,7 @@ class Controller {
                 }
             });
         }
-        
+
         // REW 10s
         this.player.template.mobileBackwardButton.addEventListener('click', () => {
             this.mobileBackwardTime += 10;
@@ -88,7 +88,7 @@ class Controller {
             }, 1000);
             this.setAutoHide();
         });
-        
+
         // FF 10s
         this.player.template.mobileForwardButton.addEventListener('click', () => {
             this.mobileForwardTime += 10;

@@ -53,12 +53,16 @@ class HotKey {
                             }
                             break;
                         case 87:
-                            event.preventDefault();
-                            player.fullScreen.toggle('web');
+                            if (!event.ctrlKey && !event.metaKey) {
+                                event.preventDefault();
+                                player.fullScreen.toggle('web');
+                            }
                             break;
                         case 70:
-                            event.preventDefault();
-                            player.fullScreen.toggle('browser');
+                            if (!event.ctrlKey && !event.metaKey) {
+                                event.preventDefault();
+                                player.fullScreen.toggle('browser');
+                            }
                             break;
                         case 80:
                             if (document.pictureInPictureEnabled) {
@@ -67,8 +71,10 @@ class HotKey {
                             }
                             break;
                         case 67:
-                            event.preventDefault();
-                            player.template.commentButton.click();
+                            if (!event.ctrlKey && !event.metaKey) {
+                                event.preventDefault();
+                                player.template.commentButton.click();
+                            }
                             break;
                         case 83:
                             if (player.options.live) {
