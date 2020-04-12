@@ -76,6 +76,21 @@ class HotKey {
                                 player.template.commentButton.click();
                             }
                             break;
+                        case 74:
+                            if (!event.ctrlKey && !event.metaKey) {
+                                event.preventDefault();
+                                player.subtitle.toggle();
+                                player.notice(`${player.tran('Switched subtitle display')}`);
+                            }
+                            break;
+                        case 75:
+                            if (!event.ctrlKey && !event.metaKey) {
+                                event.preventDefault();
+                                player.danmaku.toggle();
+                                player.notice(`${player.tran('Switched danmaku display')}`);
+                                player.template.showDanmakuToggle.checked = !player.template.showDanmakuToggle.checked;
+                            }
+                            break;
                         case 83:
                             if (player.options.live) {
                                 event.preventDefault();

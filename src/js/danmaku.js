@@ -352,6 +352,14 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_show');
     }
 
+    toggle() {
+        if (this.showing){
+            this.hide();
+        } else {
+            this.show();
+        }
+    }
+
     unlimit(boolean) {
         this.unlimited = boolean;
     }
