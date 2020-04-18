@@ -18,6 +18,7 @@ export default (options) => {
         video: {},
         contextmenu: [],
         mutex: true,
+        pictureInPicture: true,
         pluginOptions: { hls: {}, flvjs: {}, dash: {}, webtorrent: {} },
     };
     for (const defaultKey in defaultOption) {

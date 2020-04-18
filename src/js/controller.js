@@ -33,7 +33,7 @@ class Controller {
         this.initThumbnails();
         this.initPlayedBar();
         this.initFullButton();
-        this.initPiPButton();
+        this.initPipButton();
         this.initQualityButton();
         this.initSyncButton();
         this.initScreenshotButton();
@@ -233,9 +233,9 @@ class Controller {
         });
     }
 
-    initPiPButton() {
+    initPipButton() {
         if (document.pictureInPictureEnabled) {
-            this.player.template.PiPButton.addEventListener('click', () => {
+            this.player.template.pipButton.addEventListener('click', () => {
                 if (!document.pictureInPictureElement) {
                     this.player.video.requestPictureInPicture();
                 } else {
@@ -243,7 +243,7 @@ class Controller {
                 }
             });
         } else {
-            this.player.template.PiPButton.style.display = 'none';
+            this.player.template.pipButton.style.display = 'none';
         }
     }
 
@@ -296,7 +296,7 @@ class Controller {
 
     initSyncButton() {
         if (this.player.options.live) {
-            this.player.template.SyncButton.addEventListener('click', () => {
+            this.player.template.syncButton.addEventListener('click', () => {
                 this.player.sync();
             });
         }

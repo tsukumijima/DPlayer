@@ -210,7 +210,10 @@ class Danmaku {
             const docFragment = document.createDocumentFragment();
 
             for (let i = 0; i < dan.length; i++) {
-                dan[i].type = utils.number2Type(dan[i].type);
+                if (isFinite(dan[i].type)) {
+                    // Whether the type is numeric
+                    dan[i].type = utils.number2Type(dan[i].type);
+                }
                 if (!dan[i].color) {
                     dan[i].color = 16777215;
                 }
@@ -353,7 +356,7 @@ class Danmaku {
     }
 
     toggle() {
-        if (this.showing){
+        if (this.showing) {
             this.hide();
         } else {
             this.show();

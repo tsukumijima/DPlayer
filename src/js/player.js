@@ -182,16 +182,18 @@ class DPlayer {
      * Sync video (live only)
      */
     sync() {
-        const time = utils.getVideoDuration(this.video, this.template);
-        this.video.currentTime = time;
+        if (this.options.live) {
+            const time = utils.getVideoDuration(this.video, this.template);
+            this.video.currentTime = time;
 
-        this.notice(this.tran('Synchronized'));
+            this.notice(this.tran('Synchronized'));
 
-        if (this.danmaku) {
-            this.danmaku.seek();
+            if (this.danmaku) {
+                this.danmaku.seek();
+            }
+
+            this.template.ptime.innerHTML = utils.secondToTime(time);
         }
-
-        this.template.ptime.innerHTML = utils.secondToTime(time);
     }
 
     /**

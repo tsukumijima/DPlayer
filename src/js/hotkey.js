@@ -52,49 +52,68 @@ class HotKey {
                                 player.volume(percentage);
                             }
                             break;
-                        case 87:
-                            if (!event.ctrlKey && !event.metaKey) {
-                                event.preventDefault();
-                                player.fullScreen.toggle('web');
-                            }
-                            break;
-                        case 70:
+                        case 70: // F
                             if (!event.ctrlKey && !event.metaKey) {
                                 event.preventDefault();
                                 player.fullScreen.toggle('browser');
                             }
                             break;
-                        case 80:
-                            if (document.pictureInPictureEnabled) {
-                                event.preventDefault();
-                                player.template.PiPButton.click();
-                            }
-                            break;
-                        case 67:
+                        case 87: // W
                             if (!event.ctrlKey && !event.metaKey) {
                                 event.preventDefault();
-                                player.template.commentButton.click();
+                                player.fullScreen.toggle('web');
                             }
                             break;
-                        case 74:
-                            if (!event.ctrlKey && !event.metaKey) {
-                                event.preventDefault();
-                                player.subtitle.toggle();
-                                player.notice(`${player.tran('Switched subtitle display')}`);
-                            }
-                            break;
-                        case 75:
-                            if (!event.ctrlKey && !event.metaKey) {
-                                event.preventDefault();
-                                player.danmaku.toggle();
-                                player.notice(`${player.tran('Switched danmaku display')}`);
-                                player.template.showDanmakuToggle.checked = !player.template.showDanmakuToggle.checked;
-                            }
-                            break;
-                        case 83:
+                        case 76: // L
                             if (player.options.live) {
                                 event.preventDefault();
                                 player.sync();
+                            }
+                            break;
+                        case 80: // P
+                            if (player.options.pictureInPicture) {
+                                if (document.pictureInPictureEnabled) {
+                                    event.preventDefault();
+                                    player.template.pipButton.click();
+                                }
+                            }
+                            break;
+                        case 67: // C
+                            if (typeof player.options.danmaku === 'object' && player.options.danmaku) {
+                                if (!event.ctrlKey && !event.metaKey) {
+                                    event.preventDefault();
+                                    if (!player.template.controller.classList.contains('dplayer-controller-comment')){
+                                        player.comment.show();
+                                    } else {
+                                        player.comment.hide();
+                                    }
+                                }
+                            }
+                            break;
+                        case 68: // D
+                            if (typeof player.options.danmaku === 'object' && player.options.danmaku) {
+                                if (!event.ctrlKey && !event.metaKey) {
+                                    event.preventDefault();
+                                    player.template.showDanmaku.click();
+                                    if (player.template.showDanmakuToggle.checked){
+                                        player.notice(`${player.tran('Show danmaku')}`);
+                                    } else {
+                                        player.notice(`${player.tran('Hide danmaku')}`);
+                                    }
+                                }
+                            }
+                            break;
+                        case 83: // S
+                            if (player.options.subtitle) {
+                                if (!event.ctrlKey && !event.metaKey) {
+                                    event.preventDefault();
+                                    if (player.subtitle.container.classList.contains('dplayer-subtitle-hide')){
+                                        player.notice(`${player.tran('Show subtitle')}`);
+                                    } else {
+                                        player.notice(`${player.tran('Hide subtitle')}`);
+                                    }
+                                    player.subtitle.toggle();
+                                }
                             }
                             break;
                     }

@@ -52,7 +52,7 @@ class Template {
         this.settingButton = this.container.querySelector('.dplayer-setting-icon');
         this.settingBox = this.container.querySelector('.dplayer-setting-box');
         this.mask = this.container.querySelector('.dplayer-mask');
-        this.SyncButton = this.container.querySelector('.dplayer-live-badge');
+        this.syncButton = this.container.querySelector('.dplayer-live-badge');
         this.loop = this.container.querySelector('.dplayer-setting-loop');
         this.loopToggle = this.container.querySelector('.dplayer-setting-loop .dplayer-toggle-setting-input');
         this.showDanmaku = this.container.querySelector('.dplayer-setting-showdan');
@@ -77,7 +77,7 @@ class Template {
         this.commentColorSettingBox = this.container.querySelector('.dplayer-comment-setting-color');
         this.browserFullButton = this.container.querySelector('.dplayer-full-icon');
         this.webFullButton = this.container.querySelector('.dplayer-full-in-icon');
-        this.PiPButton = this.container.querySelector('.dplayer-pip-icon');
+        this.pipButton = this.container.querySelector('.dplayer-pip-icon');
         this.menu = this.container.querySelector('.dplayer-menu');
         this.menuItem = this.container.querySelectorAll('.dplayer-menu-item');
         this.qualityList = this.container.querySelector('.dplayer-quality-list');
