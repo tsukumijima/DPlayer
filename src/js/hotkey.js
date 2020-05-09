@@ -82,11 +82,7 @@ class HotKey {
                             if (typeof player.options.danmaku === 'object' && player.options.danmaku) {
                                 if (!event.ctrlKey && !event.metaKey) {
                                     event.preventDefault();
-                                    if (!player.template.controller.classList.contains('dplayer-controller-comment')){
-                                        player.comment.show();
-                                    } else {
-                                        player.comment.hide();
-                                    }
+                                    player.comment.show();
                                 }
                             }
                             break;
@@ -95,10 +91,10 @@ class HotKey {
                                 if (!event.ctrlKey && !event.metaKey) {
                                     event.preventDefault();
                                     player.template.showDanmaku.click();
-                                    if (player.template.showDanmakuToggle.checked){
-                                        player.notice(`${player.tran('Show danmaku')}`);
+                                    if (player.template.showDanmakuToggle.checked) {
+                                        player.notice(`${player.tran('Show comment')}`);
                                     } else {
-                                        player.notice(`${player.tran('Hide danmaku')}`);
+                                        player.notice(`${player.tran('Hide comment')}`);
                                     }
                                 }
                             }
@@ -107,7 +103,7 @@ class HotKey {
                             if (player.options.subtitle) {
                                 if (!event.ctrlKey && !event.metaKey) {
                                     event.preventDefault();
-                                    if (player.subtitle.container.classList.contains('dplayer-subtitle-hide')){
+                                    if (player.subtitle.container.classList.contains('dplayer-subtitle-hide')) {
                                         player.notice(`${player.tran('Show subtitle')}`);
                                     } else {
                                         player.notice(`${player.tran('Hide subtitle')}`);
