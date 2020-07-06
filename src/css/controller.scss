@@ -406,20 +406,20 @@
             &.dplayer-volume-icon {
                 width: 43px;
             }
-            &.dplayer-full-icon[data-balloon]:after {
+            &.dplayer-full-icon[aria-label]:after {
                 left: 2px;
             }
-            &.dplayer-full-in-icon[data-balloon]:after {
+            &.dplayer-full-in-icon[aria-label]:after {
                 left: -22px;
             }
-            &.dplayer-pip-icon[data-balloon]:after {
+            &.dplayer-pip-icon[aria-label]:after {
                 left: -27px;
             }
             @media (max-width: 1024px){
-                &.dplayer-full-in-icon[data-balloon]:after {
+                &.dplayer-full-in-icon[aria-label]:after {
                     left: 47%;
                 }
-                &.dplayer-pip-icon[data-balloon]:after {
+                &.dplayer-pip-icon[aria-label]:after {
                     left: 14%;
                 }
             }

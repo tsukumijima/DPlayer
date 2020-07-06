@@ -277,7 +277,7 @@ class DPlayer {
             percentage = Math.min(percentage, 1);
             this.bar.set('volume', percentage, 'width');
             const formatPercentage = `${(percentage * 100).toFixed(0)}%`;
-            this.template.volumeBarWrapWrap.dataset.balloon = formatPercentage;
+            this.template.volumeBarWrapWrap.ariaLabel = formatPercentage;
             if (!nostorage) {
                 this.user.set('volume', percentage);
             }

@@ -1,14 +1,19 @@
 @import '../../node_modules/balloon-css/balloon.css';
 
-[data-balloon]:before {
+[aria-label] {
+    --balloon-font-size: 11.5px;
+}
+
+[aria-label]:before {
     display: none;
 }
 
-[data-balloon]:after {
-    padding: .3em .7em .2em .7em;
-    background: rgba(17, 17, 17, 0.7);
+[aria-label]:after {
+    padding: .3em .8em !important;
+    background: rgba(17, 17, 17, 0.7) !important;
+    font-family: inherit !important;
 }
 
-[data-balloon][data-balloon-pos="up"]:after {
-    margin-bottom: 0;
+[aria-label][data-balloon-pos="up"]:after {
+    margin-bottom: 0 !important;
 }
