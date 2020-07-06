@@ -39,6 +39,7 @@ class Controller {
         this.initScreenshotButton();
         this.initSubtitleButton();
         this.initHighlights();
+        this.initAirplayButton();
         if (!utils.isMobile) {
             this.initVolumeButton();
         }
@@ -332,6 +333,35 @@ class Controller {
 
                 this.player.events.trigger('screenshot', dataURL);
             });
+        }
+    }
+
+    initAirplayButton() {
+        if (this.player.options.airplay) {
+            if (window.WebKitPlaybackTargetAvailabilityEvent) {
+                this.player.video.addEventListener(
+                    'webkitplaybacktargetavailabilitychanged',
+                    function (event) {
+                        switch (event.availability) {
+                            case 'available':
+                                this.template.airplayButton.disable = false;
+                                break;
+
+                            default:
+                                this.template.airplayButton.disable = true;
+                        }
+
+                        this.template.airplayButton.addEventListener(
+                            'click',
+                            function () {
+                                this.video.webkitShowPlaybackTargetPicker();
+                            }.bind(this)
+                        );
+                    }.bind(this.player)
+                );
+            } else {
+                this.player.template.airplayButton.style.display = 'none';
+            }
         }
     }
 

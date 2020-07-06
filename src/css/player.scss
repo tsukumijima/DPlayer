@@ -12,7 +12,7 @@
     svg {
         width: 100%;
         height: 100%;
-        
+
         path,
         circle {
             fill: #fff;
@@ -97,7 +97,7 @@
 
     &.dplayer-arrow {
         .dplayer-danmaku {
-            font-size: 18px
+            font-size: 18px;
         }
         .dplayer-icon {
             margin: 0 -3px;
@@ -105,7 +105,6 @@
     }
 
     &.dplayer-playing {
-
         .dplayer-danmaku .dplayer-danmaku-move {
             animation-play-state: running;
         }
@@ -183,6 +182,7 @@
         .dplayer-controller .dplayer-icons {
             .dplayer-volume,
             .dplayer-camera-icon,
+            .dplayer-airplay-icon,
             .dplayer-play-icon {
                 display: none;
             }

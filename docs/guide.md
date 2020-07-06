@@ -4,13 +4,6 @@ sidebar: auto
 
 # Guide
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
-
 # DPlayer
 
 🍭 Wow, such a lovely HTML5 danmaku video player
@@ -25,21 +18,17 @@ sidebar: auto
 
 &nbsp;
 
-<a href="https://www.polyv.net/?f=git_DPlayer-20190518-02" target="_blank">
-    <img width="600px" src="https://i.loli.net/2019/06/03/5cf4028f7b8f716387.gif">
+<div>
+<a href="https://www.cdnbye.com" target="_blank">
+    <img height="60px" src="https://cdnbye.oss-cn-beijing.aliyuncs.com/pic/cdnbye-dp.jpeg">
 </a>
+</div>
 
-&nbsp;
-
-<a href="https://www.9ccms.net" target="_blank">
-    <img width="280px" src="https://i.imgur.com/YBV6kfb.png">
-</a>
-
-&nbsp;
-
+<div>
 <a href="https://www.dogecloud.com/?ref=dplayer" target="_blank">
-    <img width="280px" src="https://i.imgur.com/C2NgugY.png">
+    <img height="60px" src="https://i.imgur.com/C2NgugY.png">
 </a>
+</div>
 
 ### Sponsors
 
@@ -68,7 +57,6 @@ At first, let's initialize a simplest DPlayer
 Load DPlayer files
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="DPlayer.min.js"></script>
 ```
@@ -76,7 +64,6 @@ Load DPlayer files
 Or work with module bundler:
 
 ```js
-import 'dplayer/dist/DPlayer.min.css';
 import DPlayer from 'dplayer';
 
 const dp = new DPlayer(options);
@@ -116,9 +103,11 @@ You can custom your player instance by those options
 | loop                 | false                              | video loop                                                                                                                                                 |
 | lang                 | navigator.language.toLowerCase()   | values: 'en', 'zh-cn', 'zh-tw'                                                                                                                             |
 | screenshot           | false                              | enable screenshot, if true, video and video poster must enable Cross-Origin                                                                                |
+| airplay              | true                               | enable airplay in Safari                                                                                                                                   |
 | hotkey               | true                               | enable hotkey, support FF, FR, volume control, play & pause                                                                                                |
 | preload              | 'auto'                             | values: 'none', 'metadata', 'auto'                                                                                                                         |
 | volume               | 0.7                                | default volume, notice that player will remember user setting, default volume will not work after user set volume themselves                               |
+| playbackSpeed        | [0.5, 0.75, 1, 1.25, 1.5, 2]       | optional playback speed, or or you can set a custom one                                                                                                    |
 | logo                 | -                                  | showing logo in the top left corner, you can adjust its size and position by CSS                                                                           |
 | apiBackend           | -                                  | getting and sending danmaku in your way, see [#live](#live)                                                                                                |
 | video                | -                                  | video info                                                                                                                                                 |
@@ -136,7 +125,7 @@ You can custom your player instance by those options
 | subtitle.bottom      | '40px'                             | the distance between the subtitle and player bottom, values like: '10px' '10%'                                                                             |
 | subtitle.color       | '#fff'                             | subtitle color                                                                                                                                             |
 | danmaku              | -                                  | showing danmaku                                                                                                                                            |
-| danmaku.id           | `required`                         | danamku pool id, it must be unique                                                                                                                         |
+| danmaku.id           | `required`                         | danmaku pool id, it must be unique                                                                                                                         |
 | danmaku.api          | `required`                         | see [#Danmaku API](#danmaku-api)                                                                                                                           |
 | danmaku.token        | -                                  | back end verification token                                                                                                                                |
 | danmaku.maximum      | -                                  | danmaku maximum quantity                                                                                                                                   |
@@ -282,7 +271,7 @@ const dp = new DPlayer({
             color: '#b7daff',
             type: 'right', // should be `top` `bottom` or `right`
         },
-        function() {
+        function () {
             console.log('success');
         }
     );
@@ -329,7 +318,7 @@ const dp = new DPlayer({
 `dp.on(event, handler)`
 
 ```js
-dp.on('ended', function() {
+dp.on('ended', function () {
     console.log('player ended');
 });
 ```
@@ -476,7 +465,6 @@ It requires the library [hls.js](https://github.com/video-dev/hls.js) and it sho
 }"></DPlayer>
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="hls.min.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -506,7 +494,7 @@ const dp = new DPlayer({
         url: 'demo.m3u8',
         type: 'customHls',
         customType: {
-            customHls: function(video, player) {
+            customHls: function (video, player) {
                 const hls = new Hls();
                 hls.loadSource(video.src);
                 hls.attachMedia(video);
@@ -521,7 +509,6 @@ const dp = new DPlayer({
 It requires the library [dash.js](https://github.com/Dash-Industry-Forum/dash.js) and it should be loaded before `DPlayer.min.js`.
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="dash.min.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -551,11 +538,8 @@ const dp = new DPlayer({
         url: 'demo.mpd',
         type: 'customDash',
         customType: {
-            customDash: function(video, player) {
-                dashjs
-                    .MediaPlayer()
-                    .create()
-                    .initialize(video, video.src, false);
+            customDash: function (video, player) {
+                dashjs.MediaPlayer().create().initialize(video, video.src, false);
             },
         },
     },
@@ -567,7 +551,6 @@ const dp = new DPlayer({
 It requires the library [shaka-player](https://github.com/google/shaka-player) and it should be loaded before `DPlayer.min.js`.
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="shaka-player.compiled.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -581,7 +564,7 @@ const dp = new DPlayer({
         url: 'demo.mpd',
         type: 'shakaDash',
         customType: {
-            shakaDash: function(video, player) {
+            shakaDash: function (video, player) {
                 var src = video.src;
                 var playerShaka = new shaka.Player(video); // 将会修改 video.src
                 playerShaka.load(src);
@@ -603,7 +586,6 @@ It requires the library [flv.js](https://github.com/Bilibili/flv.js) and it shou
 }"></DPlayer>
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="flv.min.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -618,7 +600,13 @@ const dp = new DPlayer({
     },
     pluginOptions: {
         flv: {
-            // flv config
+            // refer to https://github.com/bilibili/flv.js/blob/master/docs/api.md#flvjscreateplayer
+            mediaDataSource: {
+                // mediaDataSource config
+            },
+            config: {
+                // config
+            },
         },
     },
 });
@@ -633,7 +621,7 @@ const dp = new DPlayer({
         url: 'demo.flv',
         type: 'customFlv',
         customType: {
-            customFlv: function(video, player) {
+            customFlv: function (video, player) {
                 const flvPlayer = flvjs.createPlayer({
                     type: 'flv',
                     url: video.src,
@@ -658,7 +646,6 @@ It requires the library [webtorrent](https://github.com/webtorrent/webtorrent) a
 }"></DPlayer>
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="webtorrent.min.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -688,7 +675,7 @@ const dp = new DPlayer({
         url: 'magnet:demo',
         type: 'customWebTorrent',
         customType: {
-            customWebTorrent: function(video, player) {
+            customWebTorrent: function (video, player) {
                 player.container.classList.add('dplayer-loading');
                 const client = new WebTorrent();
                 const torrentId = video.src;
@@ -715,7 +702,6 @@ const dp = new DPlayer({
 DPlayer can work with any MSE library via `customType` option.
 
 ```html
-<link rel="stylesheet" href="DPlayer.min.css" />
 <div id="dplayer"></div>
 <script src="pearplayer.js"></script>
 <script src="DPlayer.min.js"></script>
@@ -728,7 +714,7 @@ const dp = new DPlayer({
         url: 'https://qq.webrtc.win/tv/Pear-Demo-Yosemite_National_Park.mp4',
         type: 'pearplayer',
         customType: {
-            pearplayer: function(video, player) {
+            pearplayer: function (video, player) {
                 new PearPlayer(video, {
                     src: video.src,
                     autoplay: player.options.autoplay,
@@ -759,12 +745,12 @@ const dp = new DPlayer({
     live: true,
     danmaku: true,
     apiBackend: {
-        read: function(options) {
+        read: function (options) {
             console.log('Pretend to connect WebSocket');
             callback();
         },
-        send: function(options) {
-            console.log('Pretend to send danamku via WebSocket', options.data);
+        send: function (options) {
+            console.log('Pretend to send danmaku via WebSocket', options.data);
             callback();
         },
     },
@@ -779,7 +765,7 @@ Draw danmaku after getting a danmaku via WebSocket:
 
 ```js
 const danmaku = {
-    text: 'Get a danamku via WebSocket',
+    text: 'Get a danmaku via WebSocket',
     color: '#fff',
     type: 'right',
 };

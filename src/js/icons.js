@@ -15,6 +15,7 @@ import commentOff from '../assets/comment-off.svg';
 import send from '../assets/send.svg';
 import pallette from '../assets/pallette.svg';
 import camera from '../assets/camera.svg';
+import airplay from '../assets/airplay.svg';
 import subtitle from '../assets/subtitle.svg';
 import loading from '../assets/loading.svg';
 
@@ -38,6 +39,7 @@ const Icons = {
     camera: camera,
     subtitle: subtitle,
     loading: loading,
+    airplay: airplay,
 };
 
 export default Icons;

@@ -11,15 +11,17 @@ export default (options) => {
         loop: false,
         lang: (navigator.language || navigator.browserLanguage).toLowerCase(),
         screenshot: false,
+        airplay: true,
         hotkey: true,
         preload: 'metadata',
         volume: 1.0,
+        playbackSpeed: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
         apiBackend: defaultApiBackend,
         video: {},
         contextmenu: [],
         mutex: true,
         pictureInPicture: true,
-        pluginOptions: { hls: {}, flvjs: {}, dash: {}, webtorrent: {} },
+        pluginOptions: { hls: {}, flv: {}, dash: {}, webtorrent: {} },
     };
     for (const defaultKey in defaultOption) {
         if (defaultOption.hasOwnProperty(defaultKey) && !options.hasOwnProperty(defaultKey)) {
