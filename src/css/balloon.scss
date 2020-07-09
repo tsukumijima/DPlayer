@@ -1,19 +1,19 @@
 @import '../../node_modules/balloon-css/balloon.css';
 
-[aria-label] {
+.dplayer [aria-label] {
     --balloon-font-size: 11.5px;
 }
 
-[aria-label]:before {
+.dplayer [aria-label]:before {
     display: none;
 }
 
-[aria-label]:after {
+.dplayer [aria-label]:after {
     padding: .3em .8em !important;
     background: rgba(17, 17, 17, 0.7) !important;
     font-family: inherit !important;
 }
 
-[aria-label][data-balloon-pos="up"]:after {
+.dplayer [aria-label][data-balloon-pos="up"]:after {
     margin-bottom: 0 !important;
 }
