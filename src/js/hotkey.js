@@ -9,13 +9,13 @@ class HotKey {
                     let percentage;
                     switch (event.keyCode) {
                         case 32:
-                            if (player.options.hotkey) {
+                            if (player.focus || player.options.hotkey) {
                                 event.preventDefault();
                                 player.toggle();
                             }
                             break;
                         case 37:
-                            if (player.options.hotkey) {
+                            if (player.focus || player.options.hotkey) {
                                 event.preventDefault();
                                 if (event.altKey) {
                                     player.seek(player.video.currentTime - 60);
@@ -30,7 +30,7 @@ class HotKey {
                             }
                             break;
                         case 39:
-                            if (player.options.hotkey) {
+                            if (player.focus || player.options.hotkey) {
                                 event.preventDefault();
                                 if (event.altKey) {
                                     player.seek(player.video.currentTime + 60);
