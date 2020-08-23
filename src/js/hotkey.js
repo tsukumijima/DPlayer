@@ -9,34 +9,40 @@ class HotKey {
                     let percentage;
                     switch (event.keyCode) {
                         case 32:
-                            event.preventDefault();
-                            player.toggle();
+                            if (player.options.hotkey) {
+                                event.preventDefault();
+                                player.toggle();
+                            }
                             break;
                         case 37:
-                            event.preventDefault();
-                            if (event.altKey) {
-                                player.seek(player.video.currentTime - 60);
-                            } else if (event.shiftKey) {
-                                player.seek(player.video.currentTime - 30);
-                            } else if (event.ctrlKey || event.metaKey) {
-                                player.seek(player.video.currentTime - 15);
-                            } else {
-                                player.seek(player.video.currentTime - 5);
+                            if (player.options.hotkey) {
+                                event.preventDefault();
+                                if (event.altKey) {
+                                    player.seek(player.video.currentTime - 60);
+                                } else if (event.shiftKey) {
+                                    player.seek(player.video.currentTime - 30);
+                                } else if (event.ctrlKey || event.metaKey) {
+                                    player.seek(player.video.currentTime - 15);
+                                } else {
+                                    player.seek(player.video.currentTime - 5);
+                                }
+                                player.controller.setAutoHide();
                             }
-                            player.controller.setAutoHide();
                             break;
                         case 39:
-                            event.preventDefault();
-                            if (event.altKey) {
-                                player.seek(player.video.currentTime + 60);
-                            } else if (event.shiftKey) {
-                                player.seek(player.video.currentTime + 30);
-                            } else if (event.ctrlKey || event.metaKey) {
-                                player.seek(player.video.currentTime + 15);
-                            } else {
-                                player.seek(player.video.currentTime + 5);
+                            if (player.options.hotkey) {
+                                event.preventDefault();
+                                if (event.altKey) {
+                                    player.seek(player.video.currentTime + 60);
+                                } else if (event.shiftKey) {
+                                    player.seek(player.video.currentTime + 30);
+                                } else if (event.ctrlKey || event.metaKey) {
+                                    player.seek(player.video.currentTime + 15);
+                                } else {
+                                    player.seek(player.video.currentTime + 5);
+                                }
+                                player.controller.setAutoHide();
                             }
-                            player.controller.setAutoHide();
                             break;
                         case 38:
                             if (player.focus) {
