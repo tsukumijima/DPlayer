@@ -1,4 +1,4 @@
-const isMobile = /mobile/i.test(window.navigator.userAgent);
+const isMobile = /iPhone|iPad|iPod|Macintosh|Android|Mobile/i.test(window.navigator.userAgent) && 'ontouchend' in document;
 
 const utils = {
     /**
