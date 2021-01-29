@@ -630,6 +630,9 @@ class DPlayer {
         if (this.danmaku) {
             this.danmaku.resize();
         }
+        if (this.b24Renderer) {
+            this.b24Renderer.refresh();
+        }
         if (this.controller.thumbnails) {
             this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
         }

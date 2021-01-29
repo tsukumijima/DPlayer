@@ -1,6 +1,8 @@
 <div class="dplayer-mask"></div>
 <div class="dplayer-video-wrap">
-    {{ include './video.art' video }}
+    <div class="dplayer-video-wrap-aspect">
+      {{ include './video.art' video }}
+    </div>
     {{ if options.logo }}
     <div class="dplayer-logo">
         <img src="{{ options.logo }}">
