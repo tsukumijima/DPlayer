@@ -1,9 +1,8 @@
-import * as b24js from 'b24.js';
-
 class Subtitle {
-    constructor(container, video, options, events) {
+    constructor(container, video, b24Renderer, options, events) {
         this.container = container;
         this.video = video;
+        this.b24Renderer = b24Renderer;
         this.options = options;
         this.events = events;
 
@@ -39,10 +38,8 @@ class Subtitle {
         this.container.classList.remove('dplayer-subtitle-hide');
         this.events.trigger('subtitle_show');
 
-        const render = new b24js.WebVTTRenderer();
-        if (render !== null) {
-            render.attachMedia(this.video);
-            render.show();
+        if (this.b24Renderer !== null) {
+            this.b24Renderer.show();
         }
     }
 
@@ -50,10 +47,8 @@ class Subtitle {
         this.container.classList.add('dplayer-subtitle-hide');
         this.events.trigger('subtitle_hide');
 
-        const render = new b24js.WebVTTRenderer();
-        if (render !== null) {
-            render.attachMedia(this.video);
-            render.hide();
+        if (this.b24Renderer !== null) {
+            this.b24Renderer.hide();
         }
     }
 
