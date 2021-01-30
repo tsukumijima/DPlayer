@@ -42,7 +42,7 @@
         "@vuepress/plugin-back-to-top": "1.5.2",
         "@vuepress/plugin-google-analytics": "1.5.2",
         "@vuepress/plugin-pwa": "1.5.2",
-        "aribb24.js": "0.0.14",
+        "aribb24.js": "0.0.15",
         "art-template": "4.13.2",
         "art-template-loader": "1.4.3",
         "autoprefixer": "^9.6.1",
