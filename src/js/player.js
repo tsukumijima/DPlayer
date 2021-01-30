@@ -376,12 +376,19 @@ class DPlayer {
                             hls.attachMedia(video);
                             this.events.on('destroy', () => {
                                 hls.destroy();
+                                if (this.options.subtitle && this.b24Renderer) {
+                                    this.b24Renderer.dispose();
+                                    this.b24Renderer = null;
+                                }
                                 delete this.plugins.hls;
                             });
 
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
-                                this.b24Renderer = new aribb24js.CanvasRenderer();
+                                this.b24Renderer = new aribb24js.CanvasRenderer({
+                                    forceStrokeColor: 'black',
+                                    guessDuration: 1 / 3,
+                                });
                                 this.b24Renderer.attachMedia(video);
                                 this.b24Renderer.show();
                                 hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, (event, data) => {
