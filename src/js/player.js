@@ -1,5 +1,5 @@
 import Promise from 'promise-polyfill';
-import * as b24js from 'b24.js';
+import * as aribb24js from 'aribb24.js';
 
 import utils from './utils';
 import handleOption from './options';
@@ -376,19 +376,28 @@ class DPlayer {
                             hls.attachMedia(video);
                             this.events.on('destroy', () => {
                                 hls.destroy();
+                                if (this.options.subtitle && this.b24Renderer) {
+                                    this.b24Renderer.dispose();
+                                    this.b24Renderer = null;
+                                }
                                 delete this.plugins.hls;
                             });
 
-                            // https://github.com/xqq/b24.js
+                            // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
-                                const b24Renderer = new b24js.WebVTTRenderer();
-                                b24Renderer.init().then(function () {
-                                    b24Renderer.attachMedia(video);
-                                    b24Renderer.show();
+                                if (this.b24Renderer) {
+                                    this.b24Renderer.dispose();
+                                    this.b24Renderer = null;
+                                }
+
+                                this.b24Renderer = new aribb24js.CanvasRenderer({
+                                    forceStrokeColor: 'black',
                                 });
-                                hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, function (event, data) {
+                                this.b24Renderer.attachMedia(video);
+                                this.b24Renderer.show();
+                                hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, (event, data) => {
                                     for (const sample of data.samples) {
-                                        b24Renderer.pushData(sample.pid, sample.data, sample.pts);
+                                        this.b24Renderer.pushData(sample.pid, sample.data, sample.pts);
                                     }
                                 });
                             }
@@ -556,7 +565,7 @@ class DPlayer {
         this.volume(this.user.get('volume'), true, true);
 
         if (this.options.subtitle) {
-            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.options.subtitle, this.events);
+            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.b24Renderer, this.options.subtitle, this.events);
             if (!this.user.get('subtitle')) {
                 this.subtitle.hide();
             }
@@ -631,6 +640,9 @@ class DPlayer {
     resize() {
         if (this.danmaku) {
             this.danmaku.resize();
+        }
+        if (this.b24Renderer) {
+            this.b24Renderer.refresh();
         }
         if (this.controller.thumbnails) {
             this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
