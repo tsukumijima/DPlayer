@@ -387,7 +387,6 @@ class DPlayer {
                             if (this.options.subtitle) {
                                 this.b24Renderer = new aribb24js.CanvasRenderer({
                                     forceStrokeColor: 'black',
-                                    guessDuration: 1 / 3,
                                 });
                                 this.b24Renderer.attachMedia(video);
                                 this.b24Renderer.show();
