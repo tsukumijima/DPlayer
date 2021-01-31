@@ -385,6 +385,11 @@ class DPlayer {
 
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
+                                if (this.b24Renderer) {
+                                    this.b24Renderer.dispose();
+                                    this.b24Renderer = null;
+                                }
+
                                 this.b24Renderer = new aribb24js.CanvasRenderer({
                                     forceStrokeColor: 'black',
                                 });
