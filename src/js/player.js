@@ -392,6 +392,7 @@ class DPlayer {
 
                                 this.b24Renderer = new aribb24js.CanvasRenderer({
                                     forceStrokeColor: 'black',
+                                    normalFont: '"Windows TV MaruGothic",sans-serif',
                                 });
                                 this.b24Renderer.attachMedia(video);
                                 this.b24Renderer.show();
