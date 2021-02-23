@@ -1,8 +1,8 @@
 class Subtitle {
-    constructor(container, video, b24Renderer, options, events) {
+    constructor(container, video, aribb24, options, events) {
         this.container = container;
         this.video = video;
-        this.b24Renderer = b24Renderer;
+        this.aribb24 = aribb24;
         this.options = options;
         this.events = events;
 
@@ -38,8 +38,8 @@ class Subtitle {
         this.container.classList.remove('dplayer-subtitle-hide');
         this.events.trigger('subtitle_show');
 
-        if (this.b24Renderer !== null) {
-            this.b24Renderer.show();
+        if (this.aribb24 !== null) {
+            this.aribb24.show();
         }
     }
 
@@ -47,8 +47,8 @@ class Subtitle {
         this.container.classList.add('dplayer-subtitle-hide');
         this.events.trigger('subtitle_hide');
 
-        if (this.b24Renderer !== null) {
-            this.b24Renderer.hide();
+        if (this.aribb24 !== null) {
+            this.aribb24.hide();
         }
     }
 

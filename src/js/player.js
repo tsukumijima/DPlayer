@@ -369,39 +369,38 @@ class DPlayer {
                 case 'hls':
                     if (window.Hls) {
                         if (window.Hls.isSupported()) {
-                            const options = this.options.pluginOptions.hls;
-                            const hls = new window.Hls(options);
                             if (this.plugins.hls) {
                                 this.plugins.hls.destroy();
-                                if (this.options.subtitle && this.b24Renderer) {
-                                    this.b24Renderer.dispose();
-                                    this.b24Renderer = null;
+                                if (this.options.subtitle && this.plugins.aribb24) {
+                                    this.plugins.aribb24.dispose();
+                                    delete this.plugins.aribb24;
                                 }
                                 delete this.plugins.hls;
                             }
+                            const options = this.options.pluginOptions.hls;
+                            const hls = new window.Hls(options);
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
                             this.events.on('destroy', () => {
                                 hls.destroy();
-                                if (this.options.subtitle && this.b24Renderer) {
-                                    this.b24Renderer.dispose();
-                                    this.b24Renderer = null;
+                                if (this.options.subtitle && this.plugins.aribb24) {
+                                    this.plugins.aribb24.dispose();
+                                    delete this.plugins.aribb24;
                                 }
                                 delete this.plugins.hls;
                             });
 
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
-                                this.b24Renderer = new aribb24js.CanvasRenderer({
-                                    forceStrokeColor: 'black',
-                                    normalFont: '"Windows TV MaruGothic",sans-serif',
-                                });
-                                this.b24Renderer.attachMedia(video);
-                                this.b24Renderer.show();
+                                const aribb24Options = this.options.pluginOptions.aribb24;
+                                const aribb24 = new aribb24js.CanvasRenderer(aribb24Options);
+                                this.plugins.aribb24 = aribb24;
+                                aribb24.attachMedia(video);
+                                aribb24.show();
                                 hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, (event, data) => {
                                     for (const sample of data.samples) {
-                                        this.b24Renderer.pushData(sample.pid, sample.data, sample.pts);
+                                        aribb24.pushData(sample.pid, sample.data, sample.pts);
                                     }
                                 });
                             }
@@ -569,7 +568,7 @@ class DPlayer {
         this.volume(this.user.get('volume'), true, true);
 
         if (this.options.subtitle) {
-            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.b24Renderer, this.options.subtitle, this.events);
+            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins.aribb24, this.options.subtitle, this.events);
             if (!this.user.get('subtitle')) {
                 this.subtitle.hide();
             }
@@ -645,8 +644,8 @@ class DPlayer {
         if (this.danmaku) {
             this.danmaku.resize();
         }
-        if (this.b24Renderer) {
-            this.b24Renderer.refresh();
+        if (this.plugins.aribb24) {
+            this.plugins.aribb24.refresh();
         }
         if (this.controller.thumbnails) {
             this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
