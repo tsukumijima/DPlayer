@@ -371,6 +371,14 @@ class DPlayer {
                         if (window.Hls.isSupported()) {
                             const options = this.options.pluginOptions.hls;
                             const hls = new window.Hls(options);
+                            if (this.plugins.hls) {
+                                this.plugins.hls.destroy();
+                                if (this.options.subtitle && this.b24Renderer) {
+                                    this.b24Renderer.dispose();
+                                    this.b24Renderer = null;
+                                }
+                                delete this.plugins.hls;
+                            }
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
@@ -385,11 +393,6 @@ class DPlayer {
 
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
-                                if (this.b24Renderer) {
-                                    this.b24Renderer.dispose();
-                                    this.b24Renderer = null;
-                                }
-
                                 this.b24Renderer = new aribb24js.CanvasRenderer({
                                     forceStrokeColor: 'black',
                                     normalFont: '"Windows TV MaruGothic",sans-serif',
