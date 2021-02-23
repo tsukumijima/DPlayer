@@ -83,7 +83,6 @@ Using DPlayer on your project? [Let me know!](https://github.com/DIYgod/DPlayer/
 | [极酷社](https://www.acg.app) |
 | :---------------------------: |
 
-
 ### Contributors
 
 <a href="https://github.com/MoePlayer/DPlayer/graphs/contributors"><img src="https://opencollective.com/DPlayer/contributors.svg?width=890" /></a>
@@ -122,7 +121,8 @@ Feel free to submit yours in [`Let me know!`](https://github.com/MoePlayer/DPlay
 ### Other
 
 -   [DPlayer-Lite](https://github.com/kn007/DPlayer-Lite): lite version
--   [hlsjs-p2p-engine](https://github.com/cdnbye/hlsjs-p2p-engine)
+-   [hlsjs-p2p-engine](https://github.com/cdnbye/hlsjs-p2p-engine): Let your viewers become your unlimitedly scalable CDN
+-   [CBPlayer](https://github.com/cdnbye/CBPlayer): Dplayer with CDNBye P2P plugin built in, supporting HLS, MP4 and MPEG-DASH P2P streaming.
 -   Feel free to submit yours in [`Let me know!`](https://github.com/MoePlayer/DPlayer/issues/31)
 
 ## Who use DPlayer?
