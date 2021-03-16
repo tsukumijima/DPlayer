@@ -38,7 +38,7 @@ class Subtitle {
         this.container.classList.remove('dplayer-subtitle-hide');
         this.events.trigger('subtitle_show');
 
-        if (this.aribb24 !== null) {
+        if (this.aribb24 !== undefined && this.aribb24 !== null) {
             this.aribb24.show();
         }
     }
@@ -47,7 +47,7 @@ class Subtitle {
         this.container.classList.add('dplayer-subtitle-hide');
         this.events.trigger('subtitle_hide');
 
-        if (this.aribb24 !== null) {
+        if (this.aribb24 !== undefined && this.aribb24 !== null) {
             this.aribb24.hide();
         }
     }

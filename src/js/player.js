@@ -369,6 +369,7 @@ class DPlayer {
                 case 'hls':
                     if (window.Hls) {
                         if (window.Hls.isSupported()) {
+                            // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 this.plugins.hls.destroy();
                                 if (this.options.subtitle && this.plugins.aribb24) {
@@ -377,8 +378,9 @@ class DPlayer {
                                 }
                                 delete this.plugins.hls;
                             }
-                            const options = this.options.pluginOptions.hls;
-                            const hls = new window.Hls(options);
+                            // Initialize hls.js
+                            const hlsOptions = this.options.pluginOptions.hls;
+                            const hls = new window.Hls(hlsOptions);
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
@@ -391,6 +393,7 @@ class DPlayer {
                                 delete this.plugins.hls;
                             });
 
+                            // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
