@@ -81,8 +81,8 @@ class Controller {
             this.mobileBackwardTime += 10;
             this.player.seek(this.player.video.currentTime - 10);
             this.player.notice(`${this.player.tran('REW')} ${this.mobileBackwardTime.toFixed(0)} ${this.player.tran('s')}`);
-            // カウントリセットを延長
-            // 1秒間ボタンが押されなかったら自動でリセットされる
+            // extend count reset
+            // if the REW button is not pressed within 1 second, the count will be reset automatically
             clearTimeout(this.mobileSkipTimer);
             this.mobileSkipTimer = setTimeout(() => {
                 this.mobileBackwardTime = 0;
@@ -95,8 +95,8 @@ class Controller {
             this.mobileForwardTime += 10;
             this.player.seek(this.player.video.currentTime + 10);
             this.player.notice(`${this.player.tran('FF')} ${this.mobileForwardTime.toFixed(0)} ${this.player.tran('s')}`);
-            // カウントリセットを延長
-            // 1秒間ボタンが押されなかったら自動でリセットされる
+            // extend count reset
+            // if the FF button is not pressed within 1 second, the count will be reset automatically
             clearTimeout(this.mobileSkipTimer);
             this.mobileSkipTimer = setTimeout(() => {
                 this.mobileForwardTime = 0;
@@ -238,7 +238,9 @@ class Controller {
         if (document.pictureInPictureEnabled) {
             this.player.template.pipButton.addEventListener('click', () => {
                 if (!document.pictureInPictureElement) {
-                    this.player.video.requestPictureInPicture();
+                    this.player.video.requestPictureInPicture().catch(() => {
+                        this.player.notice('Error: Picture-in-Picture is not supported.');
+                    });
                 } else {
                     document.exitPictureInPicture();
                 }
