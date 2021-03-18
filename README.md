@@ -15,13 +15,13 @@
 -   Picture-in-Picture (PiP) ボタンの追加
 -   キーボードショートカット（ホットキー）の追加
 -   スクリーンショット時のファイル名の変更
--   b24.js を利用した字幕表示の対応
+-   aribb24.js を利用した字幕表示の対応
 
-等、TVRemotePlus 向けに多くの不具合改善や変更を加えた DPlayer です。
+など、TVRemotePlus 向けに多くの不具合改善や変更を行った DPlayer です。
 
-恐らく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
-是非日本でももっと広まって欲しいと思っています（コメントを流さない場合でも非常に優秀なプレイヤーだと思います）。  
-TVRemotePlus 向けではありますが、出来るだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
+おそらく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
+ぜひ日本でももっと広まって欲しいと思っています（コメントを流さない場合でも軽量で優秀なプレイヤーだと思います）。  
+TVRemotePlus 向けではありますが、できるだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
 
 [![npm](https://img.shields.io/npm/v/dplayer.svg?style=flat-square)](https://www.npmjs.com/package/dplayer)
 [![npm](https://img.shields.io/npm/l/dplayer.svg?style=flat-square)](https://github.com/MoePlayer/DPlayer/blob/master/LICENSE)
