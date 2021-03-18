@@ -20,8 +20,11 @@ const utils = {
     },
 
     /**
-     * Get video duration
-     * compatibility: Measures against video length becoming Infinity during HLS playback on iOS Safari
+     * get video duration
+     * compatibility: measures against video length becoming Infinity during HLS playback on native HLS player of Safari
+     *
+     * @param {HTMLVideoElement} video
+     * @param {Object} template
      */
     getVideoDuration: (video, template) => {
         let duration = video.duration;

@@ -19,7 +19,7 @@
         }
     }
 
-    &:-webkit-full-screen {
+    &.dplayer-fulled, &.dplayer-fulled-browser {
         width: 100% !important;
         height: 100% !important;
         background: #000;
@@ -32,17 +32,16 @@
         transform: translate(0, 0);
 
         .dplayer-danmaku {
-            .dplayer-danmaku-top,
-            .dplayer-danmaku-bottom {
+            .dplayer-danmaku-right {
                 &.dplayer-danmaku-move {
-                    animation: danmaku-center 6s linear;
+                    animation: danmaku 6s linear;
                     animation-play-state: inherit;
                 }
             }
-
-            .dplayer-danmaku-right {
+            .dplayer-danmaku-top,
+            .dplayer-danmaku-bottom {
                 &.dplayer-danmaku-move {
-                    animation: danmaku 8s linear;
+                    animation: danmaku-center 5s linear;
                     animation-play-state: inherit;
                 }
             }
