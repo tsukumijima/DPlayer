@@ -18,6 +18,7 @@ class FullScreen {
                 this.player.events.trigger('fullscreen');
             } else {
                 utils.setScrollPosition(this.lastScrollPosition);
+                this.player.container.classList.remove('dplayer-fulled-browser');
                 this.player.events.trigger('fullscreen_cancel');
             }
         };
@@ -31,6 +32,7 @@ class FullScreen {
                 this.player.events.trigger('fullscreen');
             } else {
                 utils.setScrollPosition(this.lastScrollPosition);
+                this.player.container.classList.remove('dplayer-fulled-browser');
                 this.player.events.trigger('fullscreen_cancel');
             }
         };
@@ -63,20 +65,33 @@ class FullScreen {
 
         switch (type) {
             case 'browser':
+                // unify method names
+                this.player.container.requestFullscreen =
+                    this.player.container.requestFullscreen || // HTML5 standard
+                    this.player.container.mozRequestFullScreen || // Gecko
+                    this.player.container.webkitRequestFullscreen || // Webkit
+                    this.player.container.webkitRequestFullScreen || // Webkit (old)
+                    this.player.container.msRequestFullscreen; // Trident
+                // request fullscreen
                 if (this.player.container.requestFullscreen) {
                     this.player.container.requestFullscreen();
-                } else if (this.player.container.mozRequestFullScreen) {
-                    this.player.container.mozRequestFullScreen();
-                } else if (this.player.container.webkitRequestFullscreen) {
-                    this.player.container.webkitRequestFullscreen();
                 } else if (this.player.video.webkitEnterFullscreen) {
-                    this.player.video.webkitEnterFullscreen(); // Safari for iOS
-                } else if (this.player.container.msRequestFullscreen) {
-                    this.player.container.msRequestFullscreen();
+                    // compatibility: Fullscreen API is not supported in Safari for iOS, so fallback to video.webkitEnterFullscreen()
+                    // only the video element is fullscreen, so if fullscreen is enabled you can only use the default controls
+                    this.player.video.webkitEnterFullscreen();
                 }
-                // Lock the screen landscape
-                screen.orientation.lock('landscape').catch(function() {});
-                this.player.container.classList.add('dplayer-fulled-browser');
+                // lock screen to landscape (if supported)
+                if (screen.orientation) {
+                    try {
+                        screen.orientation.lock('landscape').catch(() => {});
+                    } catch (e) {
+                        // pass
+                    }
+                }
+                // video.webkitEnterFullscreen() does not dispatch the event that exit fullscreen, so the 'dplayer-fulled-browser' class is not added
+                if (this.player.container.requestFullscreen) {
+                    this.player.container.classList.add('dplayer-fulled-browser');
+                }
                 break;
             case 'web':
                 this.player.container.classList.add('dplayer-fulled');
@@ -93,22 +108,24 @@ class FullScreen {
     cancel(type = 'browser') {
         switch (type) {
             case 'browser':
-                if (document.cancelFullScreen) {
-                    document.cancelFullScreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitCancelFullScreen) {
-                    document.webkitCancelFullScreen();
-                } else if (document.msCancelFullScreen) {
-                    document.msCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
+                // unify method names
+                document.exitFullscreen =
+                    document.exitFullscreen || // HTML5 standard
+                    document.mozCancelFullScreen || // Gecko
+                    document.webkitExitFullscreen || // Webkit
+                    document.webkitCancelFullScreen || // Webkit (old)
+                    document.msExitFullscreen; // Trident
+                // exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
                 }
-                try {
-                    // Unlock the screen
-                    screen.orientation.unlock();
-                } catch (e) {
-                    // Error (underfined)
+                // unlock screen (if supported)
+                if (screen.orientation) {
+                    try {
+                        screen.orientation.unlock();
+                    } catch (e) {
+                        // pass
+                    }
                 }
                 this.player.container.classList.remove('dplayer-fulled-browser');
                 break;
