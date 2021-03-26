@@ -49,10 +49,17 @@ class FullScreen {
 
     isFullScreen(type = 'browser') {
         switch (type) {
-            case 'browser':
-                return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-            case 'web':
+            case 'browser': {
+                const fullEle = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+                if (fullEle && fullEle === this.player.container) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            case 'web': {
                 return this.player.container.classList.contains('dplayer-fulled');
+            }
         }
     }
 
