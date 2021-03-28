@@ -399,7 +399,7 @@ class DPlayer {
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24 = new aribb24js.CanvasRenderer(aribb24Options);
+                                const aribb24 = new aribb24js.CanvasB24Renderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
                                 aribb24.attachMedia(video);
                                 aribb24.show();
