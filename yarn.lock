@@ -14,7 +14,7 @@
   "resolved" "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.13.5.tgz"
   "version" "7.13.5"
 
-"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.11.0", "@babel/core@^7.4.0-0", "@babel/core@^7.6.0", "@babel/core@^7.8.4":
+"@babel/core@*", "@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.4.0-0", "@babel/core@^7.6.0", "@babel/core@^7.8.4":
   "integrity" "sha512-eTAlQKq65zHfkHZV0sIVODCPGVgoo1HdBlbSLi9CqOzuZanMv2ihzY+4paiKr1mH+XmYESMAmJ/dpZ68eN6d8w=="
   "resolved" "https://registry.npmjs.org/@babel/core/-/core-7.12.10.tgz"
   "version" "7.12.10"
@@ -1622,10 +1622,10 @@
   dependencies:
     "sprintf-js" "~1.0.2"
 
-"aribb24.js@1.0.0":
-  "integrity" "sha512-xKhgaB6nNSUzUYK/RQQJDFRzY4RVH8nYOv9xEVaIwN67rjX7PGsB5dBXhxj3j1JLCAvMktfFLxQvg+TDSX1V1g=="
-  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.0.0.tgz"
-  "version" "1.0.0"
+"aribb24.js@1.1.1":
+  "integrity" "sha512-kcysfd+qo2dFC3LTWMM3diEhms0Hhwy47b7yrzvMYGsNUrCP0hxIS+CrMms+73qyeIK01CoiP1TmlgsdU202IA=="
+  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.1.1.tgz"
+  "version" "1.1.1"
   dependencies:
     "spark-md5" "^3.0.1"
 
@@ -2777,7 +2777,7 @@
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.9.0.tgz"
   "version" "3.9.0"
 
-"core-js@^3.6.5":
+"core-js@^3":
   "integrity" "sha512-PyFBJaLq93FlyYdsndE5VaueA9K5cNB7CGzeCj191YYLhkQM0gdZR2SKihM70oF0wdqKSKClv/tEBOpoRmdOVQ=="
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.9.0.tgz"
   "version" "3.9.0"
