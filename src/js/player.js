@@ -399,18 +399,26 @@ class DPlayer {
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle) {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24 = new aribb24js.CanvasB24Renderer(aribb24Options);
+                                const aribb24 = new aribb24js.CanvasID3Renderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
                                 aribb24.attachMedia(video);
                                 aribb24.show();
-                                hls.on(window.Hls.Events.FRAG_PARSING_PRIVATE_DATA, (event, data) => {
-                                    for (const sample of data.samples) {
-                                        aribb24.pushData(sample.pid, sample.data, sample.pts);
-                                    }
-                                });
                             }
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
                             // Normal playback
+                            // Initialize aribb24.js
+                            // https://github.com/monyone/aribb24.js
+                            if (this.options.subtitle) {
+                                if (this.plugins.aribb24) {
+                                    this.plugins.aribb24.dispose();
+                                    delete this.plugins.aribb24;
+                                }
+                                const aribb24Options = this.options.pluginOptions.aribb24;
+                                const aribb24 = new aribb24js.CanvasID3Renderer(aribb24Options);
+                                this.plugins.aribb24 = aribb24;
+                                aribb24.attachMedia(video);
+                                aribb24.show();
+                            }
                             break;
                         } else {
                             this.notice('Error: Hls is not supported.');
