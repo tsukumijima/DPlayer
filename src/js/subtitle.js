@@ -14,7 +14,7 @@ class Subtitle {
         this.container.style.bottom = this.options.bottom;
         this.container.style.color = this.options.color;
 
-        if (this.video.textTracks && this.video.textTracks[0]) {
+        if (this.options.type === 'webvtt' && this.video.textTracks && this.video.textTracks[0]) {
             const track = this.video.textTracks[0];
 
             track.oncuechange = () => {
@@ -37,8 +37,8 @@ class Subtitle {
     show() {
         this.container.classList.remove('dplayer-subtitle-hide');
         this.events.trigger('subtitle_show');
-
-        if (this.aribb24 !== undefined && this.aribb24 !== null) {
+        // for aribb24.js
+        if (this.options.type === 'aribb24' && this.aribb24) {
             this.aribb24.show();
         }
     }
@@ -46,8 +46,8 @@ class Subtitle {
     hide() {
         this.container.classList.add('dplayer-subtitle-hide');
         this.events.trigger('subtitle_hide');
-
-        if (this.aribb24 !== undefined && this.aribb24 !== null) {
+        // for aribb24.js
+        if (this.options.type === 'aribb24' && this.aribb24) {
             this.aribb24.hide();
         }
     }

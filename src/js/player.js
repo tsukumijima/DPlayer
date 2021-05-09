@@ -374,7 +374,7 @@ class DPlayer {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 this.plugins.hls.destroy();
-                                if (this.options.subtitle && this.plugins.aribb24) {
+                                if (this.plugins.aribb24) {
                                     this.plugins.aribb24.dispose();
                                     delete this.plugins.aribb24;
                                 }
@@ -388,7 +388,7 @@ class DPlayer {
                             hls.attachMedia(video);
                             this.events.on('destroy', () => {
                                 hls.destroy();
-                                if (this.options.subtitle && this.plugins.aribb24) {
+                                if (this.plugins.aribb24) {
                                     this.plugins.aribb24.dispose();
                                     delete this.plugins.aribb24;
                                 }
@@ -397,7 +397,7 @@ class DPlayer {
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
-                            if (this.options.subtitle) {
+                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
                                 const aribb24 = new aribb24js.CanvasID3Renderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
@@ -411,13 +411,13 @@ class DPlayer {
                             }
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
                             // Normal playback
+                            if (this.plugins.aribb24) {
+                                this.plugins.aribb24.dispose();
+                                delete this.plugins.aribb24;
+                            }
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
-                            if (this.options.subtitle) {
-                                if (this.plugins.aribb24) {
-                                    this.plugins.aribb24.dispose();
-                                    delete this.plugins.aribb24;
-                                }
+                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
                                 const aribb24 = new aribb24js.CanvasID3Renderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
