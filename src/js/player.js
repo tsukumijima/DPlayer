@@ -403,6 +403,11 @@ class DPlayer {
                                 this.plugins.aribb24 = aribb24;
                                 aribb24.attachMedia(video);
                                 aribb24.show();
+                                hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
+                                    for (const sample of data.samples) {
+                                        aribb24.pushData(sample.pts, sample.data);
+                                    }
+                                });
                             }
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
                             // Normal playback
