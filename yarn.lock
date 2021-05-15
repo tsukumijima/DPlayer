@@ -1622,10 +1622,10 @@
   dependencies:
     "sprintf-js" "~1.0.2"
 
-"aribb24.js@1.6.3":
-  "integrity" "sha512-RZ6yaRjYvfl6V4PUmGKWO9Xe9eqQ/m6Dd/7k53IN6wdoHj8V7mdK+wLww9T9Qw5M2tLOFyL1HMf/SZSAKoeCMA=="
-  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.6.3.tgz"
-  "version" "1.6.3"
+"aribb24.js@1.6.4":
+  "integrity" "sha512-u72rUYIdFTfSaPNCnF+UAYNjGp+zi3xRGIXGvhVrbrZBWl2CLbbJCK+58IdmlQ7KkfjvuETnRr2WzBaRnu0YYw=="
+  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.6.4.tgz"
+  "version" "1.6.4"
   dependencies:
     "spark-md5" "^3.0.1"
 

@@ -398,7 +398,7 @@ class DPlayer {
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                this.options.pluginOptions.aribb24.enableAutoInBandMetadataDetection = false; // for hls.js
+                                this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for hls.js
                                 const aribb24Options = this.options.pluginOptions.aribb24;
                                 const aribb24 = new aribb24js.CanvasRenderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
@@ -420,7 +420,7 @@ class DPlayer {
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                this.options.pluginOptions.aribb24.enableAutoInBandMetadataDetection = true; // for Safari native HLS player
+                                this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
                                 const aribb24Options = this.options.pluginOptions.aribb24;
                                 const aribb24 = new aribb24js.CanvasRenderer(aribb24Options);
                                 this.plugins.aribb24 = aribb24;
