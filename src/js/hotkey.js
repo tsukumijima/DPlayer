@@ -88,6 +88,7 @@ class HotKey {
                             if (typeof player.options.danmaku === 'object' && player.options.danmaku) {
                                 if (!event.ctrlKey && !event.metaKey) {
                                     event.preventDefault();
+                                    player.controller.show();
                                     player.comment.show();
                                 }
                             }
