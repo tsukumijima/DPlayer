@@ -29,10 +29,10 @@ const utils = {
     getVideoDuration: (video, template) => {
         let duration = video.duration;
         if (duration === Infinity) {
-            try {
+            if (video.seekable.length > 0) {
                 template.dtime.innerHTML = utils.secondToTime(video.seekable.end(0));
                 duration = video.seekable.end(0);
-            } catch (e) {
+            } else if (video.buffered.length > 0) {
                 template.dtime.innerHTML = utils.secondToTime(video.buffered.end(0));
                 duration = video.buffered.end(0);
             }
@@ -151,6 +151,17 @@ const utils = {
             default:
                 return 'right';
         }
+    },
+
+    parseMalformedPES: (data) => {
+        const PES_header_data_length = data[2];
+
+        const payload_start_index = 3 + PES_header_data_length;
+        const payload_length = data.byteLength - payload_start_index;
+
+        const payload = data.subarray(payload_start_index, payload_start_index + payload_length);
+
+        return payload;
     },
 };
 
