@@ -1,8 +1,9 @@
 class Subtitle {
-    constructor(container, video, aribb24, options, events) {
+    constructor(container, video, aribb24_caption, aribb24_superimpose, options, events) {
         this.container = container;
         this.video = video;
-        this.aribb24 = aribb24;
+        this.aribb24_caption = aribb24_caption;
+        this.aribb24_superimpose = aribb24_superimpose;
         this.options = options;
         this.events = events;
 
@@ -38,8 +39,11 @@ class Subtitle {
         this.container.classList.remove('dplayer-subtitle-hide');
         this.events.trigger('subtitle_show');
         // for aribb24.js
-        if (this.options.type === 'aribb24' && this.aribb24) {
-            this.aribb24.show();
+        if (this.options.type === 'aribb24' && this.aribb24_caption) {
+            this.aribb24_caption.show();
+        }
+        if (this.options.type === 'aribb24' && this.aribb24_superimpose) {
+            this.aribb24_superimpose.show();
         }
     }
 
@@ -47,8 +51,11 @@ class Subtitle {
         this.container.classList.add('dplayer-subtitle-hide');
         this.events.trigger('subtitle_hide');
         // for aribb24.js
-        if (this.options.type === 'aribb24' && this.aribb24) {
-            this.aribb24.hide();
+        if (this.options.type === 'aribb24' && this.aribb24_caption) {
+            this.aribb24_caption.hide();
+        }
+        if (this.options.type === 'aribb24' && this.aribb24_superimpose) {
+            this.aribb24_superimpose.hide();
         }
     }
 

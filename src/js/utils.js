@@ -152,6 +152,17 @@ const utils = {
                 return 'right';
         }
     },
+
+    parseMalformedPES: (data) => {
+        const PES_header_data_length = data[2];
+
+        const payload_start_index = 3 + PES_header_data_length;
+        const payload_length = data.byteLength - payload_start_index;
+
+        const payload = data.subarray(payload_start_index, payload_start_index + payload_length);
+
+        return payload;
+    },
 };
 
 export default utils;
