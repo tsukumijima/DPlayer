@@ -29,10 +29,10 @@ const utils = {
     getVideoDuration: (video, template) => {
         let duration = video.duration;
         if (duration === Infinity) {
-            try {
+            if (video.seekable.length > 0) {
                 template.dtime.innerHTML = utils.secondToTime(video.seekable.end(0));
                 duration = video.seekable.end(0);
-            } catch (e) {
+            } else if (video.buffered.length > 0) {
                 template.dtime.innerHTML = utils.secondToTime(video.buffered.end(0));
                 duration = video.buffered.end(0);
             }
