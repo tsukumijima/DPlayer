@@ -185,7 +185,7 @@ class DPlayer {
      */
     sync() {
         if (this.options.live) {
-            const time = utils.getVideoDuration(this.video, this.template);
+            const time = utils.getVideoDuration(this.video, this.template) - 0.4;
             this.video.currentTime = time;
 
             this.notice(this.tran('Synchronized'));
