@@ -21,7 +21,7 @@ export default (options) => {
         contextmenu: [],
         mutex: true,
         pictureInPicture: true,
-        pluginOptions: { hls: {}, flv: {}, dash: {}, webtorrent: {}, aribb24: {} },
+        pluginOptions: { hls: {}, mpegts: {}, flv: {}, dash: {}, webtorrent: {}, aribb24: {} },
     };
     for (const defaultKey in defaultOption) {
         if (defaultOption.hasOwnProperty(defaultKey) && !options.hasOwnProperty(defaultKey)) {

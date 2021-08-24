@@ -431,16 +431,33 @@ class DPlayer {
                             }
                             break;
                         } else {
-                            this.notice('Error: Hls is not supported.');
+                            this.notice('Error: HLS is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find Hls.");
+                        this.notice("Error: Can't find hls.js.");
                     }
                     break;
                 // https://github.com/xqq/mpegts.js
                 case 'mpegts':
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
+                            // If it has already been initialized, destroy it once
+                            if (this.plugins.mpegts) {
+                                this.plugins.unload();
+                                this.plugins.detachMediaElement();
+                                this.plugins.destroy();
+                                delete this.plugins.mpegts;
+                                if (this.plugins.aribb24_caption) {
+                                    this.plugins.aribb24_caption.dispose();
+                                    delete this.plugins.aribb24_caption;
+                                }
+                                if (this.plugins.aribb24_superimpose) {
+                                    this.plugins.aribb24_superimpose.dispose();
+                                    delete this.plugins.aribb24_superimpose;
+                                }
+                            }
+
+                            // Initialize mpegts.js
                             const mpegtsPlayer = window.mpegts.createPlayer(
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
@@ -466,6 +483,9 @@ class DPlayer {
                                     delete this.plugins.aribb24_superimpose;
                                 }
                             });
+
+                            // Initialize aribb24.js
+                            // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
                                 const aribb24_caption = (this.plugins.aribb24_caption = new aribb24js.CanvasRenderer(
@@ -475,7 +495,6 @@ class DPlayer {
                                 ));
                                 aribb24_caption.attachMedia(video);
                                 aribb24_caption.show();
-
                                 const aribb24_superimpose = (this.plugins.aribb24_superimpose = new aribb24js.CanvasRenderer(
                                     Object.assign(aribb24Options, {
                                         data_identifer: 0x81,
@@ -500,7 +519,11 @@ class DPlayer {
                                     }
                                 });
                             }
+                        } else {
+                            this.notice('Error: mpegts.js is not supported.');
                         }
+                    } else {
+                        this.notice("Error: Can't find mpegts.js.");
                     }
                     break;
                 // https://github.com/Bilibili/flv.js
@@ -524,10 +547,10 @@ class DPlayer {
                                 delete this.plugins.flvjs;
                             });
                         } else {
-                            this.notice('Error: flvjs is not supported.');
+                            this.notice('Error: flv.js is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find flvjs.");
+                        this.notice("Error: Can't find flv.js.");
                     }
                     break;
                 // https://github.com/Dash-Industry-Forum/dash.js
@@ -542,7 +565,7 @@ class DPlayer {
                             delete this.plugins.dash;
                         });
                     } else {
-                        this.notice("Error: Can't find dashjs.");
+                        this.notice("Error: Can't find dash.js.");
                     }
                     break;
 
