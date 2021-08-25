@@ -442,10 +442,11 @@ class DPlayer {
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
                             // If it has already been initialized, destroy it once
+                            const source = video.src;
                             if (this.plugins.mpegts) {
-                                this.plugins.unload();
-                                this.plugins.detachMediaElement();
-                                this.plugins.destroy();
+                                this.plugins.mpegts.unload();
+                                this.plugins.mpegts.detachMediaElement();
+                                this.plugins.mpegts.destroy();
                                 delete this.plugins.mpegts;
                                 if (this.plugins.aribb24_caption) {
                                     this.plugins.aribb24_caption.dispose();
@@ -462,7 +463,7 @@ class DPlayer {
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
                                     isLive: this.options.live,
-                                    url: video.src,
+                                    url: source,
                                 }),
                                 this.options.pluginOptions.mpegts.config
                             );
