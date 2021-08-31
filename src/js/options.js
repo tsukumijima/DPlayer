@@ -42,6 +42,18 @@ export default (options) => {
     }
 
     if (options.video.quality) {
+        // defaultQuality can be specified as a string
+        if (typeof options.video.defaultQuality === 'string') {
+            options.video.quality.forEach((quality, qualityIndex) => {
+                if (options.video.defaultQuality === quality.name) {
+                    options.video.defaultQuality = qualityIndex;
+                }
+            });
+            // failsafe
+            if (typeof options.video.defaultQuality === 'string') {
+                options.video.defaultQuality = 0;
+            }
+        }
         options.video.url = options.video.quality[options.video.defaultQuality].url;
     }
 
