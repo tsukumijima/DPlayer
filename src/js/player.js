@@ -633,6 +633,7 @@ class DPlayer {
                 return;
             }
             this.tran && this.notice && this.type !== 'webtorrent' && this.notice(this.tran('Video load failed'), -1);
+            this.container.classList.remove('dplayer-loading');
         });
 
         // video end
@@ -708,29 +709,41 @@ class DPlayer {
             subtitle: this.options.subtitle,
         });
         const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild;
-        this.template.videoWrap.insertBefore(videoEle, this.template.videoWrap.getElementsByTagName('div')[0]);
+        this.template.videoWrapAspect.insertBefore(videoEle, this.template.videoWrapAspect.getElementsByTagName('div')[0]);
         this.prevVideo = this.video;
         this.video = videoEle;
         this.initVideo(this.video, this.quality.type || this.options.video.type);
-        this.seek(this.prevVideo.currentTime);
-        this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
+        if (!this.options.live) {
+            this.seek(this.prevVideo.currentTime);
+        }
+        if (this.options.lang === 'ja-jp') {
+            this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
+        } else {
+            this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
+        }
+        this.container.classList.add('dplayer-loading');
         this.events.trigger('quality_start', this.quality);
 
         this.on('canplay', () => {
-            if (this.prevVideo) {
-                if (this.video.currentTime !== this.prevVideo.currentTime) {
+            if (this.prevVideo !== null) {
+                if (!this.options.live && this.video.currentTime !== this.prevVideo.currentTime) {
                     this.seek(this.prevVideo.currentTime);
                     return;
                 }
-                this.template.videoWrap.removeChild(this.prevVideo);
+                this.template.videoWrapAspect.removeChild(this.prevVideo);
                 this.video.classList.add('dplayer-video-current');
                 if (!paused) {
                     this.video.play();
                 }
                 this.prevVideo = null;
-                this.notice(`${this.tran('Switched to')} ${this.quality.name} ${this.tran('quality')}`);
+                if (this.options.lang === 'ja-jp') {
+                    this.notice(`画質を ${this.quality.name} に切り替えました。`, 1000);
+                } else {
+                    this.notice(`${this.tran('Switched to')} ${this.quality.name} ${this.tran('quality')}`);
+                }
                 this.switchingQuality = false;
 
+                this.container.classList.remove('dplayer-loading');
                 this.events.trigger('quality_end');
             }
         });
