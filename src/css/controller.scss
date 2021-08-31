@@ -651,7 +651,7 @@
                 display: block;
                 position: absolute;
                 bottom: 38px;
-                left: -18px;
+                left: calc((100% - 80px) / 2);
                 width: 80px;
                 padding-bottom: 12px;
                 visibility: hidden;
