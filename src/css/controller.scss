@@ -389,6 +389,11 @@
                 width: auto;
                 line-height: 22px;
                 font-size: 14px;
+                opacity: .8;
+                transition: all .2s ease-in-out;
+                &:hover {
+                    opacity: 1;
+                }
             }
             &.dplayer-comment-icon {
                 padding: 10.5px 9.5px 8px;
@@ -637,23 +642,24 @@
             height: 100%;
             z-index: 2;
             &:hover {
-                .dplayer-quality-list {
-                    display: block;
-                }
                 .dplayer-quality-mask {
-                    display: block;
+                    visibility: visible;
+                    opacity: 1;
                 }
             }
             .dplayer-quality-mask {
-                display: none;
+                display: block;
                 position: absolute;
                 bottom: 38px;
                 left: -18px;
                 width: 80px;
                 padding-bottom: 12px;
+                visibility: hidden;
+                opacity: 0;
+                transition: all 0.2s ease-in-out;
             }
             .dplayer-quality-list {
-                display: none;
+                display: block;
                 font-size: 12px;
                 width: 80px;
                 border-radius: 2px;

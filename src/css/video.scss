@@ -23,20 +23,21 @@
 
     .dplayer-video-wrap-aspect {
         position: relative;
-        max-width: calc(100 / 56.25 * 100vh);
-        max-height: 56.25vw;
-        width: 100%;
-        height: 100%;
-    }
-    .dplayer-video {
-        width: 100%;
-        height: 100%;
-        display: none;
-    }
-    .dplayer-video-current {
-        display: block;
-    }
-    .dplayer-video-prepare {
-        display: none;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 16 / 9;
+
+        .dplayer-video {
+            width: 99999px;  // magic!!
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        .dplayer-video-current {
+            display: block;
+        }
+        .dplayer-video-prepare {
+            display: none;
+        }
     }
 }
