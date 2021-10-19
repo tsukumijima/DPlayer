@@ -376,12 +376,13 @@ class DPlayer {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 this.plugins.hls.destroy();
-                                if (this.plugins.aribb24_caption) {
-                                    this.plugins.aribb24_caption.dispose();
-                                    delete this.plugins.aribb24_caption;
+                                if (this.plugins.aribb24Caption) {
+                                    this.plugins.aribb24Caption.dispose();
+                                    delete this.plugins.aribb24Caption;
                                 }
                                 delete this.plugins.hls;
                             }
+
                             // Initialize hls.js
                             const hlsOptions = this.options.pluginOptions.hls;
                             const hls = new window.Hls(hlsOptions);
@@ -390,9 +391,9 @@ class DPlayer {
                             hls.attachMedia(video);
                             this.events.on('destroy', () => {
                                 hls.destroy();
-                                if (this.plugins.aribb24_caption) {
-                                    this.plugins.aribb24_caption.dispose();
-                                    delete this.plugins.aribb24_caption;
+                                if (this.plugins.aribb24Caption) {
+                                    this.plugins.aribb24Caption.dispose();
+                                    delete this.plugins.aribb24Caption;
                                 }
                                 delete this.plugins.hls;
                             });
@@ -402,34 +403,35 @@ class DPlayer {
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for hls.js
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24_caption = new aribb24js.CanvasRenderer(aribb24Options);
-                                this.plugins.aribb24_caption = aribb24_caption;
-                                aribb24_caption.attachMedia(video);
-                                aribb24_caption.show();
+                                const aribb24Caption = new aribb24js.CanvasRenderer(aribb24Options);
+                                this.plugins.aribb24Caption = aribb24Caption;
+                                aribb24Caption.attachMedia(video);
+                                aribb24Caption.show();
                                 hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
                                     for (const sample of data.samples) {
-                                        aribb24_caption.pushID3v2Data(sample.pts, sample.data);
+                                        aribb24Caption.pushID3v2Data(sample.pts, sample.data);
                                     }
                                 });
                             }
-                        } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
+
                             // Normal playback
+                        } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
                             // If it has already been initialized, destroy it once
-                            if (this.plugins.aribb24_caption) {
-                                this.plugins.aribb24_caption.dispose();
-                                delete this.plugins.aribb24_caption;
+                            if (this.plugins.aribb24Caption) {
+                                this.plugins.aribb24Caption.dispose();
+                                delete this.plugins.aribb24Caption;
                             }
+
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24_caption = new aribb24js.CanvasRenderer(aribb24Options);
-                                this.plugins.aribb24_caption = aribb24_caption;
-                                aribb24_caption.attachMedia(video);
-                                aribb24_caption.show();
+                                const aribb24Caption = new aribb24js.CanvasRenderer(aribb24Options);
+                                this.plugins.aribb24Caption = aribb24Caption;
+                                aribb24Caption.attachMedia(video);
+                                aribb24Caption.show();
                             }
-                            break;
                         } else {
                             this.notice('Error: HLS is not supported.');
                         }
@@ -448,13 +450,15 @@ class DPlayer {
                                 this.plugins.mpegts.detachMediaElement();
                                 this.plugins.mpegts.destroy();
                                 delete this.plugins.mpegts;
-                                if (this.plugins.aribb24_caption) {
-                                    this.plugins.aribb24_caption.dispose();
-                                    delete this.plugins.aribb24_caption;
+                                // destroy aribb24 caption
+                                if (this.plugins.aribb24Caption) {
+                                    this.plugins.aribb24Caption.dispose();
+                                    delete this.plugins.aribb24Caption;
                                 }
-                                if (this.plugins.aribb24_superimpose) {
-                                    this.plugins.aribb24_superimpose.dispose();
-                                    delete this.plugins.aribb24_superimpose;
+                                // destroy aribb24 superimpose
+                                if (this.plugins.aribb24Superimpose) {
+                                    this.plugins.aribb24Superimpose.dispose();
+                                    delete this.plugins.aribb24Superimpose;
                                 }
                             }
 
@@ -470,44 +474,53 @@ class DPlayer {
                             this.plugins.mpegts = mpegtsPlayer;
                             mpegtsPlayer.attachMediaElement(video);
                             mpegtsPlayer.load();
+
+                            // Processing when destroy
                             this.events.on('destroy', () => {
                                 mpegtsPlayer.unload();
                                 mpegtsPlayer.detachMediaElement();
                                 mpegtsPlayer.destroy();
                                 delete this.plugins.mpegts;
-                                if (this.plugins.aribb24_caption) {
-                                    this.plugins.aribb24_caption.dispose();
-                                    delete this.plugins.aribb24_caption;
+                                // destroy aribb24 caption
+                                if (this.plugins.aribb24Caption) {
+                                    this.plugins.aribb24Caption.dispose();
+                                    delete this.plugins.aribb24Caption;
                                 }
-                                if (this.plugins.aribb24_superimpose) {
-                                    this.plugins.aribb24_superimpose.dispose();
-                                    delete this.plugins.aribb24_superimpose;
+                                // destroy aribb24 superimpose
+                                if (this.plugins.aribb24Superimpose) {
+                                    this.plugins.aribb24Superimpose.dispose();
+                                    delete this.plugins.aribb24Superimpose;
                                 }
                             });
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                                // Set options
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24_caption = (this.plugins.aribb24_caption = new aribb24js.CanvasRenderer(
+
+                                // Initialize aribb24 caption
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
                                     Object.assign(aribb24Options, {
                                         data_identifer: 0x80,
                                     })
                                 ));
-                                aribb24_caption.attachMedia(video);
-                                aribb24_caption.show();
-                                const aribb24_superimpose = (this.plugins.aribb24_superimpose = new aribb24js.CanvasRenderer(
+                                aribb24Caption.attachMedia(video);
+                                aribb24Caption.show();
+
+                                // Initialize aribb24 superimpose
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
                                     Object.assign(aribb24Options, {
                                         data_identifer: 0x81,
                                     })
                                 ));
-                                aribb24_superimpose.attachMedia(video);
-                                aribb24_superimpose.show();
+                                aribb24Superimpose.attachMedia(video);
+                                aribb24Superimpose.show();
 
                                 mpegtsPlayer.on(window.mpegts.Events.PES_PRIVATE_DATA_ARRIVED, function (data) {
                                     if (data.stream_id === 0xbd && data.data[0] === 0x80) {
                                         // private_stream_1, caption
-                                        aribb24_caption.pushData(data.pid, data.data, data.pts / 1000);
+                                        aribb24Caption.pushData(data.pid, data.data, data.pts / 1000);
                                     } else if (data.stream_id === 0xbf) {
                                         // private_stream_2, superimpose
                                         let payload = data.data;
@@ -515,7 +528,7 @@ class DPlayer {
                                             payload = utils.parseMalformedPES(data.data);
                                         }
                                         if (payload[0] === 0x81) {
-                                            aribb24_superimpose.pushData(data.pid, payload, data.nearest_pts / 1000);
+                                            aribb24Superimpose.pushData(data.pid, payload, data.nearest_pts / 1000);
                                         }
                                     }
                                 });
@@ -680,7 +693,7 @@ class DPlayer {
         this.volume(this.user.get('volume'), true, true);
 
         if (this.options.subtitle) {
-            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins.aribb24_caption, this.plugins.aribb24_superimpose, this.options.subtitle, this.events);
+            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins.aribb24Caption, this.plugins.aribb24Superimpose, this.options.subtitle, this.events);
             if (!this.user.get('subtitle')) {
                 this.subtitle.hide();
             }
@@ -768,11 +781,11 @@ class DPlayer {
         if (this.danmaku) {
             this.danmaku.resize();
         }
-        if (this.plugins.aribb24_caption) {
-            this.plugins.aribb24_caption.refresh();
+        if (this.plugins.aribb24Caption) {
+            this.plugins.aribb24Caption.refresh();
         }
-        if (this.plugins.aribb24_superimpose) {
-            this.plugins.aribb24_superimpose.refresh();
+        if (this.plugins.aribb24Superimpose) {
+            this.plugins.aribb24Superimpose.refresh();
         }
         if (this.controller.thumbnails) {
             this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
