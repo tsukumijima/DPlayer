@@ -371,16 +371,27 @@ class DPlayer {
                 case 'hls':
                     if (window.Hls) {
                         // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
-                        const isiPadSafari = /iPad/i.test(navigator.userAgent) && /Safari/i.test(navigator.userAgent) && (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'));
+                        // prettier-ignore
+                        const isiPadSafari = (
+                            /iPad/i.test(navigator.userAgent) &&
+                            /Safari/i.test(navigator.userAgent) &&
+                            (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
+                        );
                         if (window.Hls.isSupported() && !isiPadSafari) {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 this.plugins.hls.destroy();
+                                delete this.plugins.hls;
+                                // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
                                     delete this.plugins.aribb24Caption;
                                 }
-                                delete this.plugins.hls;
+                                // destroy aribb24 superimpose
+                                if (this.plugins.aribb24Superimpose) {
+                                    this.plugins.aribb24Superimpose.dispose();
+                                    delete this.plugins.aribb24Superimpose;
+                                }
                             }
 
                             // Initialize hls.js
@@ -389,48 +400,76 @@ class DPlayer {
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
+
+                            // Processing when destroy
                             this.events.on('destroy', () => {
                                 hls.destroy();
+                                delete this.plugins.hls;
+                                // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
                                     delete this.plugins.aribb24Caption;
                                 }
-                                delete this.plugins.hls;
+                                // destroy aribb24 superimpose
+                                if (this.plugins.aribb24Superimpose) {
+                                    this.plugins.aribb24Superimpose.dispose();
+                                    delete this.plugins.aribb24Superimpose;
+                                }
                             });
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                                // Set options
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for hls.js
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24Caption = new aribb24js.CanvasRenderer(aribb24Options);
-                                this.plugins.aribb24Caption = aribb24Caption;
+
+                                // Initialize aribb24 caption
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x80 })));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
+
+                                // Initialize aribb24 superimpose
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x81 })));
+                                aribb24Superimpose.attachMedia(video);
+                                aribb24Superimpose.show();
+
+                                // Push caption data into CanvasRenderer
                                 hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
                                     for (const sample of data.samples) {
                                         aribb24Caption.pushID3v2Data(sample.pts, sample.data);
+                                        aribb24Superimpose.pushID3v2Data(sample.pts, sample.data);
                                     }
                                 });
                             }
-
-                            // Normal playback
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
+                            // Normal playback
                             // If it has already been initialized, destroy it once
                             if (this.plugins.aribb24Caption) {
                                 this.plugins.aribb24Caption.dispose();
                                 delete this.plugins.aribb24Caption;
                             }
+                            if (this.plugins.aribb24Superimpose) {
+                                this.plugins.aribb24Superimpose.dispose();
+                                delete this.plugins.aribb24Superimpose;
+                            }
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                                // Set options
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
                                 const aribb24Options = this.options.pluginOptions.aribb24;
-                                const aribb24Caption = new aribb24js.CanvasRenderer(aribb24Options);
-                                this.plugins.aribb24Caption = aribb24Caption;
+
+                                // Initialize aribb24 caption
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x80 })));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
+
+                                // Initialize aribb24 superimpose
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x81 })));
+                                aribb24Superimpose.attachMedia(video);
+                                aribb24Superimpose.show();
                             }
                         } else {
                             this.notice('Error: HLS is not supported.');
@@ -500,20 +539,12 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {
-                                        data_identifer: 0x80,
-                                    })
-                                ));
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x80 })));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {
-                                        data_identifer: 0x81,
-                                    })
-                                ));
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifer: 0x81 })));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
