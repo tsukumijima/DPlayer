@@ -548,20 +548,10 @@ class DPlayer {
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
-                                mpegtsPlayer.on(window.mpegts.Events.PES_PRIVATE_DATA_ARRIVED, function (data) {
-                                    if (data.stream_id === 0xbd && data.data[0] === 0x80) {
-                                        // private_stream_1, caption
-                                        aribb24Caption.pushData(data.pid, data.data, data.pts / 1000);
-                                    } else if (data.stream_id === 0xbf) {
-                                        // private_stream_2, superimpose
-                                        let payload = data.data;
-                                        if (payload[0] !== 0x81) {
-                                            payload = utils.parseMalformedPES(data.data);
-                                        }
-                                        if (payload[0] === 0x81) {
-                                            aribb24Superimpose.pushData(data.pid, payload, data.nearest_pts / 1000);
-                                        }
-                                    }
+                                // Push caption data into CanvasRenderer
+                                mpegtsPlayer.on(window.mpegts.Events.TIMED_ID3_METADATA_ARRIVED, (data) => {
+                                    aribb24Caption.pushID3v2Data(data.pts / 1000, data.data);
+                                    aribb24Superimpose.pushID3v2Data(data.pts / 1000, data.data);
                                 });
                             }
                         } else {
