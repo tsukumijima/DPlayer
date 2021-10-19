@@ -75,7 +75,7 @@
         "yorkie": "^2.0.0"
     },
     "dependencies": {
-        "aribb24.js": "1.7.9",
+        "aribb24.js": "1.7.11",
         "axios": "0.21.0",
         "balloon-css": "^1.0.3",
         "promise-polyfill": "8.2.0"
