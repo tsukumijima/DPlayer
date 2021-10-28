@@ -220,8 +220,10 @@ class Danmaku {
                 const item = document.createElement('div');
                 item.classList.add('dplayer-danmaku-item');
                 item.classList.add(`dplayer-danmaku-${dan[i].type}`);
+                // show line break
+                dan[i].text = dan[i].text.replace(/\n/g, '<br>');
                 if (dan[i].border) {
-                    item.innerHTML = `<span style="border:${dan[i].border}">${dan[i].text}</span>`;
+                    item.innerHTML = `<span style="border:${dan[i].border};-webkit-box-decoration-break:clone;">${dan[i].text}</span>`;
                 } else {
                     item.innerHTML = dan[i].text;
                 }
@@ -231,7 +233,17 @@ class Danmaku {
                     this.container.removeChild(item);
                 });
 
-                const itemWidth = this._measure(dan[i].text, itemFontSize);
+                const itemWidth = (() => {
+                    let measure = 0;
+                    // returns the width of the widest line
+                    dan[i].text.split('<br>').forEach((text) => {
+                        const result = this._measure(text, itemFontSize);
+                        if (result > measure) {
+                            measure = result;
+                        }
+                    });
+                    return measure;
+                })();
                 let tunnel;
 
                 // adjust
