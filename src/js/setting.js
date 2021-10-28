@@ -11,6 +11,10 @@ class Setting {
             this.show();
         });
 
+        // clip setting box
+        const settingOriginPanelHeight = this.player.template.settingOriginPanel.clientHeight;
+        this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
+
         // loop
         this.loop = this.player.options.loop;
         this.player.template.loopToggle.checked = this.loop;
@@ -72,6 +76,28 @@ class Setting {
             });
         }
 
+        // audio
+        this.player.template.audio.addEventListener('click', () => {
+            this.player.template.settingBox.classList.add('dplayer-setting-box-audio');
+        });
+        this.player.template.audioHeader.addEventListener('click', () => {
+            this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
+        });
+        for (let i = 0; i < this.player.template.audioItem.length; i++) {
+            this.player.template.audioItem[i].addEventListener('click', () => {
+                this.player.container.querySelector('.dplayer-setting-audio-current').classList.remove('dplayer-setting-audio-current');
+                this.player.template.audioItem[i].classList.add('dplayer-setting-audio-current');
+                if (this.player.plugins.mpegts) {
+                    if (this.player.template.audioItem[i].dataset.audio === 'primary') {
+                        this.player.plugins.switchPrimaryAudio();
+                    } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
+                        this.player.plugins.switchSecondaryAudio();
+                    }
+                }
+                this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
+            });
+        }
+
         // danmaku opacity
         if (this.player.danmaku) {
             const barWidth = 190;
@@ -114,6 +140,7 @@ class Setting {
         this.player.template.mask.classList.remove('dplayer-mask-show');
         setTimeout(() => {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
+            this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
         }, 300);
 
         this.player.controller.disableAutoHide = false;

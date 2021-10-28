@@ -48,6 +48,10 @@ class DPlayer {
         if (!this.options.danmaku) {
             this.container.classList.add('dplayer-no-danmaku');
         }
+        if (this.options.video.type !== 'mpegts') {
+            // mpegts only
+            this.container.classList.add('dplayer-no-audio-switching');
+        }
         if (this.options.live) {
             this.container.classList.add('dplayer-live');
         } else {

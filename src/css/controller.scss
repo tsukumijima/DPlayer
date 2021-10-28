@@ -535,7 +535,6 @@
     height: calc(100% - 50px - 8px);
     border-radius: 7px;
     background: rgba(28, 28, 28, 0.9);
-    clip-path: inset(calc(100% - 164px) 0 0 round 7px);
     transition: all .25s ease;
     box-sizing: border-box;
     overflow-x: hidden;
@@ -554,11 +553,21 @@
         opacity: 1;
     }
     &.dplayer-setting-box-speed {
-        clip-path: inset(calc(100% - 294px) 0 0 round 7px);
+        clip-path: inset(calc(100% - 294px) 0 0 round 7px) !important;
         .dplayer-setting-origin-panel {
             transform: translateX(-100%);
         }
         .dplayer-setting-speed-panel {
+            display: block;
+            transform: translateX(0%);
+        }
+    }
+    &.dplayer-setting-box-audio {
+        clip-path: inset(calc(100% - 114px) 0 0 round 7px) !important;
+        .dplayer-setting-origin-panel {
+            transform: translateX(-100%);
+        }
+        .dplayer-setting-audio-panel {
             display: block;
             transform: translateX(0%);
         }
@@ -627,7 +636,9 @@
             left: 12px;
         }
     }
-    .dplayer-setting-origin-panel, .dplayer-setting-speed-panel  {
+    .dplayer-setting-origin-panel,
+    .dplayer-setting-speed-panel,
+    .dplayer-setting-audio-panel {
         position: absolute;
         bottom: 0px;
         width: 100%;
@@ -647,7 +658,8 @@
     .dplayer-setting-origin-panel {
         transform: translateX(0%);
     }
-    .dplayer-setting-speed-panel {
+    .dplayer-setting-speed-panel,
+    .dplayer-setting-audio-panel {
         transform: translateX(100%);
         .dplayer-setting-header {
             display: flex;
@@ -660,12 +672,14 @@
             box-sizing: border-box;
             cursor: pointer;
         }
-        .dplayer-setting-speed-item {
+        .dplayer-setting-speed-item,
+        .dplayer-setting-audio-item {
             padding: 5px;
             .dplayer-toggle {
                 visibility: hidden;
             }
-            &.dplayer-setting-speed-current .dplayer-toggle {
+            &.dplayer-setting-speed-current .dplayer-toggle,
+            &.dplayer-setting-audio-current .dplayer-toggle {
                 visibility: visible;
             }
         }
@@ -677,7 +691,8 @@
         }
     }
     .dplayer-setting-item,
-    .dplayer-setting-speed-item {
+    .dplayer-setting-speed-item,
+    .dplayer-setting-audio-item {
         display: flex;
         align-items: center;
         height: 30px;

@@ -53,6 +53,7 @@ class Template {
         this.ptime = this.container.querySelector('.dplayer-ptime');
         this.settingButton = this.container.querySelector('.dplayer-setting-icon');
         this.settingBox = this.container.querySelector('.dplayer-setting-box');
+        this.settingOriginPanel = this.container.querySelector('.dplayer-setting-origin-panel');
         this.mask = this.container.querySelector('.dplayer-mask');
         this.syncButton = this.container.querySelector('.dplayer-live-badge');
         this.loop = this.container.querySelector('.dplayer-setting-loop');
@@ -64,6 +65,9 @@ class Template {
         this.speed = this.container.querySelector('.dplayer-setting-speed');
         this.speedHeader = this.container.querySelector('.dplayer-setting-speed-header');
         this.speedItem = this.container.querySelectorAll('.dplayer-setting-speed-item');
+        this.audio = this.container.querySelector('.dplayer-setting-audio');
+        this.audioHeader = this.container.querySelector('.dplayer-setting-audio-header');
+        this.audioItem = this.container.querySelectorAll('.dplayer-setting-audio-item');
         this.danmakuOpacityBar = this.container.querySelector('.dplayer-danmaku-bar-inner');
         this.danmakuOpacityBarWrap = this.container.querySelector('.dplayer-danmaku-bar');
         this.danmakuOpacityBarWrapWrap = this.container.querySelector('.dplayer-danmaku-bar-wrap');

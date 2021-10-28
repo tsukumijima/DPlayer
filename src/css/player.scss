@@ -49,7 +49,7 @@
     }
 
     &.dplayer-no-danmaku {
-        .dplayer-controller .dplayer-icons .dplayer-setting .dplayer-setting-box {
+        .dplayer-setting-box {
             .dplayer-setting-showdan,
             .dplayer-setting-danmaku,
             .dplayer-setting-danunlimit {
@@ -63,6 +63,14 @@
 
         .dplayer-danmaku {
             display: none;
+        }
+    }
+
+    &.dplayer-no-audio-switching {
+        .dplayer-setting-box {
+            .dplayer-setting-audio {
+                display: none;
+            }
         }
     }
 
@@ -87,7 +95,7 @@
             display: none;
         }
 
-        &.dplayer-no-danmaku {
+        &.dplayer-no-danmaku.dplayer-no-audio-switching {
             .dplayer-setting {
                 display: none;
             }

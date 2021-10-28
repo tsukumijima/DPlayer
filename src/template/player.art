@@ -132,6 +132,10 @@
             background: {{ options.theme }};
         }
         </style>
+        <div class="dplayer-setting-item dplayer-setting-audio">
+            <span class="dplayer-label">{{ tran('Audio') }}</span>
+            <div class="dplayer-toggle">{{@ icons.right }}</div>
+        </div>
         <div class="dplayer-setting-item dplayer-setting-speed">
             <span class="dplayer-label">{{ tran('Speed') }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
@@ -179,6 +183,20 @@
                 <span class="dplayer-label">{{ $value === 1 ? tran('Normal') : $value }}</span>
             </div>
         {{ /each }}
+    </div>
+    <div class="dplayer-setting-audio-panel">
+        <div class="dplayer-setting-header dplayer-setting-audio-header">
+            <div class="dplayer-toggle">{{@ icons.left }}</div>
+            <span class="dplayer-label">{{ tran('Audio') }}</span>
+        </div>
+        <div class="dplayer-setting-audio-item dplayer-setting-audio-current" data-audio="primary">
+            <div class="dplayer-toggle">{{@ icons.check }}</div>
+            <span class="dplayer-label">{{ tran('Primary audio') }}</span>
+        </div>
+        <div class="dplayer-setting-audio-item" data-audio="secondary">
+            <div class="dplayer-toggle">{{@ icons.check }}</div>
+            <span class="dplayer-label">{{ tran('Prioritize secondary audio') }}</span>
+        </div>
     </div>
 </div>
 <div class="dplayer-comment-setting-box">
