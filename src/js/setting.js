@@ -11,17 +11,6 @@ class Setting {
             this.show();
         });
 
-        this.player.video.addEventListener('loadedmetadata', () => {
-            if (this.player.container.offsetWidth <= 500) {
-                this.player.template.settingBox.style.maxHeight = this.player.container.offsetHeight - 55 + 'px';
-            }
-        });
-        window.addEventListener('resize', () => {
-            if (this.player.container.offsetWidth <= 500) {
-                this.player.template.settingBox.style.maxHeight = this.player.container.offsetHeight - 55 + 'px';
-            }
-        });
-
         // loop
         this.loop = this.player.options.loop;
         this.player.template.loopToggle.checked = this.loop;
@@ -32,7 +21,6 @@ class Setting {
             } else {
                 this.loop = false;
             }
-            this.hide();
         });
 
         // show danmaku
@@ -51,7 +39,6 @@ class Setting {
                 this.player.danmaku.hide();
             }
             this.player.user.set('danmaku', this.showDanmaku ? 1 : 0);
-            this.hide();
         });
 
         // unlimit danmaku
@@ -67,18 +54,21 @@ class Setting {
                 this.player.danmaku.unlimit(false);
             }
             this.player.user.set('unlimited', this.unlimitDanmaku ? 1 : 0);
-            this.hide();
         });
 
         // speed
         this.player.template.speed.addEventListener('click', () => {
-            this.player.template.settingBox.classList.add('dplayer-setting-box-narrow');
             this.player.template.settingBox.classList.add('dplayer-setting-box-speed');
+        });
+        this.player.template.speedHeader.addEventListener('click', () => {
+            this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
         });
         for (let i = 0; i < this.player.template.speedItem.length; i++) {
             this.player.template.speedItem[i].addEventListener('click', () => {
+                this.player.container.querySelector('.dplayer-setting-speed-current').classList.remove('dplayer-setting-speed-current');
+                this.player.template.speedItem[i].classList.add('dplayer-setting-speed-current');
                 this.player.speed(this.player.template.speedItem[i].dataset.speed);
-                this.hide();
+                this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
             });
         }
 
@@ -123,7 +113,6 @@ class Setting {
         this.player.template.settingBox.classList.remove('dplayer-setting-box-open');
         this.player.template.mask.classList.remove('dplayer-mask-show');
         setTimeout(() => {
-            this.player.template.settingBox.classList.remove('dplayer-setting-box-narrow');
             this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
         }, 300);
 

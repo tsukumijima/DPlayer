@@ -62,6 +62,7 @@ class Template {
         this.unlimitDanmaku = this.container.querySelector('.dplayer-setting-danunlimit');
         this.unlimitDanmakuToggle = this.container.querySelector('.dplayer-danunlimit-setting-input');
         this.speed = this.container.querySelector('.dplayer-setting-speed');
+        this.speedHeader = this.container.querySelector('.dplayer-setting-speed-header');
         this.speedItem = this.container.querySelectorAll('.dplayer-setting-speed-item');
         this.danmakuOpacityBar = this.container.querySelector('.dplayer-danmaku-bar-inner');
         this.danmakuOpacityBarWrap = this.container.querySelector('.dplayer-danmaku-bar');

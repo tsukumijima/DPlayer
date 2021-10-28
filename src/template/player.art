@@ -142,60 +142,6 @@
             <button class="dplayer-icon dplayer-setting-icon" aria-label="{{ tran('Setting') }}" data-balloon-pos="up">
                 <span class="dplayer-icon-content">{{@ icons.setting }}</span>
             </button>
-            <div class="dplayer-setting-box">
-                <div class="dplayer-setting-origin-panel">
-                    <style>
-                    .dplayer-controller .dplayer-icons .dplayer-toggle input:checked+label {
-                        border-color: {{ options.theme }};
-                    }
-                    .dplayer-controller .dplayer-icons .dplayer-toggle input:checked+label:before {
-                        background: {{ options.theme }};
-                    }
-                    </style>
-                    <div class="dplayer-setting-item dplayer-setting-speed">
-                        <span class="dplayer-label">{{ tran('Speed') }}</span>
-                        <div class="dplayer-toggle">{{@ icons.right }}</div>
-                    </div>
-                    <div class="dplayer-setting-item dplayer-setting-loop">
-                        <span class="dplayer-label">{{ tran('Loop') }}</span>
-                        <div class="dplayer-toggle">
-                            <input class="dplayer-toggle-setting-input" type="checkbox" name="dplayer-toggle">
-                            <label for="dplayer-toggle"></label>
-                        </div>
-                    </div>
-                    <div class="dplayer-setting-item dplayer-setting-showdan">
-                        <span class="dplayer-label">{{ tran('Show danmaku') }}</span>
-                        <div class="dplayer-toggle">
-                            <input class="dplayer-showdan-setting-input" type="checkbox" name="dplayer-toggle-dan">
-                            <label for="dplayer-toggle-dan"></label>
-                        </div>
-                    </div>
-                    <div class="dplayer-setting-item dplayer-setting-danunlimit">
-                        <span class="dplayer-label">{{ tran('Unlimited danmaku') }}</span>
-                        <div class="dplayer-toggle">
-                            <input class="dplayer-danunlimit-setting-input" type="checkbox" name="dplayer-toggle-danunlimit">
-                            <label for="dplayer-toggle-danunlimit"></label>
-                        </div>
-                    </div>
-                    <div class="dplayer-setting-item dplayer-setting-danmaku">
-                        <span class="dplayer-label">{{ tran('Opacity for danmaku') }}</span>
-                        <div class="dplayer-danmaku-bar-wrap">
-                            <div class="dplayer-danmaku-bar">
-                                <div class="dplayer-danmaku-bar-inner" style="background: {{ options.theme }};">
-                                    <span class="dplayer-thumb" style="background: {{ options.theme }};"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dplayer-setting-speed-panel">
-                    {{ each options.playbackSpeed }}
-                        <div class="dplayer-setting-speed-item" data-speed="{{ $value }}">
-                            <span class="dplayer-label">{{ $value === 1 ? tran('Normal') : $value }}</span>
-                        </div>
-                    {{ /each }}
-                </div>
-            </div>
         </div>
         <div class="dplayer-full">
             <button class="dplayer-icon dplayer-pip-icon" aria-label="{{ tran('Picture-in-Picture') }}" data-balloon-pos="up">
@@ -218,6 +164,65 @@
                 <span class="dplayer-thumb" style="background: {{ options.theme }};"></span>
             </div>
         </div>
+    </div>
+</div>
+<div class="dplayer-setting-box">
+    <div class="dplayer-setting-origin-panel">
+        <style>
+        .dplayer-setting-box .dplayer-toggle input:checked+label {
+            border-color: {{ options.theme }};
+        }
+        .dplayer-setting-box .dplayer-toggle input:checked+label:before {
+            background: {{ options.theme }};
+        }
+        </style>
+        <div class="dplayer-setting-item dplayer-setting-speed">
+            <span class="dplayer-label">{{ tran('Speed') }}</span>
+            <div class="dplayer-toggle">{{@ icons.right }}</div>
+        </div>
+        <div class="dplayer-setting-item dplayer-setting-loop">
+            <span class="dplayer-label">{{ tran('Loop') }}</span>
+            <div class="dplayer-toggle">
+                <input class="dplayer-toggle-setting-input" type="checkbox" name="dplayer-toggle">
+                <label for="dplayer-toggle"></label>
+            </div>
+        </div>
+        <div class="dplayer-setting-item dplayer-setting-showdan">
+            <span class="dplayer-label">{{ tran('Show danmaku') }}</span>
+            <div class="dplayer-toggle">
+                <input class="dplayer-showdan-setting-input" type="checkbox" name="dplayer-toggle-dan">
+                <label for="dplayer-toggle-dan"></label>
+            </div>
+        </div>
+        <div class="dplayer-setting-item dplayer-setting-danunlimit">
+            <span class="dplayer-label">{{ tran('Unlimited danmaku') }}</span>
+            <div class="dplayer-toggle">
+                <input class="dplayer-danunlimit-setting-input" type="checkbox" name="dplayer-toggle-danunlimit">
+                <label for="dplayer-toggle-danunlimit"></label>
+            </div>
+        </div>
+        <div class="dplayer-setting-item dplayer-setting-danmaku">
+            <span class="dplayer-label">{{ tran('Opacity for danmaku') }}</span>
+            <div class="dplayer-danmaku-bar-wrap">
+                <div class="dplayer-danmaku-bar">
+                    <div class="dplayer-danmaku-bar-inner" style="background: {{ options.theme }};">
+                        <span class="dplayer-thumb" style="background: {{ options.theme }};"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dplayer-setting-speed-panel">
+        <div class="dplayer-setting-header dplayer-setting-speed-header">
+            <div class="dplayer-toggle">{{@ icons.left }}</div>
+            <span class="dplayer-label">{{ tran('Speed') }}</span>
+        </div>
+        {{ each options.playbackSpeed }}
+            <div class="dplayer-setting-speed-item {{ $value === 1 ? 'dplayer-setting-speed-current' : '' }}" data-speed="{{ $value }}">
+                <div class="dplayer-toggle">{{@ icons.check }}</div>
+                <span class="dplayer-label">{{ $value === 1 ? tran('Normal') : $value }}</span>
+            </div>
+        {{ /each }}
     </div>
 </div>
 <div class="dplayer-info-panel dplayer-info-panel-hide">
