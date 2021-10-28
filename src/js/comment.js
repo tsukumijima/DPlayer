@@ -87,11 +87,14 @@ class Comment {
                 type: parseInt(this.player.container.querySelector('.dplayer-comment-setting-type input:checked').value),
             },
             () => {
-                this.player.template.commentInput.value = '';
                 this.hide();
                 this.player.controller.setAutoHide(750);
-            }
+            },
+            true
         );
+
+        // prevent double send
+        this.player.template.commentInput.value = '';
     }
 }
 

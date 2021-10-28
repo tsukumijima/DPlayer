@@ -82,7 +82,7 @@ class Danmaku {
         }
     }
 
-    send(dan, callback) {
+    send(dan, callback, isCallbackOnError = false) {
         const danmakuData = {
             token: this.options.api.token,
             id: this.options.api.id,
@@ -98,6 +98,9 @@ class Danmaku {
             success: callback,
             error: (msg) => {
                 this.options.error(msg || this.options.tran('Danmaku send failed'));
+                if (isCallbackOnError === true) {
+                    callback();
+                }
             },
         });
 
