@@ -600,28 +600,28 @@
             content: "";
             position: absolute;
             display: block;
-            height: 18px;
-            width: 18px;
-            top: 0;
-            left: 0;
+            height: 19px;
+            width: 19px;
+            top: -0.5px;
+            left: -0.5px;
             border-radius: 15px;
             transition: .25s ease;
         }
         input+label:after {
             content: "";
-            position: absolute;
             display: block;
+            position: absolute;
+            height: 18.1px;
+            width: 18.1px;
+            top: -0.1px;
             left: 0;
-            top: 0;
             border-radius: 15px;
             background: #fff;
             transition: .25s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-            height: 18px;
-            width: 18px;
         }
         input:checked+label:before {
-            width: 30px;
+            width: 31px;
         }
         input:checked+label:after {
             left: 12px;
@@ -730,7 +730,7 @@
                     bottom: 0;
                     left: 0;
                     height: 100%;
-                    transition: all 0.1s ease;
+                    transition: all 0.06s ease;
                     will-change: width;
                     .dplayer-thumb {
                         position: absolute;
