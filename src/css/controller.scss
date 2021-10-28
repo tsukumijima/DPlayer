@@ -82,10 +82,11 @@
             }
         }
         .dplayer-bar-preview {
+            display: none;
             position: absolute;
+            border-radius: 6px;
             background: #fff;
             pointer-events: none;
-            display: none;
             background-size: 16000px 100%;
         }
         .dplayer-bar-preview-canvas {
@@ -181,6 +182,9 @@
                 position: absolute;
                 right: 0;
                 top: 0;
+                &[aria-label]:after {
+                    left: 14%;
+                }
             }
             .dplayer-comment-input {
                 outline: none;
@@ -332,21 +336,7 @@
                 width: 43px;
             }
             &.dplayer-full-icon[aria-label]:after {
-                left: 2px;
-            }
-            &.dplayer-full-in-icon[aria-label]:after {
-                left: -22px;
-            }
-            &.dplayer-pip-icon[aria-label]:after {
-                left: -27px;
-            }
-            @media (max-width: 1024px){
-                &.dplayer-full-in-icon[aria-label]:after {
-                    left: 47%;
-                }
-                &.dplayer-pip-icon[aria-label]:after {
-                    left: 14%;
-                }
+                left: 1%;
             }
         }
         @media (max-width: 350px){
@@ -423,26 +413,6 @@
             display: inline-block;
             height: 100%;
             position: relative;
-            &:hover {
-                .dplayer-full-in-icon {
-                    display: block;
-                }
-                .dplayer-pip-icon {
-                    display: block;
-                }
-            }
-            .dplayer-full-in-icon {
-                position: absolute;
-                top: -30px;
-                z-index: 1;
-                display: none;
-            }
-            .dplayer-pip-icon {
-                position: absolute;
-                top: -60px;
-                z-index: 1;
-                display: none;
-            }
         }
         .dplayer-quality {
             position: relative;
