@@ -9,6 +9,7 @@ import full from '../assets/full.svg';
 import fullWeb from '../assets/full-web.svg';
 import pip from '../assets/pip.svg';
 import setting from '../assets/setting.svg';
+import left from '../assets/left.svg';
 import right from '../assets/right.svg';
 import comment from '../assets/comment.svg';
 import commentOff from '../assets/comment-off.svg';
@@ -31,6 +32,7 @@ const Icons = {
     fullWeb: fullWeb,
     pip: pip,
     setting: setting,
+    left: left,
     right: right,
     comment: comment,
     commentOff: commentOff,
