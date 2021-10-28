@@ -10,18 +10,22 @@
 -   日本語への対応
 -   Danmaku（コメント）描画周りの修正
 -   スマホ・タブレットや日本語対応により崩れる CSS の修正
+-   スマホ・タブレット向け UI の最適化と改善
+-   スマホ・タブレット向けの早送り・巻き戻しボタンの追加
 -   早送り・巻き戻し周りの不具合の修正
 -   Live 再生時の同期ボタンの追加
 -   Picture-in-Picture (PiP) ボタンの追加
 -   キーボードショートカット（ホットキー）の追加
 -   スクリーンショット時のファイル名の変更
--   aribb24.js を利用した字幕表示の対応
+-   mpegts.js を利用した低遅延ライブストリーミングのサポートを追加
+-   aribb24.js を利用した ARIB 字幕・文字スーパーのサポートを追加
+-   そのほか多数の不具合修正と改善
 
-など、TVRemotePlus 向けに多くの不具合改善や変更を行った DPlayer です。
+と、KonomiTV・TVRemotePlus 向けに多くの不具合改善や変更を行った DPlayer です。
 
 おそらく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
 ぜひ日本でももっと広まって欲しいと思っています（コメントを流さない場合でも軽量で優秀なプレイヤーだと思います）。  
-TVRemotePlus 向けではありますが、できるだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
+KonomiTV や TVRemotePlus 向けではありますが、できるだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
 
 [![npm](https://img.shields.io/npm/v/dplayer.svg?style=flat-square)](https://www.npmjs.com/package/dplayer)
 [![npm](https://img.shields.io/npm/l/dplayer.svg?style=flat-square)](https://github.com/MoePlayer/DPlayer/blob/master/LICENSE)
