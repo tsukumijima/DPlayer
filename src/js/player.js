@@ -820,6 +820,12 @@ class DPlayer {
 
     speed(rate) {
         this.video.playbackRate = rate;
+        this.template.speedItem.forEach((elem) => {
+            if (parseFloat(elem.dataset.speed) === rate) {
+                this.container.querySelector('.dplayer-setting-speed-current').classList.remove('dplayer-setting-speed-current');
+                elem.classList.add('dplayer-setting-speed-current');
+            }
+        });
     }
 
     destroy() {
