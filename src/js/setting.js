@@ -89,9 +89,9 @@ class Setting {
                 this.player.template.audioItem[i].classList.add('dplayer-setting-audio-current');
                 if (this.player.plugins.mpegts) {
                     if (this.player.template.audioItem[i].dataset.audio === 'primary') {
-                        this.player.plugins.switchPrimaryAudio();
+                        this.player.plugins.mpegts.switchPrimaryAudio();
                     } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
-                        this.player.plugins.switchSecondaryAudio();
+                        this.player.plugins.mpegts.switchSecondaryAudio();
                     }
                 }
                 this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
