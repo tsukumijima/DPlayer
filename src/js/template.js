@@ -88,7 +88,7 @@ class Template {
         this.menu = this.container.querySelector('.dplayer-menu');
         this.menuItem = this.container.querySelectorAll('.dplayer-menu-item');
         this.qualityList = this.container.querySelector('.dplayer-quality-list');
-        this.camareButton = this.container.querySelector('.dplayer-camera-icon');
+        this.cameraButton = this.container.querySelector('.dplayer-camera-icon');
         this.airplayButton = this.container.querySelector('.dplayer-airplay-icon');
         this.subtitleButton = this.container.querySelector('.dplayer-subtitle-icon');
         this.subtitleButtonInner = this.container.querySelector('.dplayer-subtitle-icon .dplayer-icon-content');

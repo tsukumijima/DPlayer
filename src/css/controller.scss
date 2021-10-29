@@ -244,15 +244,17 @@
             right: 20px;
             .dplayer-icon {
                 padding: 8px;
-            }
-            @media (max-width: 500px){
-                .dplayer-icon {
-                    padding: 7px;
+                @media (max-width: 500px){
+                    & {
+                        width: 38px;
+                        padding: 7px;
+                    }
                 }
-            }
-            @media (max-width: 350px){
-                .dplayer-icon {
-                    padding: 6px;
+                @media (max-width: 350px){
+                    & {
+                        width: 31px;
+                        padding: 5px;
+                    }
                 }
             }
         }
@@ -263,6 +265,11 @@
             vertical-align: middle;
             font-size: 13px;
             font-family: inherit;
+            @media (max-width: 350px){
+                & {
+                    font-size: 12px;
+                }
+            }
         }
         .dplayer-live-badge {
             line-height: 18px;
@@ -321,15 +328,15 @@
             }
             &.dplayer-comment-icon {
                 padding: 10.5px 9.5px 8px;
-            }
-            @media (max-width: 500px){
-                &.dplayer-comment-icon {
-                    padding: 9.5px 9.5px 8px;
+                @media (max-width: 500px){
+                    & {
+                        padding: 9px 9px 8px;
+                    }
                 }
-            }
-            @media (max-width: 350px){
-                &.dplayer-comment-icon {
-                    padding: 9px 8px 8px;
+                @media (max-width: 350px){
+                    & {
+                        padding: 6.5px 6.5px 6px;
+                    }
                 }
             }
             &.dplayer-volume-icon {
@@ -338,10 +345,10 @@
             &.dplayer-full-icon[aria-label]:after {
                 left: 1%;
             }
-        }
-        @media (max-width: 350px){
-            .dplayer-icon {
-                width: 35px;
+            @media (max-width: 350px){
+                & {
+                    width: 35px;
+                }
             }
         }
         .dplayer-volume {
@@ -599,8 +606,12 @@
             transition: .25s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
         }
+        input:checked+label {
+            border-color: var(--theme-color);
+        }
         input:checked+label:before {
             width: 31px;
+            background: var(--theme-color);
         }
         input:checked+label:after {
             left: 12px;

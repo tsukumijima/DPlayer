@@ -124,14 +124,6 @@
 </div>
 <div class="dplayer-setting-box">
     <div class="dplayer-setting-origin-panel">
-        <style>
-        .dplayer-setting-box .dplayer-toggle input:checked+label {
-            border-color: {{ options.theme }};
-        }
-        .dplayer-setting-box .dplayer-toggle input:checked+label:before {
-            background: {{ options.theme }};
-        }
-        </style>
         <div class="dplayer-setting-item dplayer-setting-audio">
             <span class="dplayer-label">{{ tran('Audio') }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
@@ -144,21 +136,21 @@
             <span class="dplayer-label">{{ tran('Loop') }}</span>
             <div class="dplayer-toggle">
                 <input class="dplayer-toggle-setting-input" type="checkbox" name="dplayer-toggle">
-                <label for="dplayer-toggle"></label>
+                <label for="dplayer-toggle" style="--theme-color:{{ options.theme }}"></label>
             </div>
         </div>
         <div class="dplayer-setting-item dplayer-setting-showdan">
             <span class="dplayer-label">{{ tran('Show danmaku') }}</span>
             <div class="dplayer-toggle">
                 <input class="dplayer-showdan-setting-input" type="checkbox" name="dplayer-toggle-dan">
-                <label for="dplayer-toggle-dan"></label>
+                <label for="dplayer-toggle-dan" style="--theme-color:{{ options.theme }}"></label>
             </div>
         </div>
         <div class="dplayer-setting-item dplayer-setting-danunlimit">
             <span class="dplayer-label">{{ tran('Unlimited danmaku') }}</span>
             <div class="dplayer-toggle">
                 <input class="dplayer-danunlimit-setting-input" type="checkbox" name="dplayer-toggle-danunlimit">
-                <label for="dplayer-toggle-danunlimit"></label>
+                <label for="dplayer-toggle-danunlimit" style="--theme-color:{{ options.theme }}"></label>
             </div>
         </div>
         <div class="dplayer-setting-item dplayer-setting-danmaku">

@@ -307,7 +307,7 @@ class Controller {
 
     initScreenshotButton() {
         if (this.player.options.screenshot) {
-            this.player.template.camareButton.addEventListener('click', () => {
+            this.player.template.cameraButton.addEventListener('click', () => {
                 const canvas = document.createElement('canvas');
                 canvas.width = this.player.video.videoWidth;
                 canvas.height = this.player.video.videoHeight;
@@ -315,9 +315,18 @@ class Controller {
 
                 let dataURL;
                 canvas.toBlob((blob) => {
+                    // generate a tag
+                    if (blob === null) {
+                        return;
+                    }
                     dataURL = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = dataURL;
+                    if (typeof link.download === 'undefined') {
+                        this.player.notice('Error: Screenshot download is not supported.');
+                    }
+
+                    // generate screenshot name
                     const today = new Date();
                     const year = today.getFullYear();
                     const month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -325,7 +334,9 @@ class Controller {
                     const hour = ('0' + today.getHours()).slice(-2);
                     const min = ('0' + today.getMinutes()).slice(-2);
                     const sec = ('0' + today.getSeconds()).slice(-2);
-                    link.download = 'Capture_' + year + month + day + '-' + hour + min + sec + '.png';
+                    link.download = `Capture_${year}${month}${day}-${hour}${min}${sec}.png`;
+
+                    // download screenshot
                     link.style.display = 'none';
                     document.body.appendChild(link);
                     link.click();
