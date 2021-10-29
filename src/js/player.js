@@ -48,10 +48,6 @@ class DPlayer {
         if (!this.options.danmaku) {
             this.container.classList.add('dplayer-no-danmaku');
         }
-        if (this.options.video.type !== 'mpegts') {
-            // mpegts only
-            this.container.classList.add('dplayer-no-audio-switching');
-        }
         if (this.options.live) {
             this.container.classList.add('dplayer-live');
         } else {
@@ -121,7 +117,6 @@ class DPlayer {
             this.comment = new Comment(this);
         }
 
-        this.setting = new Setting(this);
         this.plugins = {};
 
         document.addEventListener(
@@ -148,6 +143,8 @@ class DPlayer {
         this.contextmenu = new ContextMenu(this);
 
         this.initVideo(this.video, (this.quality && this.quality.type) || this.options.video.type);
+
+        this.setting = new Setting(this);
 
         this.infoPanel = new InfoPanel(this);
 
@@ -368,6 +365,10 @@ class DPlayer {
                 } else {
                     this.type = 'normal';
                 }
+            }
+            if (this.type !== 'mpegts') {
+                // audio switching is enabled only when using mpegts.js
+                this.container.classList.add('dplayer-no-audio-switching');
             }
 
             switch (this.type) {
