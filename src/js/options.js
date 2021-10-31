@@ -65,7 +65,7 @@ export default (options) => {
         {
             text: 'Video info',
             click: (player) => {
-                player.infoPanel.triggle();
+                player.infoPanel.toggle();
             },
         },
         {

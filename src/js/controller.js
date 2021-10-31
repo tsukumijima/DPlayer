@@ -304,10 +304,10 @@ class Controller {
 
                 let dataURL;
                 canvas.toBlob((blob) => {
-                    // generate a tag
                     if (blob === null) {
                         return;
                     }
+                    // generate a tag
                     dataURL = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = dataURL;

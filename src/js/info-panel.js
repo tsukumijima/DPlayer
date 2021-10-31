@@ -26,7 +26,7 @@ class InfoPanel {
         this.container.classList.add('dplayer-info-panel-hide');
     }
 
-    triggle() {
+    toggle() {
         if (this.container.classList.contains('dplayer-info-panel-hide')) {
             this.show();
         } else {
