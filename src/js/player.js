@@ -187,15 +187,19 @@ class DPlayer {
     sync() {
         if (this.options.live) {
             const time = utils.getVideoDuration(this.video, this.template) - 0.4;
-            this.video.currentTime = time;
-
-            this.notice(this.tran('Synchronized'));
+            try {
+                this.video.currentTime = time;
+            } catch (error) {
+                // seek failed
+                return;
+            }
 
             if (this.danmaku) {
                 this.danmaku.seek();
             }
 
             this.template.ptime.innerHTML = utils.secondToTime(time);
+            this.notice(this.tran('Synchronized'));
         }
     }
 
