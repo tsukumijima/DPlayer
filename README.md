@@ -8,6 +8,7 @@
 この Fork は、
 
 -   日本語への対応
+-   全体的な UI の見直しとブラッシュアップ
 -   Danmaku（コメント）描画周りの修正
 -   スマホ・タブレットや日本語対応により崩れる CSS の修正
 -   スマホ・タブレット向け UI の最適化と改善
@@ -16,16 +17,24 @@
 -   Live 再生時の同期ボタンの追加
 -   Picture-in-Picture (PiP) ボタンの追加
 -   キーボードショートカット（ホットキー）の追加
--   スクリーンショット時のファイル名の変更
+-   スクリーンショット保存時のファイル名の変更
+-   スクリーンショット機能をスマホ・タブレットでも使えるように変更
+-   設定パネルの UI を丸みを帯びたデザインに刷新
+-   設定パネルで現在の設定値を確認できるように変更
+-   画質の切り替え UI を設定パネルに統合
+-   再生速度の切り替え UI のデザインを刷新
+-   mpegts.js 利用時に主音声と副音声を切り替えられる機能を追加し、設定パネルに統合
 -   mpegts.js を利用した低遅延ライブストリーミングのサポートを追加
 -   aribb24.js を利用した ARIB 字幕・文字スーパーのサポートを追加
 -   そのほか多数の不具合修正と改善
 
-と、KonomiTV・TVRemotePlus 向けに多くの不具合改善や変更を行った DPlayer です。
+と、[KonomiTV](https://github.com/tsukumijima/KonomiTV)・[TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus) 向けに多くの不具合改善と大幅な変更を行った DPlayer です。
 
 おそらく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
 ぜひ日本でももっと広まって欲しいと思っています（コメントを流さない場合でも軽量で優秀なプレイヤーだと思います）。  
 KonomiTV や TVRemotePlus 向けではありますが、できるだけ汎用的に改造しているつもりです。そのまま他の用途でも使えるかもしれません。
+
+---
 
 [![npm](https://img.shields.io/npm/v/dplayer.svg?style=flat-square)](https://www.npmjs.com/package/dplayer)
 [![npm](https://img.shields.io/npm/l/dplayer.svg?style=flat-square)](https://github.com/MoePlayer/DPlayer/blob/master/LICENSE)
