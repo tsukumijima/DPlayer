@@ -671,6 +671,14 @@ class DPlayer {
                 // Not a video load error, may be poster load failed, see #307
                 return;
             }
+            // quality switching failed
+            if (this.switchingQuality) {
+                this.template.videoWrapAspect.removeChild(this.prevVideo);
+                this.video.classList.add('dplayer-video-current');
+                this.prevVideo = null;
+                this.switchingQuality = false;
+                this.events.trigger('quality_end');
+            }
             this.tran && this.notice && this.type !== 'webtorrent' && this.notice(this.tran('Video load failed'), -1);
             this.container.classList.remove('dplayer-loading');
         });
