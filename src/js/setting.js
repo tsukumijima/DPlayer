@@ -15,6 +15,66 @@ class Setting {
         const settingOriginPanelHeight = this.player.template.settingOriginPanel.scrollHeight;
         this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
 
+        // quality
+        if (this.player.options.video.quality) {
+            this.player.template.quality.addEventListener('click', () => {
+                this.player.template.settingBox.classList.add('dplayer-setting-box-quality');
+            });
+            this.player.template.qualityHeader.addEventListener('click', () => {
+                this.player.template.settingBox.classList.remove('dplayer-setting-box-quality');
+            });
+            for (let i = 0; i < this.player.template.qualityItem.length; i++) {
+                this.player.template.qualityItem[i].addEventListener('click', (event) => {
+                    // currently switching
+                    if (this.player.switchingQuality) {
+                        return;
+                    }
+                    this.player.switchQuality(parseInt(event.target.dataset.index));
+                });
+            }
+        }
+
+        // speed
+        this.player.template.speed.addEventListener('click', () => {
+            this.player.template.settingBox.classList.add('dplayer-setting-box-speed');
+        });
+        this.player.template.speedHeader.addEventListener('click', () => {
+            this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
+        });
+        for (let i = 0; i < this.player.template.speedItem.length; i++) {
+            this.player.template.speedItem[i].addEventListener('click', (event) => {
+                this.player.speed(parseFloat(event.target.dataset.speed));
+            });
+        }
+
+        // audio
+        this.player.template.audio.addEventListener('click', () => {
+            this.player.template.settingBox.classList.add('dplayer-setting-box-audio');
+        });
+        this.player.template.audioHeader.addEventListener('click', () => {
+            this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
+        });
+        for (let i = 0; i < this.player.template.audioItem.length; i++) {
+            this.player.template.audioItem[i].addEventListener('click', (event) => {
+                if (this.player.plugins.mpegts) {
+                    if (event.target.dataset.audio === 'primary') {
+                        // switch primary audio
+                        this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
+                        this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
+                        this.player.template.audioValue.textContent = this.player.tran('Primary audio');
+                        this.player.plugins.mpegts.switchPrimaryAudio();
+                    } else if (event.target.dataset.audio === 'secondary') {
+                        // switch secondary audio
+                        this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
+                        this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
+                        this.player.template.audioValue.textContent = this.player.tran('Prioritize secondary audio');
+                        this.player.plugins.mpegts.switchSecondaryAudio();
+                    }
+                    this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
+                }
+            });
+        }
+
         // loop
         this.loop = this.player.options.loop;
         this.player.template.loopToggle.checked = this.loop;
@@ -60,71 +120,16 @@ class Setting {
             this.player.user.set('unlimited', this.unlimitDanmaku ? 1 : 0);
         });
 
-        // quality
-        if (this.player.options.video.quality) {
-            this.player.template.quality.addEventListener('click', () => {
-                this.player.template.settingBox.classList.add('dplayer-setting-box-quality');
-            });
-            this.player.template.qualityHeader.addEventListener('click', () => {
-                this.player.template.settingBox.classList.remove('dplayer-setting-box-quality');
-            });
-            for (let i = 0; i < this.player.template.qualityItem.length; i++) {
-                this.player.template.qualityItem[i].addEventListener('click', () => {
-                    // currently switching
-                    if (this.player.switchingQuality) {
-                        return;
-                    }
-                    this.player.switchQuality(this.player.template.qualityItem[i].dataset.index);
-                });
-            }
-        }
-
-        // speed
-        this.player.template.speed.addEventListener('click', () => {
-            this.player.template.settingBox.classList.add('dplayer-setting-box-speed');
-        });
-        this.player.template.speedHeader.addEventListener('click', () => {
-            this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
-        });
-        for (let i = 0; i < this.player.template.speedItem.length; i++) {
-            this.player.template.speedItem[i].addEventListener('click', () => {
-                this.player.container.querySelector('.dplayer-setting-speed-current').classList.remove('dplayer-setting-speed-current');
-                this.player.template.speedItem[i].classList.add('dplayer-setting-speed-current');
-                this.player.speed(this.player.template.speedItem[i].dataset.speed);
-                this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
-            });
-        }
-
-        // audio
-        this.player.template.audio.addEventListener('click', () => {
-            this.player.template.settingBox.classList.add('dplayer-setting-box-audio');
-        });
-        this.player.template.audioHeader.addEventListener('click', () => {
-            this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
-        });
-        for (let i = 0; i < this.player.template.audioItem.length; i++) {
-            this.player.template.audioItem[i].addEventListener('click', () => {
-                this.player.container.querySelector('.dplayer-setting-audio-current').classList.remove('dplayer-setting-audio-current');
-                this.player.template.audioItem[i].classList.add('dplayer-setting-audio-current');
-                if (this.player.plugins.mpegts) {
-                    if (this.player.template.audioItem[i].dataset.audio === 'primary') {
-                        this.player.plugins.mpegts.switchPrimaryAudio();
-                    } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
-                        this.player.plugins.mpegts.switchSecondaryAudio();
-                    }
-                }
-                this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
-            });
-        }
-
         // danmaku opacity
         if (this.player.danmaku) {
             const barWidth = 190;
             this.player.on('danmaku_opacity', (percentage) => {
                 this.player.bar.set('danmaku', percentage, 'width');
                 this.player.user.set('opacity', percentage);
+                this.player.template.danmakuOpacityValue.textContent = percentage.toFixed(1);
             });
             this.player.danmaku.opacity(this.player.user.get('opacity'));
+            this.player.template.danmakuOpacityValue.textContent = this.player.user.get('opacity').toFixed(1);
 
             const danmakuMove = (event) => {
                 const e = event || window.event;

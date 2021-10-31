@@ -115,15 +115,18 @@
         {{ if options.video.quality }}
         <div class="dplayer-setting-item dplayer-setting-quality">
             <span class="dplayer-label">{{ tran('Quality') }}</span>
+            <span class="dplayer-label-value">{{ options.video.quality[options.video.defaultQuality].name }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
         </div>
         {{ /if }}
         <div class="dplayer-setting-item dplayer-setting-audio">
             <span class="dplayer-label">{{ tran('Audio') }}</span>
+            <span class="dplayer-label-value">{{ tran('Primary audio') }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
         </div>
         <div class="dplayer-setting-item dplayer-setting-speed">
             <span class="dplayer-label">{{ tran('Speed') }}</span>
+            <span class="dplayer-label-value">{{ tran('Normal') }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
         </div>
         <div class="dplayer-setting-item dplayer-setting-loop">
@@ -149,6 +152,7 @@
         </div>
         <div class="dplayer-setting-item dplayer-setting-danmaku">
             <span class="dplayer-label">{{ tran('Opacity for danmaku') }}</span>
+            <span class="dplayer-label-value">1.0</span>
             <div class="dplayer-danmaku-bar-wrap">
                 <div class="dplayer-danmaku-bar">
                     <div class="dplayer-danmaku-bar-inner" style="background: {{ options.theme }};">

@@ -505,14 +505,22 @@
         }
     }
     .dplayer-label {
+        display: inline-block;
         color: #eee;
         font-size: 13px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .dplayer-label-value {
         display: inline-block;
+        margin-left: auto;
+        margin-right: 26px;
+        color: #e0e0e0;
+        font-size: 12px;
         vertical-align: middle;
         white-space: nowrap;
     }
     .dplayer-toggle {
-        width: 32px;
         height: 20px;
         text-align: center;
         font-size: 0;
@@ -651,8 +659,12 @@
             padding: 0 10px;
             display: inline;
         }
+        .dplayer-label-value {
+            margin-right: 16px;
+            font-size: 12.5px;
+        }
         &:hover {
-            .dplayer-label {
+            .dplayer-label, .dplayer-label-value {
                 display: none;
             }
             .dplayer-danmaku-bar-wrap {
@@ -660,7 +672,7 @@
             }
         }
         &.dplayer-setting-danmaku-active {
-            .dplayer-label {
+            .dplayer-label, .dplayer-label-value {
                 display: none;
             }
             .dplayer-danmaku-bar-wrap {

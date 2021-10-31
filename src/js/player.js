@@ -760,10 +760,16 @@ class DPlayer {
             this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
         }
         this.container.classList.add('dplayer-loading');
-        this.container.querySelector('.dplayer-setting-quality-current').classList.remove('dplayer-setting-quality-current');
-        this.container.querySelector(`.dplayer-setting-quality-item[data-index="${index}"]`).classList.add('dplayer-setting-quality-current');
-        this.template.settingBox.classList.remove('dplayer-setting-box-quality');
         this.events.trigger('quality_start', this.quality);
+
+        this.template.qualityItem.forEach((elem) => {
+            elem.classList.remove('dplayer-setting-quality-current');
+            if (parseInt(elem.dataset.index) === index) {
+                elem.classList.add('dplayer-setting-quality-current');
+                this.template.qualityValue.textContent = this.quality.name;
+                this.template.settingBox.classList.remove('dplayer-setting-box-quality');
+            }
+        });
 
         this.on('canplay', () => {
             if (this.prevVideo !== null) {
@@ -824,9 +830,15 @@ class DPlayer {
     speed(rate) {
         this.video.playbackRate = rate;
         this.template.speedItem.forEach((elem) => {
+            elem.classList.remove('dplayer-setting-speed-current');
             if (parseFloat(elem.dataset.speed) === rate) {
-                this.container.querySelector('.dplayer-setting-speed-current').classList.remove('dplayer-setting-speed-current');
                 elem.classList.add('dplayer-setting-speed-current');
+                if (parseFloat(elem.dataset.speed) === 1) {
+                    this.template.speedValue.textContent = this.tran('Normal');
+                } else {
+                    this.template.speedValue.textContent = rate;
+                }
+                this.template.settingBox.classList.remove('dplayer-setting-box-speed');
             }
         });
     }
