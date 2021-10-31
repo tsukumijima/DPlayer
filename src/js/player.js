@@ -211,6 +211,11 @@ class DPlayer {
         this.template.playButton.innerHTML = Icons.pause;
         this.template.mobilePlayButton.innerHTML = Icons.pause;
 
+        // if live, sync video in advance
+        if (this.options.live) {
+            this.sync();
+        }
+
         if (!fromNative) {
             const playedPromise = Promise.resolve(this.video.play());
             playedPromise
