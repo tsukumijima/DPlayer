@@ -735,7 +735,6 @@ class DPlayer {
         }
         this.switchingQuality = true;
         this.quality = this.options.video.quality[index];
-        this.template.qualityButton.innerHTML = this.quality.name;
 
         const paused = this.video.paused;
         this.video.pause();
@@ -761,6 +760,9 @@ class DPlayer {
             this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
         }
         this.container.classList.add('dplayer-loading');
+        this.container.querySelector('.dplayer-setting-quality-current').classList.remove('dplayer-setting-quality-current');
+        this.container.querySelector(`.dplayer-setting-quality-item[data-index="${index}"]`).classList.add('dplayer-setting-quality-current');
+        this.template.settingBox.classList.remove('dplayer-setting-box-quality');
         this.events.trigger('quality_start', this.quality);
 
         this.on('canplay', () => {

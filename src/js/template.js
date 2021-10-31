@@ -62,6 +62,9 @@ class Template {
         this.showDanmakuToggle = this.container.querySelector('.dplayer-showdan-setting-input');
         this.unlimitDanmaku = this.container.querySelector('.dplayer-setting-danunlimit');
         this.unlimitDanmakuToggle = this.container.querySelector('.dplayer-danunlimit-setting-input');
+        this.quality = this.container.querySelector('.dplayer-setting-quality');
+        this.qualityHeader = this.container.querySelector('.dplayer-setting-quality-header');
+        this.qualityItem = this.container.querySelectorAll('.dplayer-setting-quality-item');
         this.speed = this.container.querySelector('.dplayer-setting-speed');
         this.speedHeader = this.container.querySelector('.dplayer-setting-speed-header');
         this.speedItem = this.container.querySelectorAll('.dplayer-setting-speed-item');
@@ -87,13 +90,11 @@ class Template {
         this.pipButton = this.container.querySelector('.dplayer-pip-icon');
         this.menu = this.container.querySelector('.dplayer-menu');
         this.menuItem = this.container.querySelectorAll('.dplayer-menu-item');
-        this.qualityList = this.container.querySelector('.dplayer-quality-list');
         this.cameraButton = this.container.querySelector('.dplayer-camera-icon');
         this.airplayButton = this.container.querySelector('.dplayer-airplay-icon');
         this.subtitleButton = this.container.querySelector('.dplayer-subtitle-icon');
         this.subtitleButtonInner = this.container.querySelector('.dplayer-subtitle-icon .dplayer-icon-content');
         this.subtitle = this.container.querySelector('.dplayer-subtitle');
-        this.qualityButton = this.container.querySelector('.dplayer-quality-icon');
         this.barPreview = this.container.querySelector('.dplayer-bar-preview');
         this.barWrap = this.container.querySelector('.dplayer-bar-wrap');
         this.notice = this.container.querySelector('.dplayer-notice');

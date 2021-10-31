@@ -60,18 +60,6 @@
         {{ /if }}
     </div>
     <div class="dplayer-icons dplayer-icons-right">
-        {{ if options.video.quality }}
-        <div class="dplayer-quality">
-            <button class="dplayer-icon dplayer-quality-icon">{{ options.video.quality[options.video.defaultQuality].name }}</button>
-            <div class="dplayer-quality-mask">
-                <div class="dplayer-quality-list">
-                {{ each options.video.quality }}
-                    <div class="dplayer-quality-item" data-index="{{ $index }}">{{ $value.name }}</div>
-                {{ /each }}
-                </div>
-            </div>
-        </div>
-        {{ /if }}
         {{ if options.screenshot }}
         <div class="dplayer-icon dplayer-camera-icon" aria-label="{{ tran('Screenshot') }}" data-balloon-nofocus data-balloon-pos="up">
             <span class="dplayer-icon-content">{{@ icons.camera }}</span>
@@ -122,8 +110,14 @@
         </div>
     </div>
 </div>
-<div class="dplayer-setting-box">
+<div class="dplayer-setting-box" style="{{ options.video.quality ? `--quality-length:${options.video.quality.length}` : '' }}">
     <div class="dplayer-setting-origin-panel">
+        {{ if options.video.quality }}
+        <div class="dplayer-setting-item dplayer-setting-quality">
+            <span class="dplayer-label">{{ tran('Quality') }}</span>
+            <div class="dplayer-toggle">{{@ icons.right }}</div>
+        </div>
+        {{ /if }}
         <div class="dplayer-setting-item dplayer-setting-audio">
             <span class="dplayer-label">{{ tran('Audio') }}</span>
             <div class="dplayer-toggle">{{@ icons.right }}</div>
@@ -164,6 +158,20 @@
             </div>
         </div>
     </div>
+    {{ if options.video.quality }}
+    <div class="dplayer-setting-quality-panel">
+        <div class="dplayer-setting-header dplayer-setting-quality-header">
+            <div class="dplayer-toggle">{{@ icons.left }}</div>
+            <span class="dplayer-label">{{ tran('Quality') }}</span>
+        </div>
+        {{ each options.video.quality }}
+            <div class="dplayer-setting-quality-item {{ $value.name === options.video.quality[options.video.defaultQuality].name ? 'dplayer-setting-quality-current' : '' }}" data-index="{{ $index }}">
+                <div class="dplayer-toggle">{{@ icons.check }}</div>
+                <span class="dplayer-label">{{ $value.name }}</span>
+            </div>
+        {{ /each }}
+    </div>
+    {{ /if }}
     <div class="dplayer-setting-speed-panel">
         <div class="dplayer-setting-header dplayer-setting-speed-header">
             <div class="dplayer-toggle">{{@ icons.left }}</div>

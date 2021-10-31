@@ -60,6 +60,25 @@ class Setting {
             this.player.user.set('unlimited', this.unlimitDanmaku ? 1 : 0);
         });
 
+        // quality
+        if (this.player.options.video.quality) {
+            this.player.template.quality.addEventListener('click', () => {
+                this.player.template.settingBox.classList.add('dplayer-setting-box-quality');
+            });
+            this.player.template.qualityHeader.addEventListener('click', () => {
+                this.player.template.settingBox.classList.remove('dplayer-setting-box-quality');
+            });
+            for (let i = 0; i < this.player.template.qualityItem.length; i++) {
+                this.player.template.qualityItem[i].addEventListener('click', () => {
+                    // currently switching
+                    if (this.player.switchingQuality) {
+                        return;
+                    }
+                    this.player.switchQuality(this.player.template.qualityItem[i].dataset.index);
+                });
+            }
+        }
+
         // speed
         this.player.template.speed.addEventListener('click', () => {
             this.player.template.settingBox.classList.add('dplayer-setting-box-speed');

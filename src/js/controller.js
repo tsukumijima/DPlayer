@@ -34,7 +34,6 @@ class Controller {
         this.initPlayedBar();
         this.initFullButton();
         this.initPipButton();
-        this.initQualityButton();
         this.initSyncButton();
         this.initScreenshotButton();
         this.initSubtitleButton();
@@ -285,16 +284,6 @@ class Controller {
                 this.player.bar.set('volume', 0, 'width');
             }
         });
-    }
-
-    initQualityButton() {
-        if (this.player.options.video.quality) {
-            this.player.template.qualityList.addEventListener('click', (e) => {
-                if (e.target.classList.contains('dplayer-quality-item')) {
-                    this.player.switchQuality(e.target.dataset.index);
-                }
-            });
-        }
     }
 
     initSyncButton() {
