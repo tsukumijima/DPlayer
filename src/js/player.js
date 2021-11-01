@@ -184,7 +184,7 @@ class DPlayer {
     /**
      * Sync video (live only)
      */
-    sync() {
+    sync(quiet = false) {
         if (this.options.live) {
             const time = utils.getVideoDuration(this.video, this.template) - 0.4;
             try {
@@ -199,7 +199,9 @@ class DPlayer {
             }
 
             this.template.ptime.innerHTML = utils.secondToTime(time);
-            this.notice(this.tran('Synchronized'));
+            if (!quiet) {
+                this.notice(this.tran('Synchronized'));
+            }
         }
     }
 
@@ -217,7 +219,7 @@ class DPlayer {
 
         // if live, sync video in advance
         if (this.options.live) {
-            this.sync();
+            this.sync(true);
         }
 
         if (!fromNative) {
