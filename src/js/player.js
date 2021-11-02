@@ -809,6 +809,17 @@ class DPlayer {
                 }
                 this.switchingQuality = false;
 
+                // restore speed
+                const speed = parseFloat(this.template.settingBox.querySelector('.dplayer-setting-speed-current').dataset.speed);
+                this.speed(speed);
+
+                // restore audio
+                const audio = this.template.settingBox.querySelector('.dplayer-setting-audio-current').dataset.audio;
+                if (audio === 'secondary') {
+                    // switch secondary audio
+                    this.plugins.mpegts.switchSecondaryAudio();
+                }
+
                 this.container.classList.remove('dplayer-loading');
                 this.events.trigger('quality_end');
             }
