@@ -67,7 +67,7 @@ class Setting {
                         // switch secondary audio
                         this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
-                        this.player.template.audioValue.textContent = this.player.tran('Prioritize secondary audio');
+                        this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
                         this.player.plugins.mpegts.switchSecondaryAudio();
                     }
                     this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');

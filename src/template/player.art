@@ -199,7 +199,7 @@
         </div>
         <div class="dplayer-setting-audio-item" data-audio="secondary">
             <div class="dplayer-toggle">{{@ icons.check }}</div>
-            <span class="dplayer-label">{{ tran('Prioritize secondary audio') }}</span>
+            <span class="dplayer-label">{{ tran('Secondary audio') }}</span>
         </div>
     </div>
 </div>
