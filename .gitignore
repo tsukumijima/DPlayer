@@ -6,5 +6,4 @@ npm-debug.log
 DPlayer.log*
 wxw
 .vscode
-package-lock.json
 docs/.vuepress/dist
