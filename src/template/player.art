@@ -17,7 +17,7 @@
         {{ if options.danmaku }}
         <span class="dplayer-danloading">{{ tran('Danmaku is loading') }}</span>
         {{ /if }}
-        <span class="diplayer-loading-icon">{{@ icons.loading }}</span>
+        <span class="dplayer-loading-icon">{{@ icons.loading }}</span>
     </div>
 </div>
 <div class="dplayer-controller-mask"></div>
