@@ -521,13 +521,14 @@
         white-space: nowrap;
     }
     .dplayer-toggle {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        width: 20px;
         height: 20px;
         text-align: center;
         font-size: 0;
         vertical-align: middle;
-        position: absolute;
-        top: 5px;
-        right: 10px;
         input {
             max-height: 0;
             max-width: 0;
