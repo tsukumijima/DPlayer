@@ -466,6 +466,7 @@
     z-index: 2;
     -webkit-tap-highlight-color: transparent;
     &>div {
+        overflow-x: hidden;
         &.dplayer-setting-origin-panel {
             display: block;
         }
@@ -514,7 +515,7 @@
     .dplayer-label-value {
         display: inline-block;
         margin-left: auto;
-        margin-right: 26px;
+        margin-right: 23px;
         color: #e0e0e0;
         font-size: 12px;
         vertical-align: middle;
@@ -523,7 +524,7 @@
     .dplayer-toggle {
         position: absolute;
         top: 5px;
-        right: 10px;
+        right: 7px;
         width: 20px;
         height: 20px;
         text-align: center;
@@ -537,14 +538,15 @@
         input+label {
             display: inline-block;
             position: relative;
-            box-shadow: rgb(223, 223, 223) 0 0 0 0 inset;
-            border: 1px solid rgb(223, 223, 223);
-            height: 20px;
+            right: 15px;
             width: 32px;
+            height: 20px;
             border-radius: 10px;
             box-sizing: border-box;
-            cursor: pointer;
             transition: .25s ease;
+            box-shadow: rgb(223, 223, 223) 0 0 0 0 inset;
+            border: 1px solid rgb(223, 223, 223);
+            cursor: pointer;
         }
         input+label:before {
             content: "";
@@ -661,7 +663,7 @@
             display: inline;
         }
         .dplayer-label-value {
-            margin-right: 16px;
+            margin-right: 18px;
             font-size: 12.5px;
         }
         &:hover {
