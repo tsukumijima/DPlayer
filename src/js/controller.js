@@ -302,38 +302,45 @@ class Controller {
                 canvas.height = this.player.video.videoHeight;
                 canvas.getContext('2d').drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
 
-                let dataURL;
+                // prettier-ignore
                 canvas.toBlob((blob) => {
                     if (blob === null) {
                         return;
                     }
-                    // generate a tag
-                    dataURL = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = dataURL;
-                    if (typeof link.download === 'undefined') {
-                        this.player.notice('Error: Screenshot download is not supported.');
+
+                    // create blob url
+                    const bloburl = URL.createObjectURL(blob);
+
+                    // case of download screenshot
+                    if (!this.player.options.screenshotOfEventTriggerOnly) {
+                        const link = document.createElement('a');
+                        link.href = bloburl;
+                        if (typeof link.download === 'undefined') {
+                            this.player.notice('Error: Screenshot download is not supported.');
+                            return;
+                        }
+
+                        // generate download filename
+                        const today = new Date();
+                        const year = today.getFullYear();
+                        const month = ('0' + (today.getMonth() + 1)).slice(-2);
+                        const day = ('0' + today.getDate()).slice(-2);
+                        const hour = ('0' + today.getHours()).slice(-2);
+                        const min = ('0' + today.getMinutes()).slice(-2);
+                        const sec = ('0' + today.getSeconds()).slice(-2);
+                        link.download = `Capture_${year}${month}${day}-${hour}${min}${sec}.jpg`;
+
+                        // download screenshot
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                     }
 
-                    // generate screenshot name
-                    const today = new Date();
-                    const year = today.getFullYear();
-                    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-                    const day = ('0' + today.getDate()).slice(-2);
-                    const hour = ('0' + today.getHours()).slice(-2);
-                    const min = ('0' + today.getMinutes()).slice(-2);
-                    const sec = ('0' + today.getSeconds()).slice(-2);
-                    link.download = `Capture_${year}${month}${day}-${hour}${min}${sec}.png`;
+                    this.player.events.trigger('screenshot', bloburl);
 
-                    // download screenshot
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(dataURL);
-                });
-
-                this.player.events.trigger('screenshot', dataURL);
+                // specify image type and quality
+                }, 'image/jpeg', 1);
             });
         }
     }
