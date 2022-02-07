@@ -389,7 +389,7 @@ class DPlayer {
                         // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
                         // prettier-ignore
                         const isiPadSafari = (
-                            /iPad/i.test(navigator.userAgent) &&
+                            (/iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document) &&
                             /Safari/i.test(navigator.userAgent) &&
                             (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
                         );
