@@ -37,7 +37,6 @@ class Subtitle {
 
     show() {
         this.container.classList.remove('dplayer-subtitle-hide');
-        this.events.trigger('subtitle_show');
         // for aribb24.js
         if (this.options.type === 'aribb24' && this.aribb24Caption) {
             this.aribb24Caption.show();
@@ -45,11 +44,11 @@ class Subtitle {
         if (this.options.type === 'aribb24' && this.aribb24Superimpose) {
             this.aribb24Superimpose.show();
         }
+        this.events.trigger('subtitle_show');
     }
 
     hide() {
         this.container.classList.add('dplayer-subtitle-hide');
-        this.events.trigger('subtitle_hide');
         // for aribb24.js
         if (this.options.type === 'aribb24' && this.aribb24Caption) {
             this.aribb24Caption.hide();
@@ -57,6 +56,7 @@ class Subtitle {
         if (this.options.type === 'aribb24' && this.aribb24Superimpose) {
             this.aribb24Superimpose.hide();
         }
+        this.events.trigger('subtitle_hide');
     }
 
     toggle() {
