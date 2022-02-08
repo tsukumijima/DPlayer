@@ -12,7 +12,7 @@ class FullScreen {
             utils.setScrollPosition(this.lastScrollPosition);
         });
 
-        const fullscreenchange = () => {
+        this.fullscreenchange = () => {
             this.player.resize();
             if (this.isFullScreen('browser')) {
                 this.player.events.trigger('fullscreen');
@@ -23,9 +23,9 @@ class FullScreen {
             }
         };
         if (this.player.container.onfullscreenchange !== undefined) {
-            this.player.container.addEventListener('fullscreenchange', fullscreenchange);
+            this.player.container.addEventListener('fullscreenchange', this.fullscreenchange);
         } else {
-            this.player.container.addEventListener('webkitfullscreenchange', fullscreenchange);
+            this.player.container.addEventListener('webkitfullscreenchange', this.fullscreenchange);
         }
     }
 
@@ -126,6 +126,11 @@ class FullScreen {
         } else {
             this.request(type);
         }
+    }
+
+    destroy() {
+        this.player.container.removeEventListener('fullscreenchange', this.fullscreenchange);
+        this.player.container.removeEventListener('webkitfullscreenchange', this.fullscreenchange);
     }
 }
 

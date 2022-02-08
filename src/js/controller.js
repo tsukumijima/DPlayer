@@ -10,24 +10,15 @@ class Controller {
         this.mobileSkipTimer = 0;
         this.mobileBackwardTime = 0;
         this.mobileForwardTime = 0;
+        this.setAutoHideHandler = this.setAutoHide.bind(this);
         if (!utils.isMobile) {
-            this.player.container.addEventListener('mousemove', () => {
-                this.setAutoHide();
-            });
-            this.player.container.addEventListener('click', () => {
-                this.setAutoHide();
-            });
+            this.player.container.addEventListener('mousemove', this.setAutoHideHandler);
+            this.player.container.addEventListener('click', this.setAutoHideHandler);
         } else {
-            this.player.container.addEventListener('touchmove', () => {
-                this.setAutoHide();
-            });
+            this.player.container.addEventListener('touchmove', this.setAutoHideHandler);
         }
-        this.player.on('play', () => {
-            this.setAutoHide();
-        });
-        this.player.on('pause', () => {
-            this.setAutoHide();
-        });
+        this.player.on('play', this.setAutoHideHandler);
+        this.player.on('pause', this.setAutoHideHandler);
 
         this.initPlayButton();
         this.initThumbnails();
@@ -426,6 +417,12 @@ class Controller {
     }
 
     destroy() {
+        if (!utils.isMobile) {
+            this.player.container.removeEventListener('mousemove', this.setAutoHideHandler);
+            this.player.container.removeEventListener('click', this.setAutoHideHandler);
+        } else {
+            this.player.container.removeEventListener('touchmove', this.setAutoHideHandler);
+        }
         clearTimeout(this.autoHideTimer);
     }
 }
