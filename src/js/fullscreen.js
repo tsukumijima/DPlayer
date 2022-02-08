@@ -22,35 +22,17 @@ class FullScreen {
                 this.player.events.trigger('fullscreen_cancel');
             }
         };
-        const docfullscreenchange = () => {
-            const fullEle = document.fullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-            if (fullEle && fullEle !== this.player.container) {
-                return;
-            }
-            this.player.resize();
-            if (fullEle) {
-                this.player.events.trigger('fullscreen');
-            } else {
-                utils.setScrollPosition(this.lastScrollPosition);
-                this.player.container.classList.remove('dplayer-fulled-browser');
-                this.player.events.trigger('fullscreen_cancel');
-            }
-        };
-        if (/Firefox/.test(navigator.userAgent)) {
-            document.addEventListener('mozfullscreenchange', docfullscreenchange);
-            document.addEventListener('fullscreenchange', docfullscreenchange);
-        } else {
+        if (this.player.container.onfullscreenchange !== undefined) {
             this.player.container.addEventListener('fullscreenchange', fullscreenchange);
+        } else {
             this.player.container.addEventListener('webkitfullscreenchange', fullscreenchange);
-            document.addEventListener('msfullscreenchange', docfullscreenchange);
-            document.addEventListener('MSFullscreenChange', docfullscreenchange);
         }
     }
 
     isFullScreen(type = 'browser') {
         switch (type) {
             case 'browser': {
-                const fullEle = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+                const fullEle = document.fullscreenElement || document.webkitFullscreenElement;
                 if (fullEle && fullEle === this.player.container) {
                     return true;
                 } else {
@@ -75,10 +57,7 @@ class FullScreen {
                 // unify method names
                 this.player.container.requestFullscreen =
                     this.player.container.requestFullscreen || // HTML5 standard
-                    this.player.container.mozRequestFullScreen || // Gecko
-                    this.player.container.webkitRequestFullscreen || // Webkit
-                    this.player.container.webkitRequestFullScreen || // Webkit (old)
-                    this.player.container.msRequestFullscreen; // Trident
+                    this.player.container.webkitRequestFullscreen; // Webkit
                 // request fullscreen
                 if (this.player.container.requestFullscreen) {
                     this.player.container.requestFullscreen();
@@ -118,10 +97,7 @@ class FullScreen {
                 // unify method names
                 document.exitFullscreen =
                     document.exitFullscreen || // HTML5 standard
-                    document.mozCancelFullScreen || // Gecko
-                    document.webkitExitFullscreen || // Webkit
-                    document.webkitCancelFullScreen || // Webkit (old)
-                    document.msExitFullscreen; // Trident
+                    document.webkitExitFullscreen; // Webkit
                 // exit fullscreen
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
