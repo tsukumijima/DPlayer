@@ -156,14 +156,11 @@ class Danmaku {
      */
     draw(dan) {
         if (this.showing) {
-            this.offsetWidth = this.container.offsetWidth;
-            this.offsetHeight = this.container.offsetHeight;
-            this.tablet = this.offsetWidth <= 768;
-            this.mobile = this.offsetWidth <= 500;
-            const itemHeight = this.tablet ? (this.mobile ? this.options.heightMobile : this.options.heightTablet) : this.options.height;
-            const itemFontSize = this.tablet ? (this.mobile ? this.options.heightMobile - 3 : this.options.heightTablet - 5) : this.options.height - 6;
-            const danWidth = this.offsetWidth;
-            const danHeight = this.offsetHeight;
+            const ratio = (this.container.offsetWidth / 1024) * 1.3 < 1 ? (this.container.offsetWidth / 1024) * 1.3 : 1; // magic!
+            const itemFontSize = this.options.fontSize * ratio;
+            const itemHeight = itemFontSize + 6 * ratio;
+            const danWidth = this.container.offsetWidth;
+            const danHeight = this.container.offsetWidth;
             const itemY = parseInt(danHeight / itemHeight);
 
             const danItemRight = (ele) => {
@@ -339,7 +336,14 @@ class Danmaku {
     }
 
     htmlEncode(str) {
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g, '&#x2f;');
+        // prettier-ignore
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#x27;')
+            .replace(/\//g, '&#x2f;');
     }
 
     resize() {
