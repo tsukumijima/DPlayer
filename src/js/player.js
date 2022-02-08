@@ -80,6 +80,7 @@ class DPlayer {
 
         if (this.options.danmaku) {
             this.danmaku = new Danmaku({
+                player: this,
                 container: this.template.danmaku,
                 opacity: this.user.get('opacity'),
                 callback: () => {
@@ -102,6 +103,7 @@ class DPlayer {
                 heightMobile: (this.options.danmaku.height || 35) - 16,
                 time: () => this.video.currentTime,
                 unlimited: this.user.get('unlimited'),
+                speedRate: this.options.danmaku.speedRate,
                 api: {
                     id: this.options.danmaku.id,
                     address: this.options.danmaku.api,
