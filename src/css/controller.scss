@@ -430,6 +430,7 @@
     transition: all 0.28s ease;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
 
     .dplayer-mobile-icon {
         width: 50px;
@@ -441,6 +442,7 @@
         box-sizing: border-box;
         cursor: pointer;
         outline: none;
+        pointer-events: auto;
 
         &-backward, &-forward {
             padding: 12px;
