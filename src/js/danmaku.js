@@ -156,9 +156,12 @@ class Danmaku {
      */
     draw(dan) {
         if (this.showing) {
-            const ratio = (this.container.offsetWidth / 1024) * 1.3 < 1 ? (this.container.offsetWidth / 1024) * 1.3 : 1; // magic!
+            // adjust the comment size according to the screen size
+            const ratioRate = 1.25; // magic!
+            const ratio = (this.container.offsetWidth / 1024) * ratioRate < 1 ? (this.container.offsetWidth / 1024) * ratioRate : 1;
             const itemFontSize = this.options.fontSize * ratio;
-            const itemHeight = itemFontSize + 6 * ratio;
+            const itemHeight = itemFontSize + 6 * ratio; // 6 is the vertical margin of danmaku
+
             const danWidth = this.container.offsetWidth;
             const danHeight = this.container.offsetWidth;
             const itemY = parseInt(danHeight / itemHeight);
@@ -390,9 +393,9 @@ class Danmaku {
         const rate = this.options.speedRate || 1;
         const isFullScreen = this.player.fullScreen.isFullScreen('browser') || this.player.fullScreen.isFullScreen('web');
         const animations = {
-            top: `${(isFullScreen ? 5 : 4) / rate}s`,
-            right: `${(isFullScreen ? 6 : 5) / rate}s`,
-            bottom: `${(isFullScreen ? 5 : 4) / rate}s`,
+            top: `${(isFullScreen ? 4.5 : 4) / rate}s`,
+            right: `${(isFullScreen ? 5.5 : 5) / rate}s`,
+            bottom: `${(isFullScreen ? 4.5 : 4) / rate}s`,
         };
         return animations[position];
     }
