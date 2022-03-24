@@ -1,10 +1,10 @@
 
 .dplayer-controller-mask {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==) repeat-x bottom;
-    height: 98px;
-    width: 100%;
     position: absolute;
+    width: 100%;
+    height: 98px;
     bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.0) 15%, rgba(0, 0, 0, 0.7) 100%);
     transition: all 0.3s ease;
 }
 
@@ -13,7 +13,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 41px;
+    height: 50px;
     padding: 0 20px;
     user-select: none;
     -webkit-user-select: none;
@@ -27,12 +27,12 @@
         }
     }
     .dplayer-bar-wrap {
-        padding: 5px 0;
-        cursor: pointer;
         position: absolute;
-        bottom: 33px;
         width: calc(100% - 40px);
         height: 3px;
+        bottom: 46px;
+        padding: 5px 0;
+        cursor: pointer;
         &:hover {
             .dplayer-bar .dplayer-played .dplayer-thumb {
                 transform: scale(1);
@@ -156,8 +156,10 @@
         }
     }
     .dplayer-icons {
-        height: 38px;
         position: absolute;
+        height: 38px;
+        padding-top: 6px;
+        padding-bottom: 6px;
         bottom: 0;
         -webkit-tap-highlight-color: transparent;
         &.dplayer-comment-box {
@@ -454,9 +456,9 @@
     display: flex;
     position: absolute;
     right: 20px;
-    bottom: 50px;
+    bottom: 64px;
     width: 210px;
-    height: calc(100% - 50px - 8px);
+    height: calc(100% - 64px - 8px);
     border-radius: 7px;
     background: rgba(28, 28, 28, 0.9);
     transition: all .25s ease;
@@ -726,9 +728,9 @@
 .dplayer-comment-setting-box {
     position: absolute;
     left: 20px;
-    bottom: 50px;
+    bottom: 64px;
     width: 255px;
-    max-height: calc(100% - 50px - 8px);
+    max-height: calc(100% - 64px - 8px);
     clip-path: inset(0 0 0 round 7px);
     border-radius: 7px;
     background: rgba(28, 28, 28, 0.9);

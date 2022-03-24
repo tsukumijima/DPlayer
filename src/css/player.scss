@@ -84,6 +84,17 @@
                 display: none;
             }
         }
+
+        .dplayer-setting-box, .dplayer-comment-setting-box {
+            bottom: 58px;
+            max-height: calc(100% - 58px - 8px);
+        }
+        &.dplayer-mobile {
+            .dplayer-setting-box, .dplayer-comment-setting-box {
+                bottom: 52px;
+                max-height: calc(100% - 52px - 8px);
+            }
+        }
     }
 
     &.dplayer-arrow {
@@ -170,24 +181,29 @@
     }
 
     &.dplayer-mobile {
-        .dplayer-controller .dplayer-icons {
-            .dplayer-volume,
-            .dplayer-airplay-icon,
-            .dplayer-play-icon {
-                display: none;
-            }
-            .dplayer-full .dplayer-full-in-icon {
-                position: static;
-                display: inline-block;
-            }
-            .dplayer-full .dplayer-pip-icon {
-                position: static;
-                display: inline-block;
+        .dplayer-controller {
+            height: 44px;
+            .dplayer-icons {
+                padding-top: 3px;
+                padding-bottom: 3px;
+                .dplayer-volume,
+                .dplayer-airplay-icon,
+                .dplayer-play-icon {
+                    display: none;
+                }
+                .dplayer-full .dplayer-full-in-icon {
+                    position: static;
+                    display: inline-block;
+                }
+                .dplayer-full .dplayer-pip-icon {
+                    position: static;
+                    display: inline-block;
+                }
             }
         }
 
         .dplayer-controller-mask {
-            background: linear-gradient(rgba(0,0,0,.55) 80%, rgba(0,0,0,.8) 100%);
+            background: linear-gradient(rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.8) 100%);
             height: 100%;
         }
 
@@ -210,8 +226,16 @@
             }
         }
 
-        .dplayer-bar-time {
-            display: none;
+        .dplayer-bar-wrap {
+            bottom: 40px;
+            .dplayer-bar-time {
+                display: none;
+            }
+        }
+
+        .dplayer-setting-box, .dplayer-comment-setting-box {
+            bottom: 58px;
+            max-height: calc(100% - 58px - 8px);
         }
 
         &.dplayer-hide-controller {
