@@ -42,8 +42,11 @@ const utils = {
 
     /**
      * control play progress
+     * get element's view position
+     *
+     * @param {HTMLElement} element
+     * @returns {Number}
      */
-    // get element's view position
     getElementViewLeft: (element) => {
         let actualLeft = element.offsetLeft;
         let current = element.offsetParent;
@@ -63,13 +66,15 @@ const utils = {
     },
 
     /**
-    * optimize control play progress
-
-    * optimize get element's view position,for float dialog video player
-    * getBoundingClientRect 在 IE8 及以下返回的值缺失 width、height 值
-    * getBoundingClientRect 在 Firefox 11 及以下返回的值会把 transform 的值也包含进去
-    * getBoundingClientRect 在 Opera 10.5 及以下返回的值缺失 width、height 值
-    */
+     * optimize control play progress
+     * optimize get element's view position, for float dialog video player
+     * The value returned by getBoundingClientRect in IE8 and below is missing width and height values
+     * The value returned by getBoundingClientRect in Firefox 11 and below will also include the value of transform
+     * The value returned by getBoundingClientRect in Opera 10.5 and below is missing width and height values
+     *
+     * @param {HTMLElement} element
+     * @returns {Number}
+     */
     getBoundingClientRectViewLeft(element) {
         const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + ((document.documentElement && document.documentElement.scrollTop) || 0);
 
