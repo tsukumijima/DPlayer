@@ -434,12 +434,18 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x80 })));
+                                // prettier-ignore
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x80},
+                                )));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x81 })));
+                                // prettier-ignore
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x81, forceStrokeColor: null},
+                                )));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
@@ -471,12 +477,18 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x80 })));
+                                // prettier-ignore
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x80},
+                                )));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x81 })));
+                                // prettier-ignore
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x81, forceStrokeColor: null},
+                                )));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
                             }
@@ -548,12 +560,18 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x80 })));
+                                // prettier-ignore
+                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x80},
+                                )));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(Object.assign(aribb24Options, { data_identifier: 0x81 })));
+                                // prettier-ignore
+                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    Object.assign(aribb24Options, {data_identifier: 0x81, forceStrokeColor: null},
+                                )));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
