@@ -160,6 +160,7 @@
         height: 100% !important;
 
         &.dplayer-hide-controller {
+            cursor: none;
             .dplayer-controller-mask {
                 opacity: 0 !important;
             }
@@ -171,6 +172,7 @@
 
     &.dplayer-fulled-browser {
         &.dplayer-hide-controller {
+            cursor: none;
             .dplayer-controller-mask {
                 opacity: 0 !important;
             }
