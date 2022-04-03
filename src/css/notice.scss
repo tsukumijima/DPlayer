@@ -1,15 +1,17 @@
 .dplayer-notice {
-    opacity: 0;
     position: absolute;
-    bottom: 60px;
+    bottom: 68px;
     left: 20px;
-    font-size: 14px;
-    border-radius: 2px;
+    padding: 12px 18px;
+    margin-right: 20px;
+    border-radius: 4px;
     background: rgba(28, 28, 28, 0.9);
-    padding: 7px 20px;
-    transition: all .3s ease-in-out;
-    overflow: hidden;
     color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    transition: all .3s ease-in-out;
+    opacity: 0;
+    overflow: hidden;
     pointer-events: none;
 }
 @media (max-width: 500px){
