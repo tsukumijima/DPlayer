@@ -1724,10 +1724,10 @@
   dependencies:
     "sprintf-js" "~1.0.2"
 
-"aribb24.js@1.9.9":
-  "integrity" "sha512-Ptq7TVFpDBJXbUVShPwe4mVQ4aj+8PiaXO6cLPWcidh49NFM8n+yOMqhozw8lEYeozawPXtKbyC2zd4rKrw+rA=="
-  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.9.9.tgz"
-  "version" "1.9.9"
+"aribb24.js@1.9.14":
+  "integrity" "sha512-p5KYfg4bIqIK5uQuu4zk/YFH2cYdl3IwPA6QIZRUZY3QNafIxToSn/WQnSuZh/0DFtxRN/aKg1TKbudsPmpa/w=="
+  "resolved" "https://registry.npmjs.org/aribb24.js/-/aribb24.js-1.9.14.tgz"
+  "version" "1.9.14"
 
 "arr-diff@^4.0.0":
   "integrity" "sha1-1kYQdP6/7HHn4VI1dhoyml3HxSA="
