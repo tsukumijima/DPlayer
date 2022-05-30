@@ -93,29 +93,30 @@ class Danmaku {
             color: dan.color,
             type: dan.type,
         };
+
         this.options.apiBackend.send({
             url: this.options.api.address,
             data: danmakuData,
-            success: callback,
-            error: (msg) => {
-                this.options.error(msg || this.options.tran('Danmaku send failed'));
+            success: () => {
+                this.dan.splice(this.danIndex, 0, danmakuData);
+                this.danIndex++;
+                this.draw({
+                    text: this.htmlEncode(danmakuData.text),
+                    color: danmakuData.color,
+                    type: danmakuData.type,
+                    border: `2px solid ${this.options.borderColor}`,
+                });
+
+                this.events && this.events.trigger('danmaku_send', danmakuData);
+                callback();
+            },
+            error: (message) => {
+                this.options.error(message || this.options.tran('Danmaku send failed'));
                 if (isCallbackOnError === true) {
                     callback();
                 }
             },
         });
-
-        this.dan.splice(this.danIndex, 0, danmakuData);
-        this.danIndex++;
-        const danmaku = {
-            text: this.htmlEncode(danmakuData.text),
-            color: danmakuData.color,
-            type: danmakuData.type,
-            border: `2px solid ${this.options.borderColor}`,
-        };
-        this.draw(danmaku);
-
-        this.events && this.events.trigger('danmaku_send', danmakuData);
     }
 
     frame() {
