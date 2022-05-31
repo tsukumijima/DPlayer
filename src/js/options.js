@@ -26,7 +26,7 @@ export default (options) => {
         pluginOptions: { hls: {}, mpegts: {}, flv: {}, dash: {}, webtorrent: {}, aribb24: {} },
     };
     for (const defaultKey in defaultOption) {
-        if (defaultOption.hasOwnProperty(defaultKey) && !options.hasOwnProperty(defaultKey)) {
+        if (Object.prototype.hasOwnProperty.call(defaultOption, defaultKey) && !Object.prototype.hasOwnProperty.call(options, defaultKey)) {
             options[defaultKey] = defaultOption[defaultKey];
         }
     }

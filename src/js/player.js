@@ -380,7 +380,6 @@ class DPlayer {
                 case 'hls':
                     if (window.Hls) {
                         // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
-                        // prettier-ignore
                         const isiPadSafari = (
                             /Safari/i.test(navigator.userAgent) &&
                             (/iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document) &&
@@ -434,18 +433,16 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x80},
+                                );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x81},
+                                );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
@@ -477,18 +474,16 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x80},
+                                );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x81},
+                                );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
                             }
@@ -496,7 +491,7 @@ class DPlayer {
                             this.notice('Error: HLS is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find hls.js.");
+                        this.notice('Error: Can\'t find hls.js.');
                     }
                     break;
                 // https://github.com/xqq/mpegts.js
@@ -560,18 +555,16 @@ class DPlayer {
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x80},
+                                );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x81},
+                                );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
@@ -585,7 +578,7 @@ class DPlayer {
                             this.notice('Error: mpegts.js is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find mpegts.js.");
+                        this.notice('Error: Can\'t find mpegts.js.');
                     }
                     break;
                 // https://github.com/Bilibili/flv.js
@@ -612,7 +605,7 @@ class DPlayer {
                             this.notice('Error: flv.js is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find flv.js.");
+                        this.notice('Error: Can\'t find flv.js.');
                     }
                     break;
                 // https://github.com/Dash-Industry-Forum/dash.js
@@ -627,7 +620,7 @@ class DPlayer {
                             delete this.plugins.dash;
                         });
                     } else {
-                        this.notice("Error: Can't find dash.js.");
+                        this.notice('Error: Can\'t find dash.js.');
                     }
                     break;
 
@@ -659,7 +652,7 @@ class DPlayer {
                             this.notice('Error: Webtorrent is not supported.');
                         }
                     } else {
-                        this.notice("Error: Can't find Webtorrent.");
+                        this.notice('Error: Can\'t find Webtorrent.');
                     }
                     break;
             }

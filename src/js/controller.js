@@ -293,7 +293,6 @@ class Controller {
                 canvas.height = this.player.video.videoHeight;
                 canvas.getContext('2d').drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
 
-                // prettier-ignore
                 canvas.toBlob((blob) => {
                     if (blob === null) {
                         return;
