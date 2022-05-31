@@ -1,26 +1,26 @@
-import Promise from 'promise-polyfill';
-import * as aribb24js from 'aribb24.js';
+import Promise from "promise-polyfill";
+import * as aribb24js from "aribb24.js";
 
-import utils from './utils';
-import handleOption from './options';
-import i18n from './i18n';
-import Template from './template';
-import Icons from './icons';
-import Danmaku from './danmaku';
-import Events from './events';
-import FullScreen from './fullscreen';
-import User from './user';
-import Subtitle from './subtitle';
-import Bar from './bar';
-import Timer from './timer';
-import Bezel from './bezel';
-import Controller from './controller';
-import Setting from './setting';
-import Comment from './comment';
-import HotKey from './hotkey';
-import ContextMenu from './contextmenu';
-import InfoPanel from './info-panel';
-import tplVideo from '../template/video.art';
+import utils from "./utils";
+import handleOption from "./options";
+import i18n from "./i18n";
+import Template from "./template";
+import Icons from "./icons";
+import Danmaku from "./danmaku";
+import Events from "./events";
+import FullScreen from "./fullscreen";
+import User from "./user";
+import Subtitle from "./subtitle";
+import Bar from "./bar";
+import Timer from "./timer";
+import Bezel from "./bezel";
+import Controller from "./controller";
+import Setting from "./setting";
+import Comment from "./comment";
+import HotKey from "./hotkey";
+import ContextMenu from "./contextmenu";
+import InfoPanel from "./info-panel";
+import tplVideo from "../template/video.art";
 
 let index = 0;
 const instances = [];
@@ -33,32 +33,36 @@ class DPlayer {
      * @constructor
      */
     constructor(options) {
-        this.options = handleOption({ preload: options.video.type === 'webtorrent' ? 'none' : 'metadata', ...options });
+        this.options = handleOption({
+            preload: options.video.type === "webtorrent" ? "none" : "metadata",
+            ...options,
+        });
 
         if (this.options.video.quality) {
             this.qualityIndex = this.options.video.defaultQuality;
-            this.quality = this.options.video.quality[this.options.video.defaultQuality];
+            this.quality =
+                this.options.video.quality[this.options.video.defaultQuality];
         }
         this.tran = new i18n(this.options.lang).tran;
         this.events = new Events();
         this.user = new User(this);
         this.container = this.options.container;
 
-        this.container.classList.add('dplayer');
+        this.container.classList.add("dplayer");
         if (!this.options.danmaku) {
-            this.container.classList.add('dplayer-no-danmaku');
+            this.container.classList.add("dplayer-no-danmaku");
         }
         if (this.options.live) {
-            this.container.classList.add('dplayer-live');
+            this.container.classList.add("dplayer-live");
         } else {
-            this.container.classList.remove('dplayer-live');
+            this.container.classList.remove("dplayer-live");
         }
         if (utils.isMobile) {
-            this.container.classList.add('dplayer-mobile');
+            this.container.classList.add("dplayer-mobile");
         }
         this.arrow = this.container.offsetWidth <= 500;
         if (this.arrow) {
-            this.container.classList.add('dplayer-arrow');
+            this.container.classList.add("dplayer-arrow");
         }
 
         this.template = new Template({
@@ -82,10 +86,10 @@ class DPlayer {
             this.danmaku = new Danmaku({
                 player: this,
                 container: this.template.danmaku,
-                opacity: this.user.get('opacity'),
+                opacity: this.user.get("opacity"),
                 callback: () => {
                     setTimeout(() => {
-                        this.template.danmakuLoading.style.display = 'none';
+                        this.template.danmakuLoading.style.display = "none";
 
                         // autoplay
                         if (this.options.autoplay) {
@@ -100,7 +104,7 @@ class DPlayer {
                 borderColor: this.options.theme,
                 fontSize: this.options.danmaku.fontSize || 35,
                 time: () => this.video.currentTime,
-                unlimited: this.user.get('unlimited'),
+                unlimited: this.user.get("unlimited"),
                 speedRate: this.options.danmaku.speedRate,
                 api: {
                     id: this.options.danmaku.id,
@@ -124,8 +128,8 @@ class DPlayer {
         this.containerClickFun = () => {
             this.focus = true;
         };
-        document.addEventListener('click', this.docClickFun, true);
-        this.container.addEventListener('click', this.containerClickFun, true);
+        document.addEventListener("click", this.docClickFun, true);
+        this.container.addEventListener("click", this.containerClickFun, true);
 
         this.paused = true;
 
@@ -135,7 +139,10 @@ class DPlayer {
 
         this.contextmenu = new ContextMenu(this);
 
-        this.initVideo(this.video, (this.quality && this.quality.type) || this.options.video.type);
+        this.initVideo(
+            this.video,
+            (this.quality && this.quality.type) || this.options.video.type
+        );
 
         this.setting = new Setting(this);
 
@@ -159,9 +166,17 @@ class DPlayer {
             time = Math.min(time, duration);
         }
         if (this.video.currentTime < time) {
-            this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
+            this.notice(
+                `${this.tran("FF")} ${(time - this.video.currentTime).toFixed(
+                    0
+                )} ${this.tran("s")}`
+            );
         } else if (this.video.currentTime > time) {
-            this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
+            this.notice(
+                `${this.tran("REW")} ${(this.video.currentTime - time).toFixed(
+                    0
+                )} ${this.tran("s")}`
+            );
         }
 
         this.video.currentTime = time;
@@ -170,7 +185,7 @@ class DPlayer {
             this.danmaku.seek();
         }
 
-        this.bar.set('played', time / duration, 'width');
+        this.bar.set("played", time / duration, "width");
         this.template.ptime.innerHTML = utils.secondToTime(time);
     }
 
@@ -179,7 +194,8 @@ class DPlayer {
      */
     sync(quiet = false) {
         if (this.options.live) {
-            const time = utils.getVideoDuration(this.video, this.template) - 0.4; // 0.4s is play buffer
+            const time =
+                utils.getVideoDuration(this.video, this.template) - 0.4; // 0.4s is play buffer
             try {
                 this.video.currentTime = time;
             } catch (error) {
@@ -193,7 +209,7 @@ class DPlayer {
 
             this.template.ptime.innerHTML = utils.secondToTime(time);
             if (!quiet) {
-                this.notice(this.tran('Synchronized'));
+                this.notice(this.tran("Synchronized"));
             }
         }
     }
@@ -223,9 +239,9 @@ class DPlayer {
                 })
                 .then(() => {});
         }
-        this.timer.enable('loading');
-        this.container.classList.remove('dplayer-paused');
-        this.container.classList.add('dplayer-playing');
+        this.timer.enable("loading");
+        this.container.classList.remove("dplayer-paused");
+        this.container.classList.add("dplayer-playing");
         if (this.danmaku) {
             this.danmaku.play();
         }
@@ -243,7 +259,7 @@ class DPlayer {
      */
     pause(fromNative) {
         this.paused = true;
-        this.container.classList.remove('dplayer-loading');
+        this.container.classList.remove("dplayer-loading");
 
         if (!this.video.paused && !utils.isMobile) {
             this.bezel.switch(Icons.pause);
@@ -254,9 +270,9 @@ class DPlayer {
         if (!fromNative) {
             this.video.pause();
         }
-        this.timer.disable('loading');
-        this.container.classList.remove('dplayer-playing');
-        this.container.classList.add('dplayer-paused');
+        this.timer.disable("loading");
+        this.container.classList.remove("dplayer-playing");
+        this.container.classList.add("dplayer-paused");
         if (this.danmaku) {
             this.danmaku.pause();
         }
@@ -280,14 +296,16 @@ class DPlayer {
         if (!isNaN(percentage)) {
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
-            this.bar.set('volume', percentage, 'width');
+            this.bar.set("volume", percentage, "width");
             const formatPercentage = `${(percentage * 100).toFixed(0)}%`;
             this.template.volumeBarWrapWrap.ariaLabel = formatPercentage;
             if (!nostorage) {
-                this.user.set('volume', percentage);
+                this.user.set("volume", percentage);
             }
             if (!nonotice) {
-                this.notice(`${this.tran('Volume')} ${(percentage * 100).toFixed(0)}%`);
+                this.notice(
+                    `${this.tran("Volume")} ${(percentage * 100).toFixed(0)}%`
+                );
             }
 
             this.video.volume = percentage;
@@ -326,15 +344,15 @@ class DPlayer {
      */
     switchVideo(video, danmakuAPI) {
         this.pause();
-        this.video.poster = video.pic ? video.pic : '';
+        this.video.poster = video.pic ? video.pic : "";
         this.video.src = video.url;
-        this.initMSE(this.video, video.type || 'auto');
+        this.initMSE(this.video, video.type || "auto");
         if (danmakuAPI) {
-            this.template.danmakuLoading.style.display = 'block';
-            this.bar.set('played', 0, 'width');
-            this.bar.set('loaded', 0, 'width');
-            this.template.ptime.innerHTML = '00:00';
-            this.template.danmaku.innerHTML = '';
+            this.template.danmakuLoading.style.display = "block";
+            this.bar.set("played", 0, "width");
+            this.bar.set("loaded", 0, "width");
+            this.template.ptime.innerHTML = "00:00";
+            this.template.danmaku.innerHTML = "";
             if (this.danmaku) {
                 this.danmaku.reload({
                     id: danmakuAPI.id,
@@ -350,42 +368,51 @@ class DPlayer {
 
     initMSE(video, type) {
         this.type = type;
-        if (this.options.video.customType && this.options.video.customType[type]) {
-            if (Object.prototype.toString.call(this.options.video.customType[type]) === '[object Function]') {
+        if (
+            this.options.video.customType &&
+            this.options.video.customType[type]
+        ) {
+            if (
+                Object.prototype.toString.call(
+                    this.options.video.customType[type]
+                ) === "[object Function]"
+            ) {
                 this.options.video.customType[type](this.video, this);
             } else {
                 console.error(`Illegal customType: ${type}`);
             }
         } else {
-            if (this.type === 'auto') {
+            if (this.type === "auto") {
                 if (/m3u8(#|\?|$)/i.exec(video.src)) {
-                    this.type = 'hls';
+                    this.type = "hls";
                 } else if (/.ts(#|\?|$)/i.exec(video.src)) {
-                    this.type = 'mpegts';
+                    this.type = "mpegts";
                 } else if (/.flv(#|\?|$)/i.exec(video.src)) {
-                    this.type = 'flv';
+                    this.type = "flv";
                 } else if (/.mpd(#|\?|$)/i.exec(video.src)) {
-                    this.type = 'dash';
+                    this.type = "dash";
                 } else {
-                    this.type = 'normal';
+                    this.type = "normal";
                 }
             }
-            if (this.type !== 'mpegts') {
+            if (this.type !== "mpegts") {
                 // audio switching is enabled only when using mpegts.js
-                this.container.classList.add('dplayer-no-audio-switching');
+                this.container.classList.add("dplayer-no-audio-switching");
             }
 
             switch (this.type) {
                 // https://github.com/video-dev/hls.js
-                case 'hls':
+                case "hls":
                     if (window.Hls) {
                         // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
-                        // prettier-ignore
-                        const isiPadSafari = (
-                            (/iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document) &&
+                        const isiPadSafari =
+                            /iPad|Macintosh/i.test(navigator.userAgent) &&
+                            "ontouchend" in document &&
                             /Safari/i.test(navigator.userAgent) &&
-                            (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
-                        );
+                            (video.canPlayType("application/x-mpegURL") ||
+                                video.canPlayType(
+                                    "application/vnd.apple.mpegURL"
+                                ));
                         if (window.Hls.isSupported() && !isiPadSafari) {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
@@ -411,7 +438,7 @@ class DPlayer {
                             hls.attachMedia(video);
 
                             // Processing when destroy
-                            this.events.on('destroy', () => {
+                            this.events.on("destroy", () => {
                                 hls.destroy();
                                 delete this.plugins.hls;
                                 // destroy aribb24 caption
@@ -428,36 +455,58 @@ class DPlayer {
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
-                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                            if (
+                                this.options.subtitle &&
+                                this.options.subtitle.type === "aribb24"
+                            ) {
                                 // Set options
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for hls.js
-                                const aribb24Options = this.options.pluginOptions.aribb24;
+                                const aribb24Options =
+                                    this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption =
+                                    (this.plugins.aribb24Caption =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x80,
+                                            })
+                                        ));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose =
+                                    (this.plugins.aribb24Superimpose =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x81,
+                                            })
+                                        ));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
                                 // Push caption data into CanvasRenderer
-                                hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
-                                    for (const sample of data.samples) {
-                                        aribb24Caption.pushID3v2Data(sample.pts, sample.data);
-                                        aribb24Superimpose.pushID3v2Data(sample.pts, sample.data);
+                                hls.on(
+                                    window.Hls.Events.FRAG_PARSING_METADATA,
+                                    (event, data) => {
+                                        for (const sample of data.samples) {
+                                            aribb24Caption.pushID3v2Data(
+                                                sample.pts,
+                                                sample.data
+                                            );
+                                            aribb24Superimpose.pushID3v2Data(
+                                                sample.pts,
+                                                sample.data
+                                            );
+                                        }
                                     }
-                                });
+                                );
                             }
-                        } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
+                        } else if (
+                            video.canPlayType("application/x-mpegURL") ||
+                            video.canPlayType("application/vnd.apple.mpegURL")
+                        ) {
                             // Normal playback
                             // If it has already been initialized, destroy it once
                             if (this.plugins.aribb24Caption) {
@@ -471,36 +520,46 @@ class DPlayer {
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
-                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                            if (
+                                this.options.subtitle &&
+                                this.options.subtitle.type === "aribb24"
+                            ) {
                                 // Set options
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
-                                const aribb24Options = this.options.pluginOptions.aribb24;
+                                const aribb24Options =
+                                    this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption =
+                                    (this.plugins.aribb24Caption =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x80,
+                                            })
+                                        ));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose =
+                                    (this.plugins.aribb24Superimpose =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x81,
+                                            })
+                                        ));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
                             }
                         } else {
-                            this.notice('Error: HLS is not supported.');
+                            this.notice("Error: HLS is not supported.");
                         }
                     } else {
                         this.notice("Error: Can't find hls.js.");
                     }
                     break;
                 // https://github.com/xqq/mpegts.js
-                case 'mpegts':
+                case "mpegts":
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
                             // If it has already been initialized, destroy it once
@@ -524,11 +583,15 @@ class DPlayer {
 
                             // Initialize mpegts.js
                             const mpegtsPlayer = window.mpegts.createPlayer(
-                                Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
-                                    type: 'mpegts',
-                                    isLive: this.options.live,
-                                    url: source,
-                                }),
+                                Object.assign(
+                                    this.options.pluginOptions.mpegts
+                                        .mediaDataSource || {},
+                                    {
+                                        type: "mpegts",
+                                        isLive: this.options.live,
+                                        url: source,
+                                    }
+                                ),
                                 this.options.pluginOptions.mpegts.config
                             );
                             this.plugins.mpegts = mpegtsPlayer;
@@ -536,7 +599,7 @@ class DPlayer {
                             mpegtsPlayer.load();
 
                             // Processing when destroy
-                            this.events.on('destroy', () => {
+                            this.events.on("destroy", () => {
                                 mpegtsPlayer.unload();
                                 mpegtsPlayer.detachMediaElement();
                                 mpegtsPlayer.destroy();
@@ -555,74 +618,101 @@ class DPlayer {
 
                             // Initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
-                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                            if (
+                                this.options.subtitle &&
+                                this.options.subtitle.type === "aribb24"
+                            ) {
                                 // Set options
-                                const aribb24Options = this.options.pluginOptions.aribb24;
+                                const aribb24Options =
+                                    this.options.pluginOptions.aribb24;
 
                                 // Initialize aribb24 caption
-                                // prettier-ignore
-                                const aribb24Caption = (this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x80},
-                                )));
+                                const aribb24Caption =
+                                    (this.plugins.aribb24Caption =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x80,
+                                            })
+                                        ));
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
                                 // Initialize aribb24 superimpose
-                                // prettier-ignore
-                                const aribb24Superimpose = (this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    Object.assign(aribb24Options, {data_identifier: 0x81},
-                                )));
+                                const aribb24Superimpose =
+                                    (this.plugins.aribb24Superimpose =
+                                        new aribb24js.CanvasRenderer(
+                                            Object.assign(aribb24Options, {
+                                                data_identifier: 0x81,
+                                            })
+                                        ));
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
                                 // Push caption data into CanvasRenderer
-                                mpegtsPlayer.on(window.mpegts.Events.TIMED_ID3_METADATA_ARRIVED, (data) => {
-                                    aribb24Caption.pushID3v2Data(data.pts / 1000, data.data);
-                                    aribb24Superimpose.pushID3v2Data(data.pts / 1000, data.data);
-                                });
+                                mpegtsPlayer.on(
+                                    window.mpegts.Events
+                                        .TIMED_ID3_METADATA_ARRIVED,
+                                    (data) => {
+                                        aribb24Caption.pushID3v2Data(
+                                            data.pts / 1000,
+                                            data.data
+                                        );
+                                        aribb24Superimpose.pushID3v2Data(
+                                            data.pts / 1000,
+                                            data.data
+                                        );
+                                    }
+                                );
                             }
                         } else {
-                            this.notice('Error: mpegts.js is not supported.');
+                            this.notice("Error: mpegts.js is not supported.");
                         }
                     } else {
                         this.notice("Error: Can't find mpegts.js.");
                     }
                     break;
                 // https://github.com/Bilibili/flv.js
-                case 'flv':
+                case "flv":
                     if (window.flvjs) {
                         if (window.flvjs.isSupported()) {
                             const flvPlayer = window.flvjs.createPlayer(
-                                Object.assign(this.options.pluginOptions.flv.mediaDataSource || {}, {
-                                    type: 'flv',
-                                    url: video.src,
-                                }),
+                                Object.assign(
+                                    this.options.pluginOptions.flv
+                                        .mediaDataSource || {},
+                                    {
+                                        type: "flv",
+                                        url: video.src,
+                                    }
+                                ),
                                 this.options.pluginOptions.flv.config
                             );
                             this.plugins.flvjs = flvPlayer;
                             flvPlayer.attachMediaElement(video);
                             flvPlayer.load();
-                            this.events.on('destroy', () => {
+                            this.events.on("destroy", () => {
                                 flvPlayer.unload();
                                 flvPlayer.detachMediaElement();
                                 flvPlayer.destroy();
                                 delete this.plugins.flvjs;
                             });
                         } else {
-                            this.notice('Error: flv.js is not supported.');
+                            this.notice("Error: flv.js is not supported.");
                         }
                     } else {
                         this.notice("Error: Can't find flv.js.");
                     }
                     break;
                 // https://github.com/Dash-Industry-Forum/dash.js
-                case 'dash':
+                case "dash":
                     if (window.dashjs) {
-                        const dashjsPlayer = window.dashjs.MediaPlayer().create().initialize(video, video.src, false);
+                        const dashjsPlayer = window.dashjs
+                            .MediaPlayer()
+                            .create()
+                            .initialize(video, video.src, false);
                         const options = this.options.pluginOptions.dash;
                         dashjsPlayer.updateSettings(options);
                         this.plugins.dash = dashjsPlayer;
-                        this.events.on('destroy', () => {
+                        this.events.on("destroy", () => {
                             window.dashjs.MediaPlayer().reset();
                             delete this.plugins.dash;
                         });
@@ -632,31 +722,41 @@ class DPlayer {
                     break;
 
                 // https://github.com/webtorrent/webtorrent
-                case 'webtorrent':
+                case "webtorrent":
                     if (window.WebTorrent) {
                         if (window.WebTorrent.WEBRTC_SUPPORT) {
-                            this.container.classList.add('dplayer-loading');
-                            const options = this.options.pluginOptions.webtorrent;
+                            this.container.classList.add("dplayer-loading");
+                            const options =
+                                this.options.pluginOptions.webtorrent;
                             const client = new window.WebTorrent(options);
                             this.plugins.webtorrent = client;
                             const torrentId = video.src;
-                            video.src = '';
-                            video.preload = 'metadata';
-                            video.addEventListener('durationchange', () => this.container.classList.remove('dplayer-loading'), { once: true });
+                            video.src = "";
+                            video.preload = "metadata";
+                            video.addEventListener(
+                                "durationchange",
+                                () =>
+                                    this.container.classList.remove(
+                                        "dplayer-loading"
+                                    ),
+                                { once: true }
+                            );
                             client.add(torrentId, (torrent) => {
-                                const file = torrent.files.find((file) => file.name.endsWith('.mp4'));
+                                const file = torrent.files.find((file) =>
+                                    file.name.endsWith(".mp4")
+                                );
                                 file.renderTo(this.video, {
                                     autoplay: this.options.autoplay,
                                     controls: false,
                                 });
                             });
-                            this.events.on('destroy', () => {
+                            this.events.on("destroy", () => {
                                 client.remove(torrentId);
                                 client.destroy();
                                 delete this.plugins.webtorrent;
                             });
                         } else {
-                            this.notice('Error: Webtorrent is not supported.');
+                            this.notice("Error: Webtorrent is not supported.");
                         }
                     } else {
                         this.notice("Error: Can't find Webtorrent.");
@@ -673,22 +773,26 @@ class DPlayer {
          * video events
          */
         // show video time: the metadata has loaded or changed
-        this.on('durationchange', () => {
+        this.on("durationchange", () => {
             // compatibility: Android browsers will output 1 or Infinity at first
             if (video.duration !== 1 && video.duration !== Infinity) {
-                this.template.dtime.innerHTML = utils.secondToTime(video.duration);
+                this.template.dtime.innerHTML = utils.secondToTime(
+                    video.duration
+                );
             }
         });
 
         // show video loaded bar: to inform interested parties of progress downloading the media
-        this.on('progress', () => {
+        this.on("progress", () => {
             const duration = utils.getVideoDuration(this.video, this.template);
-            const percentage = video.buffered.length ? video.buffered.end(video.buffered.length - 1) / duration : 0;
-            this.bar.set('loaded', percentage, 'width');
+            const percentage = video.buffered.length
+                ? video.buffered.end(video.buffered.length - 1) / duration
+                : 0;
+            this.bar.set("loaded", percentage, "width");
         });
 
         // video download error: an error occurs
-        this.on('error', () => {
+        this.on("error", () => {
             if (!this.video.error) {
                 // Not a video load error, may be poster load failed, see #307
                 return;
@@ -696,18 +800,21 @@ class DPlayer {
             // quality switching failed
             if (this.switchingQuality) {
                 this.template.videoWrapAspect.removeChild(this.prevVideo);
-                this.video.classList.add('dplayer-video-current');
+                this.video.classList.add("dplayer-video-current");
                 this.prevVideo = null;
                 this.switchingQuality = false;
-                this.events.trigger('quality_end');
+                this.events.trigger("quality_end");
             }
-            this.tran && this.notice && this.type !== 'webtorrent' && this.notice(this.tran('Video load failed'), -1);
-            this.container.classList.remove('dplayer-loading');
+            this.tran &&
+                this.notice &&
+                this.type !== "webtorrent" &&
+                this.notice(this.tran("Video load failed"), -1);
+            this.container.classList.remove("dplayer-loading");
         });
 
         // video end
-        this.on('ended', () => {
-            this.bar.set('played', 1, 'width');
+        this.on("ended", () => {
+            this.bar.set("played", 1, "width");
             if (!this.setting.loop) {
                 this.pause();
             } else {
@@ -719,21 +826,21 @@ class DPlayer {
             }
         });
 
-        this.on('play', () => {
+        this.on("play", () => {
             if (this.paused) {
                 this.play(true);
             }
         });
 
-        this.on('pause', () => {
+        this.on("pause", () => {
             if (!this.paused) {
                 this.pause(true);
             }
         });
 
-        this.on('timeupdate', () => {
+        this.on("timeupdate", () => {
             const duration = utils.getVideoDuration(this.video, this.template);
-            this.bar.set('played', this.video.currentTime / duration, 'width');
+            this.bar.set("played", this.video.currentTime / duration, "width");
             const currentTime = utils.secondToTime(this.video.currentTime);
             if (this.template.ptime.innerHTML !== currentTime) {
                 this.template.ptime.innerHTML = currentTime;
@@ -746,18 +853,25 @@ class DPlayer {
             });
         }
 
-        this.volume(this.user.get('volume'), true, true);
+        this.volume(this.user.get("volume"), true, true);
 
         if (this.options.subtitle) {
-            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins.aribb24Caption, this.plugins.aribb24Superimpose, this.options.subtitle, this.events);
-            if (!this.user.get('subtitle')) {
+            this.subtitle = new Subtitle(
+                this.template.subtitle,
+                this.video,
+                this.plugins.aribb24Caption,
+                this.plugins.aribb24Superimpose,
+                this.options.subtitle,
+                this.events
+            );
+            if (!this.user.get("subtitle")) {
                 this.subtitle.hide();
             }
         }
     }
 
     switchQuality(index) {
-        index = typeof index === 'string' ? parseInt(index) : index;
+        index = typeof index === "string" ? parseInt(index) : index;
         if (this.qualityIndex === index || this.switchingQuality) {
             return;
         } else {
@@ -772,67 +886,100 @@ class DPlayer {
             current: false,
             pic: null,
             screenshot: this.options.screenshot,
-            preload: 'auto',
+            preload: "auto",
             url: this.quality.url,
             subtitle: this.options.subtitle,
         });
-        const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild;
-        this.template.videoWrapAspect.insertBefore(videoEle, this.template.videoWrapAspect.getElementsByTagName('div')[0]);
+        const videoEle = new DOMParser().parseFromString(videoHTML, "text/html")
+            .body.firstChild;
+        this.template.videoWrapAspect.insertBefore(
+            videoEle,
+            this.template.videoWrapAspect.getElementsByTagName("div")[0]
+        );
         this.prevVideo = this.video;
         this.video = videoEle;
-        this.initVideo(this.video, this.quality.type || this.options.video.type);
+        this.initVideo(
+            this.video,
+            this.quality.type || this.options.video.type
+        );
         if (!this.options.live) {
             this.seek(this.prevVideo.currentTime);
         }
-        if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
+        if (this.options.lang === "ja" || this.options.lang === "ja-jp") {
             this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
         } else {
-            this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
+            this.notice(
+                `${this.tran("Switching to")} ${this.quality.name} ${this.tran(
+                    "quality"
+                )}`,
+                -1
+            );
         }
-        this.container.classList.add('dplayer-loading');
-        this.events.trigger('quality_start', this.quality);
+        this.container.classList.add("dplayer-loading");
+        this.events.trigger("quality_start", this.quality);
 
         this.template.qualityItem.forEach((elem) => {
-            elem.classList.remove('dplayer-setting-quality-current');
+            elem.classList.remove("dplayer-setting-quality-current");
             if (parseInt(elem.dataset.index) === index) {
-                elem.classList.add('dplayer-setting-quality-current');
+                elem.classList.add("dplayer-setting-quality-current");
                 this.template.qualityValue.textContent = this.quality.name;
-                this.template.settingBox.classList.remove('dplayer-setting-box-quality');
+                this.template.settingBox.classList.remove(
+                    "dplayer-setting-box-quality"
+                );
             }
         });
 
-        this.on('canplay', () => {
+        this.on("canplay", () => {
             if (this.prevVideo !== null) {
-                if (!this.options.live && this.video.currentTime !== this.prevVideo.currentTime) {
+                if (
+                    !this.options.live &&
+                    this.video.currentTime !== this.prevVideo.currentTime
+                ) {
                     this.seek(this.prevVideo.currentTime);
                     return;
                 }
                 this.template.videoWrapAspect.removeChild(this.prevVideo);
-                this.video.classList.add('dplayer-video-current');
+                this.video.classList.add("dplayer-video-current");
                 if (!paused) {
                     this.video.play();
                 }
                 this.prevVideo = null;
-                if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
-                    this.notice(`画質を ${this.quality.name} に切り替えました。`, 1000);
+                if (
+                    this.options.lang === "ja" ||
+                    this.options.lang === "ja-jp"
+                ) {
+                    this.notice(
+                        `画質を ${this.quality.name} に切り替えました。`,
+                        1000
+                    );
                 } else {
-                    this.notice(`${this.tran('Switched to')} ${this.quality.name} ${this.tran('quality')}`);
+                    this.notice(
+                        `${this.tran("Switched to")} ${
+                            this.quality.name
+                        } ${this.tran("quality")}`
+                    );
                 }
                 this.switchingQuality = false;
 
                 // restore speed
-                const speed = parseFloat(this.template.settingBox.querySelector('.dplayer-setting-speed-current').dataset.speed);
+                const speed = parseFloat(
+                    this.template.settingBox.querySelector(
+                        ".dplayer-setting-speed-current"
+                    ).dataset.speed
+                );
                 this.speed(speed);
 
                 // restore audio
-                const audio = this.template.settingBox.querySelector('.dplayer-setting-audio-current').dataset.audio;
-                if (audio === 'secondary') {
+                const audio = this.template.settingBox.querySelector(
+                    ".dplayer-setting-audio-current"
+                ).dataset.audio;
+                if (audio === "secondary") {
                     // switch secondary audio
                     this.plugins.mpegts.switchSecondaryAudio();
                 }
 
-                this.container.classList.remove('dplayer-loading');
-                this.events.trigger('quality_end');
+                this.container.classList.remove("dplayer-loading");
+                this.events.trigger("quality_end");
             }
         });
     }
@@ -843,11 +990,11 @@ class DPlayer {
         if (this.noticeTime) {
             clearTimeout(this.noticeTime);
         }
-        this.events.trigger('notice_show', text);
+        this.events.trigger("notice_show", text);
         if (time > 0) {
             this.noticeTime = setTimeout(() => {
                 this.template.notice.style.opacity = 0;
-                this.events.trigger('notice_hide');
+                this.events.trigger("notice_hide");
             }, time);
         }
     }
@@ -863,23 +1010,29 @@ class DPlayer {
             this.plugins.aribb24Superimpose.refresh();
         }
         if (this.controller.thumbnails) {
-            this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
+            this.controller.thumbnails.resize(
+                160,
+                (this.video.videoHeight / this.video.videoWidth) * 160,
+                this.template.barWrap.offsetWidth
+            );
         }
-        this.events.trigger('resize');
+        this.events.trigger("resize");
     }
 
     speed(rate) {
         this.video.playbackRate = rate;
         this.template.speedItem.forEach((elem) => {
-            elem.classList.remove('dplayer-setting-speed-current');
+            elem.classList.remove("dplayer-setting-speed-current");
             if (parseFloat(elem.dataset.speed) === rate) {
-                elem.classList.add('dplayer-setting-speed-current');
+                elem.classList.add("dplayer-setting-speed-current");
                 if (parseFloat(elem.dataset.speed) === 1) {
-                    this.template.speedValue.textContent = this.tran('Normal');
+                    this.template.speedValue.textContent = this.tran("Normal");
                 } else {
                     this.template.speedValue.textContent = rate;
                 }
-                this.template.settingBox.classList.remove('dplayer-setting-box-speed');
+                this.template.settingBox.classList.remove(
+                    "dplayer-setting-box-speed"
+                );
             }
         });
     }
@@ -887,16 +1040,20 @@ class DPlayer {
     destroy() {
         instances.splice(instances.indexOf(this), 1);
         this.pause();
-        document.removeEventListener('click', this.docClickFun, true);
-        this.container.removeEventListener('click', this.containerClickFun, true);
+        document.removeEventListener("click", this.docClickFun, true);
+        this.container.removeEventListener(
+            "click",
+            this.containerClickFun,
+            true
+        );
         this.fullScreen.destroy();
         this.hotkey.destroy();
         this.contextmenu.destroy();
         this.controller.destroy();
         this.timer.destroy();
-        this.video.src = '';
-        this.container.innerHTML = '';
-        this.events.trigger('destroy');
+        this.video.src = "";
+        this.container.innerHTML = "";
+        this.events.trigger("destroy");
         Object.keys(this.events.events).forEach((key) => {
             this.off(key);
         });
