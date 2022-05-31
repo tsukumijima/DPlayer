@@ -1,21 +1,25 @@
 const path = require('path');
 const webpack = require('webpack');
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 const gitRevisionPlugin = new GitRevisionPlugin();
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 
+/** @type {import('webpack').Configuration} */
 module.exports = {
+
+    // production build
     mode: 'production',
 
-    bail: true,
-
-    devtool: 'source-map',
-
+    // entry point
     entry: {
         DPlayer: './src/js/index.js',
     },
 
+    // enable source map
+    devtool: 'source-map',
+
+    // output settings
     output: {
         path: path.resolve(__dirname, '..', 'dist'),
         filename: '[name].min.js',
@@ -26,18 +30,31 @@ module.exports = {
         publicPath: '/',
     },
 
-    resolve: {
-        modules: ['node_modules'],
-        extensions: ['.js', '.scss'],
+    // show error details
+    stats: {
+        errorDetails: true,
+        children: true,
     },
 
+    // mitigate maximum asset size
+    performance: {
+        maxAssetSize: 500000,
+        maxEntrypointSize: 500000,
+    },
+
+    // report the first error as a hard error instead of tolerating it
+    bail: true,
+
+    // loader settings
     module: {
         strictExportPresence: true,
         rules: [
             {
                 test: /\.js$/,
                 use: [
+                    // optimize JavaScript template string
                     'template-string-optimize-loader',
+                    // compile JavaScript in Babel
                     {
                         loader: 'babel-loader',
                         options: {
@@ -50,51 +67,51 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
+                    // inject CSS into the DOM
                     'style-loader',
+                    // load CSS
                     {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,
                         },
                     },
+                    // enable Autoprefixer and cssnano
                     {
                         loader: 'postcss-loader',
                         options: {
-                            plugins: [autoprefixer, cssnano],
+                            postcssOptions: {
+                                plugins: [autoprefixer, cssnano],
+                            },
                         },
                     },
+                    // compile SASS (SCSS) to CSS
                     'sass-loader',
                 ],
             },
             {
+                // bundle images inline
                 test: /\.(png|jpg)$/,
-                loader: 'url-loader',
-                options: {
-                    limit: 40000,
-                },
+                type: 'asset/inline',
             },
             {
+                // bundle svg icons (with html)
                 test: /\.svg$/,
                 loader: 'svg-inline-loader',
             },
             {
+                // ART template to JavaScript
                 test: /\.art$/,
                 loader: 'art-template-loader',
             },
         ],
     },
 
+    // define DPlayer version and Git hash
     plugins: [
         new webpack.DefinePlugin({
             DPLAYER_VERSION: `"${require('../package.json').version}"`,
             GIT_HASH: JSON.stringify(gitRevisionPlugin.version()),
         }),
     ],
-
-    node: {
-        dgram: 'empty',
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty',
-    },
 };

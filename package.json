@@ -3,9 +3,28 @@
     "version": "1.26.0",
     "description": "Wow, such a lovely HTML5 danmaku video player",
     "main": "dist/DPlayer.min.js",
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "player",
+        "danmaku",
+        "video",
+        "html5"
+    ],
+    "homepage": "https://github.com/tsukumijima/DPlayer",
+    "bugs": {
+        "url": "https://github.com/tsukumijima/DPlayer/issues"
+    },
+    "license": "MIT",
+    "author": "DIYgod",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tsukumijima/DPlayer.git"
+    },
     "scripts": {
         "start": "npm run dev",
-        "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js --progress --display-error-details --colors",
+        "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js --progress",
         "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/dev.config.js --watch --colors",
         "test": "eslint src webpack",
         "format": "eslint \"**/*.js\" --fix",
@@ -14,28 +33,6 @@
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs"
     },
-    "files": [
-        "dist"
-    ],
-    "repository": {
-        "url": "git+https://github.com/DIYgod/DPlayer.git",
-        "type": "git"
-    },
-    "keywords": [
-        "player",
-        "danmaku",
-        "video",
-        "html5"
-    ],
-    "gitHooks": {
-        "pre-commit": "npm run format:staged"
-    },
-    "author": "DIYgod",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/DIYgod/DPlayer/issues"
-    },
-    "homepage": "https://github.com/DIYgod/DPlayer#readme",
     "devDependencies": {
         "@babel/core": "^7.18.2",
         "@babel/preset-env": "^7.18.2",
@@ -55,8 +52,8 @@
         "file-loader": "^6.2.0",
         "git-revision-webpack-plugin": "^5.0.0",
         "mini-css-extract-plugin": "2.6.0",
-        "node-sass": "^7.0.1",
         "postcss-loader": "^7.0.0",
+        "sass": "^1.52.1",
         "sass-loader": "^13.0.0",
         "strip-loader": "^0.1.2",
         "style-loader": "^3.3.1",
@@ -74,5 +71,13 @@
         "axios": "^0.27.2",
         "balloon-css": "^1.2.0",
         "promise-polyfill": "^8.2.3"
-    }
+    },
+    "gitHooks": {
+        "pre-commit": "npm run format:staged"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
 }
