@@ -14,16 +14,22 @@
     overflow: hidden;
     .dplayer-danmaku-item {
         display: inline-block;
-        pointer-events: none;
+        font-weight: bold;
+        font-size: var(--dplayer-danmaku-font-size);
+        opacity: var(--dplayer-danmaku-opacity);
+        white-space: nowrap;
+        text-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.9);
+        cursor: default;
         user-select: none;
         -webkit-user-select: none;
-        cursor: default;
-        white-space: nowrap;
-        font-weight: bold;
-        text-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.9);
+        pointer-events: none;
         &--demo {
             position: absolute;
             visibility: hidden;
+        }
+        span {
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
         }
     }
     .dplayer-danmaku-right {
@@ -44,8 +50,8 @@
     .dplayer-danmaku-top,
     .dplayer-danmaku-bottom {
         position: absolute;
-        width: 100%;
-        text-align: center;
+        left: 50%;
+        transform: translateX(-50%);
         visibility: hidden;
         &.dplayer-danmaku-move {
             animation-name: 'danmaku-center';
