@@ -2134,10 +2134,10 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-aribb24.js@1.9.14:
-  version "1.9.14"
-  resolved "https://registry.yarnpkg.com/aribb24.js/-/aribb24.js-1.9.14.tgz#ead7a4ac40dd696020a94d4dfca12c4ebcc50c00"
-  integrity sha512-p5KYfg4bIqIK5uQuu4zk/YFH2cYdl3IwPA6QIZRUZY3QNafIxToSn/WQnSuZh/0DFtxRN/aKg1TKbudsPmpa/w==
+aribb24.js@1.9.16:
+  version "1.9.16"
+  resolved "https://registry.yarnpkg.com/aribb24.js/-/aribb24.js-1.9.16.tgz#b024c37debf9fc7acc17dcaad3eb7065de97517a"
+  integrity sha512-HooKo7kYsfMzAG7QTZG+p1hhiVLB1I+SAkYZx5xP/wTVGh/3V6qVJ3RKS1rxyzlh4PRVQoMwAdkWqqS5OqaNNA==
 
 arr-diff@^4.0.0:
   version "4.0.0"

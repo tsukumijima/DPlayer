@@ -34,7 +34,7 @@
         "docs:build": "vuepress build docs"
     },
     "dependencies": {
-        "aribb24.js": "1.9.14",
+        "aribb24.js": "1.9.16",
         "axios": "^0.27.2",
         "balloon-css": "^1.2.0",
         "promise-polyfill": "^8.2.3"
