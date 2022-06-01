@@ -1,6 +1,6 @@
 {
     "name": "dplayer",
-    "version": "1.26.0",
+    "version": "1.27.0",
     "description": "Wow, such a lovely HTML5 danmaku video player",
     "main": "dist/DPlayer.min.js",
     "files": [
@@ -37,6 +37,7 @@
         "aribb24.js": "1.9.16",
         "axios": "^0.27.2",
         "balloon-css": "^1.2.0",
+        "patch-package": "^6.4.7",
         "promise-polyfill": "^8.2.3"
     },
     "devDependencies": {
@@ -57,7 +58,6 @@
         "file-loader": "^6.2.0",
         "git-revision-webpack-plugin": "^5.0.0",
         "mini-css-extract-plugin": "2.6.0",
-        "patch-package": "^6.4.7",
         "postcss": "^8.4.14",
         "postcss-loader": "^7.0.0",
         "sass": "^1.52.1",
