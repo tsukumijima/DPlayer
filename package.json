@@ -23,15 +23,21 @@
         "url": "git+https://github.com/tsukumijima/DPlayer.git"
     },
     "scripts": {
+        "postinstall": "patch-package",
         "start": "npm run dev",
-        "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js --progress",
-        "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/dev.config.js --watch --colors",
+        "build": "cross-env NODE_ENV=production webpack build --config webpack/prod.config.js --progress",
+        "dev": "cross-env NODE_ENV=development webpack serve --config webpack/dev.config.js",
         "test": "eslint src webpack",
         "format": "eslint \"**/*.js\" --fix",
-        "format:staged": "eslint \"**/*.js\" --fix",
         "format:check": "eslint \"**/*.js\"",
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs"
+    },
+    "dependencies": {
+        "aribb24.js": "1.9.14",
+        "axios": "^0.27.2",
+        "balloon-css": "^1.2.0",
+        "promise-polyfill": "^8.2.3"
     },
     "devDependencies": {
         "@babel/core": "^7.18.2",
@@ -47,11 +53,12 @@
         "css-loader": "^6.7.1",
         "cssnano": "^5.1.10",
         "eslint": "^8.16.0",
-        "eslint-loader": "^4.0.0",
         "exports-loader": "^4.0.0",
         "file-loader": "^6.2.0",
         "git-revision-webpack-plugin": "^5.0.0",
         "mini-css-extract-plugin": "2.6.0",
+        "patch-package": "^6.4.7",
+        "postcss": "^8.4.14",
         "postcss-loader": "^7.0.0",
         "sass": "^1.52.1",
         "sass-loader": "^13.0.0",
@@ -63,17 +70,11 @@
         "vuepress": "1.9.7",
         "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
-        "webpack-dev-server": "^4.9.0",
+        "webpack-dev-server": "^4.9.1",
         "yorkie": "^2.0.0"
     },
-    "dependencies": {
-        "aribb24.js": "1.9.14",
-        "axios": "^0.27.2",
-        "balloon-css": "^1.2.0",
-        "promise-polyfill": "^8.2.3"
-    },
     "gitHooks": {
-        "pre-commit": "npm run format:staged"
+        "pre-commit": "npm run format"
     },
     "browserslist": [
         "> 1%",

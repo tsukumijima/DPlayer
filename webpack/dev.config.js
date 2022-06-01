@@ -45,16 +45,16 @@ module.exports = {
     // webpack-dev-server settings
     devServer: {
         compress: true,
-        contentBase: path.resolve(__dirname, '..', 'demo'),
-        clientLogLevel: 'none',
-        quiet: false,
         open: true,
         historyApiFallback: {
             disableDotRule: true,
         },
-        watchOptions: {
-            ignored: /node_modules/,
-        },
+        static: {
+            directory: path.resolve(__dirname, '..', 'demo'),
+            watch: {
+                ignored: /node_modules/,
+            },
+        }
     },
 
     // loader settings
