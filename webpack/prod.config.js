@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 const gitRevisionPlugin = new GitRevisionPlugin();
+const TerserPlugin = require('terser-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 
@@ -42,6 +43,16 @@ module.exports = {
         maxEntrypointSize: 500000,
     },
 
+    // optimize code
+    optimization: {
+        minimizer: [new TerserPlugin({
+            extractComments: false,
+            terserOptions: {
+                sourceMap: true,
+            }
+        })],
+    },
+
     // report the first error as a hard error instead of tolerating it
     bail: true,
 
@@ -52,8 +63,6 @@ module.exports = {
             {
                 test: /\.js$/,
                 use: [
-                    // optimize JavaScript template string
-                    'template-string-optimize-loader',
                     // compile JavaScript in Babel
                     {
                         loader: 'babel-loader',
