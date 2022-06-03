@@ -294,40 +294,31 @@ class Controller {
                 canvas.getContext('2d').drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
 
                 canvas.toBlob((blob) => {
-                    if (blob === null) {
+                    if (blob === null) return;
+
+                    // generate download filename
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+                    const day = ('0' + today.getDate()).slice(-2);
+                    const hour = ('0' + today.getHours()).slice(-2);
+                    const min = ('0' + today.getMinutes()).slice(-2);
+                    const sec = ('0' + today.getSeconds()).slice(-2);
+                    const filename = `Capture_${year}${month}${day}-${hour}${min}${sec}.jpg`;
+
+                    // download screenshot
+                    const bloburl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    if (typeof link.download === 'undefined') {
+                        this.player.notice('Error: Screenshot download is not supported.');
                         return;
                     }
+                    link.download = filename;
+                    link.href = bloburl;
+                    link.click();
+                    URL.revokeObjectURL(bloburl);
 
-                    // create blob url
-                    const bloburl = URL.createObjectURL(blob);
-
-                    // case of download screenshot
-                    if (!this.player.options.screenshotOfEventTriggerOnly) {
-                        const link = document.createElement('a');
-                        link.href = bloburl;
-                        if (typeof link.download === 'undefined') {
-                            this.player.notice('Error: Screenshot download is not supported.');
-                            return;
-                        }
-
-                        // generate download filename
-                        const today = new Date();
-                        const year = today.getFullYear();
-                        const month = ('0' + (today.getMonth() + 1)).slice(-2);
-                        const day = ('0' + today.getDate()).slice(-2);
-                        const hour = ('0' + today.getHours()).slice(-2);
-                        const min = ('0' + today.getMinutes()).slice(-2);
-                        const sec = ('0' + today.getSeconds()).slice(-2);
-                        link.download = `Capture_${year}${month}${day}-${hour}${min}${sec}.jpg`;
-
-                        // download screenshot
-                        link.style.display = 'none';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-
-                    this.player.events.trigger('screenshot', bloburl);
+                    this.player.events.trigger('screenshot', blob);
 
                 // specify image type and quality
                 }, 'image/jpeg', 1);
