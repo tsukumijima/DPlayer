@@ -34,7 +34,7 @@ export default (options) => {
         !options.video.type && (options.video.type = 'auto');
     }
     if (typeof options.danmaku === 'object' && options.danmaku) {
-        !options.danmaku.user && (options.danmaku.user = 'DIYgod');
+        !options.danmaku.user && (options.danmaku.user = 'DPlayer');
     }
     if (options.subtitle) {
         !options.subtitle.type && (options.subtitle.type = 'webvtt');

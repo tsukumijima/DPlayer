@@ -43,7 +43,7 @@ export default {
                         options.success({
                             time: 0,
                             type: 0,
-                            color: 16777215,
+                            color: '#ffeaea',
                             author: '',
                             text: '',
                         });

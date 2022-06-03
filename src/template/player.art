@@ -8,7 +8,7 @@
         <img src="{{ options.logo }}">
     </div>
     {{ /if }}
-    <div class="dplayer-danmaku"{{ if options.danmaku && options.danmaku.bottm }} style="margin-bottom:{{ options.danmaku.bottm }}"{{ /if }}>
+    <div class="dplayer-danmaku"{{ if options.danmaku && options.danmaku.bottom }} style="margin-bottom:{{ options.danmaku.bottom }}"{{ /if }}>
         <div class="dplayer-danmaku-item dplayer-danmaku-item--demo"></div>
     </div>
     <div class="dplayer-subtitle"></div>
@@ -208,44 +208,67 @@
         <div class="dplayer-comment-setting-title">{{ tran('Set danmaku color') }}</div>
         <div class="dplayer-comment-setting-color-list">
             <label>
-                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#fff" checked>
-                <span style="background: #fff;"></span>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#ffeaea" checked>
+                <span style="background: #ffeaea"></span>
             </label>
             <label>
-                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#e54256">
-                <span style="background: #e54256"></span>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#f02840">
+                <span style="background: #f02840"></span>
+            </label>
+            <label>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#fd7e80">
+                <span style="background: #fd7e80"></span>
+            </label>
+            <label>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#fda708">
+                <span style="background: #fda708"></span>
             </label>
             <label>
                 <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#ffe133">
                 <span style="background: #ffe133"></span>
             </label>
             <label>
-                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#64DD17">
-                <span style="background: #64DD17"></span>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#64dd17">
+                <span style="background: #64dd17"></span>
             </label>
             <label>
-                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#39ccff">
-                <span style="background: #39ccff"></span>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#00d4f5">
+                <span style="background: #00d4f5"></span>
             </label>
             <label>
-                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#D500F9">
-                <span style="background: #D500F9"></span>
+                <input type="radio" name="dplayer-danmaku-color-{{ index }}" value="#4763ff">
+                <span style="background: #4763ff"></span>
             </label>
         </div>
     </div>
     <div class="dplayer-comment-setting-type">
         <div class="dplayer-comment-setting-title">{{ tran('Set danmaku type') }}</div>
         <label>
-            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="1">
+            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="top">
             <span>{{ tran('Top') }}</span>
         </label>
         <label>
-            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="0" checked>
+            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="right" checked>
             <span>{{ tran('Rolling') }}</span>
         </label>
         <label>
-            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="2">
+            <input type="radio" name="dplayer-danmaku-type-{{ index }}" value="bottom">
             <span>{{ tran('Bottom') }}</span>
+        </label>
+    </div>
+    <div class="dplayer-comment-setting-size">
+        <div class="dplayer-comment-setting-title">{{ tran('Set danmaku size') }}</div>
+        <label>
+            <input type="radio" name="dplayer-danmaku-size-{{ index }}" value="big">
+            <span>{{ tran('Big') }}</span>
+        </label>
+        <label>
+            <input type="radio" name="dplayer-danmaku-size-{{ index }}" value="medium" checked>
+            <span>{{ tran('Medium') }}</span>
+        </label>
+        <label>
+            <input type="radio" name="dplayer-danmaku-size-{{ index }}" value="small">
+            <span>{{ tran('Small') }}</span>
         </label>
     </div>
 </div>

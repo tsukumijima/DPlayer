@@ -133,6 +133,7 @@ const utils = {
         dragEnd: isMobile ? 'touchend' : 'mouseup',
     },
 
+    // currently not used
     color2Number: (color) => {
         if (color[0] === '#') {
             color = color.substr(1);

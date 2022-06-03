@@ -765,8 +765,11 @@
         color: #fff;
         line-height: 30px;
     }
-    .dplayer-comment-setting-type {
+    .dplayer-comment-setting-type, .dplayer-comment-setting-size {
         font-size: 0;
+        &.dplayer-comment-setting-size {
+            margin-top: 8px;
+        }
         .dplayer-comment-setting-title {
             margin-bottom: 6px;
         }
@@ -805,7 +808,7 @@
         .dplayer-comment-setting-color-list {
             display: flex;
             justify-content: space-between;
-            padding: 6px 8.5px;
+            padding: 4px 0px;
             label {
                 display: inline-block;
                 font-size: 0;
