@@ -31,13 +31,19 @@
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
         }
+        &.dplayer-danmaku-size-big {
+            font-size: calc(var(--dplayer-danmaku-font-size) * 1.25);
+        }
+        &.dplayer-danmaku-size-small {
+            font-size: calc(var(--dplayer-danmaku-font-size) * 0.8);
+        }
     }
     .dplayer-danmaku-right {
         position: absolute;
         right: 0;
         transform: translateX(100%);
         &.dplayer-danmaku-move {
-            animation-name: 'danmaku';
+            animation-name: danmaku;
             animation-timing-function: linear;
             animation-play-state: paused;
         }
@@ -54,7 +60,7 @@
         transform: translateX(-50%);
         visibility: hidden;
         &.dplayer-danmaku-move {
-            animation-name: 'danmaku-center';
+            animation-name: danmaku-center;
             animation-timing-function: linear;
             animation-play-state: paused;
         }

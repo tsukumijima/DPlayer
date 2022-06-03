@@ -151,7 +151,7 @@ const tranTxt = {
         'Please input danmaku content!': 'コメント内容を入力して下さい！',
         'Set danmaku color': 'コメントの色',
         'Set danmaku type': 'コメントの位置',
-        'Set danmaku size': 'コメントの大きさ',
+        'Set danmaku size': 'コメントのサイズ',
         'Show danmaku': 'コメントを表示',
         'Video load failed': '動画の読み込みに失敗しました…',
         'Danmaku load failed': 'コメントの読み込みに失敗しました…',

@@ -11,7 +11,7 @@ class Danmaku {
             bottom: {},
         };
         this.danIndex = 0;
-        this.danFontSize = '24px';
+        this.danFontSize = 24; // 24px
         this.dan = [];
         this.showing = true;
         this._opacity = this.options.opacity;
@@ -34,9 +34,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
         this._readAllEndpoints(endpoints, (results) => {
-            this.dan = [].concat
-                .apply([], results)
-                .sort((a, b) => a.time - b.time);
+            this.dan = [].concat.apply([], results).sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
             });
@@ -94,6 +92,7 @@ class Danmaku {
             text: dan.text,
             color: dan.color,
             type: dan.type,
+            size: dan.size,
         };
 
         this.options.apiBackend.send({
@@ -106,7 +105,8 @@ class Danmaku {
                     text: this.htmlEncode(danmakuData.text),
                     color: danmakuData.color,
                     type: danmakuData.type,
-                    border: `2px solid ${this.options.borderColor}`,
+                    size: danmakuData.size,
+                    border: true,
                 });
 
                 this.events && this.events.trigger('danmaku_send', danmakuData);
@@ -151,30 +151,39 @@ class Danmaku {
      *
      * @param {Object Array} dan - {text, color, type}
      * text - danmaku content
-     * color - danmaku color, default: `#fff`
+     * color - danmaku color, default: `#ffeaea`
      * type - danmaku type, `right` `top` `bottom`, default: `right`
+     * size - danmaku size, `medium` `big` `small`, default: `medium`
      */
     draw(dan) {
         if (this.showing) {
-            // adjust the comment size according to the screen size
+
+            // if the dan variable is an object, create and assign an array of only one object
+            if (Object.prototype.toString.call(dan) !== '[object Array]') {
+                dan = [dan];
+            }
+
+            // adjust the font size according to the screen size
             const ratioRate = 1.25; // magic!
-            const ratio = (this.container.offsetWidth / 1024) * ratioRate < 1 ? (this.container.offsetWidth / 1024) * ratioRate : 1;
-            const itemFontSize = this.options.fontSize * ratio;
-            const itemHeight = itemFontSize + 6 * ratio; // 6 is the vertical margin of danmaku
+            let ratio = this.container.offsetWidth / 1024 * ratioRate;
+            if (ratio >= 1) ratio = 1; // ratio should not exceed 1
+            let itemFontSize = this.options.fontSize * ratio;
+            const itemHeight = itemFontSize + (6 * ratio); // 6 is the vertical margin of danmaku
 
             const danWidth = this.container.offsetWidth;
-            const danHeight = this.container.offsetWidth;
+            const danHeight = this.container.offsetHeight;
             const itemY = parseInt(danHeight / itemHeight);
 
-            const danItemRight = (ele) => {
-                const eleWidth = ele.offsetWidth || parseInt(ele.style.width);
-                const eleRight = ele.getBoundingClientRect().right || this.container.getBoundingClientRect().right + eleWidth;
-                return this.container.getBoundingClientRect().right - eleRight;
+            const danItemRight = (danmakuItem) => {
+                const danmakuItemWidth = danmakuItem.offsetWidth || parseInt(danmakuItem.style.width);
+                const danmakuItemRight =
+                    danmakuItem.getBoundingClientRect().right || this.container.getBoundingClientRect().right + danmakuItemWidth;
+                return this.container.getBoundingClientRect().right - danmakuItemRight;
             };
 
             const danSpeed = (width) => (danWidth + width) / 5;
 
-            const getTunnel = (ele, type, width) => {
+            const getTunnel = (danmakuItem, type, width) => {
                 const tmp = danWidth / danSpeed(width);
 
                 for (let i = 0; this.unlimited || i < itemY; i++) {
@@ -189,16 +198,16 @@ class Danmaku {
                                 break;
                             }
                             if (j === item.length - 1) {
-                                this.danTunnel[type][i + ''].push(ele);
-                                ele.addEventListener('animationend', () => {
+                                this.danTunnel[type][i + ''].push(danmakuItem);
+                                danmakuItem.addEventListener('animationend', () => {
                                     this.danTunnel[type][i + ''].splice(0, 1);
                                 });
                                 return i % itemY;
                             }
                         }
                     } else {
-                        this.danTunnel[type][i + ''] = [ele];
-                        ele.addEventListener('animationend', () => {
+                        this.danTunnel[type][i + ''] = [danmakuItem];
+                        danmakuItem.addEventListener('animationend', () => {
                             this.danTunnel[type][i + ''].splice(0, 1);
                         });
                         return i % itemY;
@@ -207,93 +216,127 @@ class Danmaku {
                 return -1;
             };
 
-            if (Object.prototype.toString.call(dan) !== '[object Array]') {
-                dan = [dan];
-            }
-
             const docFragment = document.createDocumentFragment();
 
             for (let i = 0; i < dan.length; i++) {
+
+                // Whether the type is numeric (for compatibility)
+                if (isFinite(dan[i].color)) {
+                    dan[i].color = utils.number2Color(dan[i].color);
+                }
                 if (isFinite(dan[i].type)) {
-                    // Whether the type is numeric
                     dan[i].type = utils.number2Type(dan[i].type);
                 }
+
+                // set default danmaku color
                 if (!dan[i].color) {
-                    dan[i].color = 16777215; // 0xFFFFFF
-                }
-                const item = document.createElement('div');
-                item.classList.add('dplayer-danmaku-item');
-                item.classList.add(`dplayer-danmaku-${dan[i].type}`);
-                item.addEventListener('animationend', () => {
-                    this.container.removeChild(item);
-                });
-
-                // show line break
-                dan[i].text = dan[i].text.replace(/\n/g, '<br>');
-                if (dan[i].border) {
-                    item.innerHTML = `<span style='border:${dan[i].border};'>${dan[i].text}</span>`;
-                } else {
-                    item.innerHTML = dan[i].text;
+                    dan[i].color = '#ffeaea'; // white
                 }
 
-                // set danmaku color
-                item.style.color = utils.number2Color(dan[i].color);
+                // set default danmaku type
+                if (!dan[i].type || (dan[i].type !== 'right' && dan[i].type !== 'top' && dan[i].type !== 'bottom')) {
+                    dan[i].type = 'right';
+                }
+
+                // set default danmaku size
+                if (!dan[i].size) {
+                    dan[i].size = 'medium';
+                }
+
+                // set danmaku size
+                // used to calculate danmaku width
+                // danmaku size doesn't affect itemHeight
+                switch (dan[i].size) {
+                    case 'big':
+                        itemFontSize = itemFontSize * 1.25;
+                        break;
+                    case 'small':
+                        itemFontSize = itemFontSize * 0.8;
+                        break;
+                }
 
                 const itemWidth = (() => {
                     let measure = 0;
                     // returns the width of the widest line
-                    dan[i].text.split('<br>').forEach((text) => {
-                        const result = this._measure(text, itemFontSize);
+                    for (const line of dan[i].text.split('\n')) {
+                        const result = this._measure(line, itemFontSize);
                         if (result > measure) {
                             measure = result;
                         }
-                    });
+                    }
                     return measure;
                 })();
-                let tunnel;
 
-                // adjust
-                switch (dan[i].type) {
-                    case 'right':
-                        tunnel = getTunnel(item, dan[i].type, itemWidth);
-                        if (tunnel >= 0) {
-                            item.style.width = itemWidth + 1 + 'px';
-                            item.style.top = itemHeight * tunnel + 8 + 'px';
-                            item.style.transform = `translateX(-${danWidth}px)`;
-                            item.style.willChange = 'transform';
-                        }
-                        break;
-                    case 'top':
-                        tunnel = getTunnel(item, dan[i].type);
-                        if (tunnel >= 0) {
-                            item.style.top = itemHeight * tunnel + 8 + 'px';
-                            item.style.willChange = 'visibility';
-                        }
-                        break;
-                    case 'bottom':
-                        tunnel = getTunnel(item, dan[i].type);
-                        if (tunnel >= 0) {
-                            item.style.bottom = itemHeight * tunnel + 8 + 'px';
-                            item.style.willChange = 'visibility';
-                        }
-                        break;
-                    default:
-                        console.error(`Can't handled danmaku type: ${dan[i].type}`);
-                }
+                // repeat for each line of danmaku
+                // if danmaku type is bottom, the order must be reversed
+                const lines = dan[i].text.split('\n');
+                for (const line of (dan[i].type === 'bottom') ? lines.reverse() : lines) {
 
-                if (tunnel >= 0) {
-                    // move
-                    item.classList.add('dplayer-danmaku-move');
-                    item.style.animationDuration = this._danAnimation(dan[i].type);
+                    const danmakuItem = document.createElement('div');
+                    danmakuItem.classList.add('dplayer-danmaku-item');
+                    danmakuItem.classList.add(`dplayer-danmaku-${dan[i].type}`); // set danmaku type (CSS)
+                    danmakuItem.classList.add(`dplayer-danmaku-size-${dan[i].size}`); // set danmaku size (CSS)
 
-                    // insert
-                    docFragment.appendChild(item);
+                    // set danmaku color
+                    danmakuItem.style.color = dan[i].color;
+
+                    // set danmaku text
+                    if (dan[i].border) {
+                        danmakuItem.innerHTML = `<span style='border: 2px solid ${this.options.borderColor};'>${line}</span>`;
+                    } else {
+                        danmakuItem.innerHTML = line;
+                    }
+
+                    // set event to remove this danmaku
+                    danmakuItem.addEventListener('animationend', () => {
+                        this.container.removeChild(danmakuItem);
+                    });
+
+                    // ensure and adjust danmaku position
+                    const tunnel = getTunnel(danmakuItem, dan[i].type, itemWidth);
+                    switch (dan[i].type) {
+                        case 'right':
+                            if (tunnel >= 0) {
+                                danmakuItem.style.width = itemWidth + 1 + 'px';
+                                danmakuItem.style.top = itemHeight * tunnel + 8 + 'px';
+                                danmakuItem.style.transform = `translateX(-${danWidth}px)`;
+                                danmakuItem.style.willChange = 'transform';
+                            }
+                            break;
+                        case 'top':
+                            if (tunnel >= 0) {
+                                danmakuItem.style.width = itemWidth + 1 + 'px';
+                                danmakuItem.style.top = itemHeight * tunnel + 8 + 'px';
+                                danmakuItem.style.willChange = 'visibility';
+                            }
+                            break;
+                        case 'bottom':
+                            if (tunnel >= 0) {
+                                danmakuItem.style.width = itemWidth + 1 + 'px';
+                                danmakuItem.style.bottom = itemHeight * tunnel + 8 + 'px';
+                                danmakuItem.style.willChange = 'visibility';
+                            }
+                            break;
+                        default:
+                            console.error(`Can't handled danmaku type: ${dan[i].type}`);
+                    }
+
+                    if (tunnel >= 0) {
+                        // move
+                        danmakuItem.classList.add('dplayer-danmaku-move');
+                        danmakuItem.style.animationDuration = this._danAnimation(dan[i].type);
+
+                        // insert
+                        docFragment.appendChild(danmakuItem);
+                    }
                 }
             }
 
+            // set base danmaku font size
             this.container.style.setProperty('--dplayer-danmaku-font-size', `${itemFontSize}px`);
-            this.container.appendChild(docFragment);
 
+            // draw danmaku
+            this.container.appendChild(docFragment);
             return docFragment;
         }
     }
@@ -310,7 +353,7 @@ class Danmaku {
         if (!this.context || this.danFontSize !== itemFontSize) {
             this.danFontSize = itemFontSize;
             this.context = document.createElement('canvas').getContext('2d');
-            this.context.font = 'bold ' + this.danFontSize + 'px ' + '"Segoe UI", Arial';
+            this.context.font = `bold ${this.danFontSize}px "Segoe UI", Arial`;
         }
         return this.context.measureText(text).width;
     }
