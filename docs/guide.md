@@ -14,26 +14,15 @@ sidebar: auto
 
 ## Special Thanks
 
-### Special Sponsors
+### Sponsors
 
 &nbsp;
-
-<div>
-<a href="https://www.cdnbye.com" target="_blank">
-    <img height="60px" src="https://cdnbye.oss-cn-beijing.aliyuncs.com/pic/cdnbye-dp.jpeg">
-</a>
-</div>
 
 <div>
 <a href="https://www.dogecloud.com/?ref=dplayer" target="_blank">
     <img height="60px" src="https://i.imgur.com/C2NgugY.png">
 </a>
 </div>
-
-### Sponsors
-
-| [极酷社](https://www.acg.app) |
-| :---------------------------: |
 
 ## Installation
 
