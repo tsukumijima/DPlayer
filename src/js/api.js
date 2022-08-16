@@ -36,6 +36,7 @@ export default {
                                 color: item[2],
                                 author: item[3],
                                 text: item[4],
+                                size: (item[5] ? (((item[5] === 'big') || (item[5] === 'small')) ? item[5] : 'medium') : 'medium'),
                             }))
                         );
                 } else {
@@ -46,6 +47,7 @@ export default {
                             color: '#ffeaea',
                             author: '',
                             text: '',
+                            size: 'medium',
                         });
                 }
             })
