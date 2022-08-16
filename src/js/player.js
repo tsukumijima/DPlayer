@@ -179,7 +179,7 @@ class DPlayer {
      */
     sync(quiet = false) {
         if (this.options.live) {
-            const time = utils.getVideoDuration(this.video, this.template) - 0.4; // 0.4s is play buffer
+            const time = utils.getVideoDuration(this.video, this.template) - 0.7; // 0.7s is play buffer
             try {
                 this.video.currentTime = time;
             } catch (error) {
