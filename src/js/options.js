@@ -6,6 +6,7 @@ export default (options) => {
     const defaultOption = {
         container: options.element || document.getElementsByClassName('dplayer')[0],
         live: false,
+        liveSyncMinBufferSize: 0.8,
         syncWhenPlayingLive: true,
         autoplay: false,
         theme: '#b7daff',
