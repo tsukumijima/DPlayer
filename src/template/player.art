@@ -26,7 +26,7 @@
         <button class="dplayer-icon dplayer-comment-setting-icon" aria-label="{{ tran('Setting') }}" data-balloon-nofocus data-balloon-pos="up">
             <span class="dplayer-icon-content">{{@ icons.pallette }}</span>
         </button>
-        <input class="dplayer-comment-input" type="text" placeholder="{{ tran('Input danmaku, hit Enter') }}" maxlength="60">
+        <input class="dplayer-comment-input" type="search" placeholder="{{ tran('Input danmaku, hit Enter') }}" maxlength="60">
         <button class="dplayer-icon dplayer-send-icon" aria-label="{{ tran('Send') }}" data-balloon-nofocus data-balloon-pos="up">
             <span class="dplayer-icon-content">{{@ icons.send }}</span>
         </button>
