@@ -24,12 +24,12 @@ class Setting {
                 this.player.template.settingBox.classList.remove('dplayer-setting-box-quality');
             });
             for (let i = 0; i < this.player.template.qualityItem.length; i++) {
-                this.player.template.qualityItem[i].addEventListener('click', (event) => {
+                this.player.template.qualityItem[i].addEventListener('click', () => {
                     // currently switching
                     if (this.player.switchingQuality) {
                         return;
                     }
-                    this.player.switchQuality(parseInt(event.target.dataset.index));
+                    this.player.switchQuality(parseInt(this.player.template.qualityItem[i].dataset.index));
                 });
             }
         }
