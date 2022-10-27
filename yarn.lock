@@ -2968,10 +2968,9 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-aribb24.js@1.10.9:
+"aribb24.js@github:tsukumijima/aribb24.js#ec3ed1d6e4d91e4c2de563c8b142abf1b0641f5f":
   version "1.10.9"
-  resolved "https://registry.yarnpkg.com/aribb24.js/-/aribb24.js-1.10.9.tgz#f11e3fbe01e935844300b7397d86a02ed4c14d9c"
-  integrity sha512-rqi6LaK1wLjWnCDlOx4C4tvuaf66Be1ipcR4G67ygZDIcfuoYvMVkd7Qxw31Cq7fBpnt/CL0U3DTTiu0ArDiCQ==
+  resolved "https://codeload.github.com/tsukumijima/aribb24.js/tar.gz/ec3ed1d6e4d91e4c2de563c8b142abf1b0641f5f"
 
 arr-diff@^4.0.0:
   version "4.0.0"
