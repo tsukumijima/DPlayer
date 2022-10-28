@@ -441,7 +441,7 @@ class DPlayer {
 
                                 // Initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    {...aribb24Options, data_identifier: 0x81, renderedTextCallback: null},
+                                    {...aribb24Options, data_identifier: 0x81},
                                 );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
@@ -482,7 +482,7 @@ class DPlayer {
 
                                 // Initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    {...aribb24Options, data_identifier: 0x81, renderedTextCallback: null},
+                                    {...aribb24Options, data_identifier: 0x81},
                                 );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
@@ -563,7 +563,7 @@ class DPlayer {
 
                                 // Initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                    {...aribb24Options, data_identifier: 0x81, renderedTextCallback: null},
+                                    {...aribb24Options, data_identifier: 0x81},
                                 );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();

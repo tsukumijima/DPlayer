@@ -37,7 +37,7 @@
         "docs:build": "vuepress build docs"
     },
     "dependencies": {
-        "aribb24.js": "github:tsukumijima/aribb24.js#ec3ed1d6e4d91e4c2de563c8b142abf1b0641f5f",
+        "aribb24.js": "1.11.0",
         "axios": "^0.27.2",
         "balloon-css": "^1.2.0",
         "patch-package": "^6.4.7",
