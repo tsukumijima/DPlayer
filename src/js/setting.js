@@ -12,8 +12,10 @@ class Setting {
         });
 
         // clip setting box
-        const settingOriginPanelHeight = this.player.template.settingOriginPanel.scrollHeight;
-        this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
+        setTimeout(() => {
+            const settingOriginPanelHeight = this.player.template.settingOriginPanel.scrollHeight;
+            this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
+        }, 300);
 
         // quality
         if (this.player.options.video.quality) {
