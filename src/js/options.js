@@ -56,6 +56,7 @@ export default (options) => {
                 options.video.defaultQuality = 0;
             }
         }
+        options.video.type = options.video.quality[options.video.defaultQuality].type;
         options.video.url = options.video.quality[options.video.defaultQuality].url;
     }
 

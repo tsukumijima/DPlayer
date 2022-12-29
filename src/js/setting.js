@@ -58,19 +58,27 @@ class Setting {
         });
         for (let i = 0; i < this.player.template.audioItem.length; i++) {
             this.player.template.audioItem[i].addEventListener('click', (event) => {
-                if (this.player.plugins.mpegts) {
+                if (this.player.plugins.mpegts || this.player.plugins.liveLLHLSForKonomiTV) {
                     if (event.target.dataset.audio === 'primary') {
                         // switch primary audio
                         this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Primary audio');
-                        this.player.plugins.mpegts.switchPrimaryAudio();
+                        if (this.player.plugins.mpegts) {
+                            this.player.plugins.mpegts.switchPrimaryAudio();
+                        } else if (this.player.plugins.liveLLHLSForKonomiTV) {
+                            this.player.plugins.liveLLHLSForKonomiTV.switchPrimaryAudio();
+                        }
                     } else if (event.target.dataset.audio === 'secondary') {
                         // switch secondary audio
                         this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
-                        this.player.plugins.mpegts.switchSecondaryAudio();
+                        if (this.player.plugins.mpegts) {
+                            this.player.plugins.mpegts.switchSecondaryAudio();
+                        } else if (this.player.plugins.liveLLHLSForKonomiTV) {
+                            this.player.plugins.liveLLHLSForKonomiTV.switchSecondaryAudio();
+                        }
                     }
                     this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
                 }
