@@ -169,7 +169,7 @@ const tranTxt = {
         'Setting': '設定',
         'Full screen': 'フルスクリーン',
         'Web full screen': 'ブラウザフルスクリーン',
-        'Picture-in-Picture': 'ピクチャーインピクチャー',
+        'Picture-in-Picture': 'Picture-in-Picture',
         'Send': 'コメントする',
         'Screenshot': 'スクリーンショット',
         's': '秒',

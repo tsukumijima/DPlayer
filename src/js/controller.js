@@ -228,8 +228,13 @@ class Controller {
         if (document.pictureInPictureEnabled) {
             this.player.template.pipButton.addEventListener('click', () => {
                 if (!document.pictureInPictureElement) {
-                    this.player.video.requestPictureInPicture().catch(() => {
-                        this.player.notice('Error: Picture-in-Picture is not supported.');
+                    this.player.video.requestPictureInPicture().catch((reason) => {
+                        console.error(reason);
+                        if (this.player.options.lang === 'ja' || this.player.options.lang === 'ja-jp') {
+                            this.player.notice('Picture-in-Picture を開始できませんでした。');
+                        } else {
+                            this.player.notice('Picture-in-Picture failed to start.');
+                        }
                     });
                 } else {
                     document.exitPictureInPicture();
