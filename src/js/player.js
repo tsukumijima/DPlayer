@@ -850,7 +850,7 @@ class DPlayer {
         this.volume(this.user.get('volume'), true, true);
 
         if (this.options.subtitle) {
-            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins.aribb24Caption, this.plugins.aribb24Superimpose, this.options.subtitle, this.events);
+            this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins, this.options.subtitle, this.events);
             if (!this.user.get('subtitle')) {
                 this.subtitle.hide();
             }
