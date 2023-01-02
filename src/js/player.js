@@ -57,10 +57,25 @@ class DPlayer {
         if (utils.isMobile) {
             this.container.classList.add('dplayer-mobile');
         }
-        this.arrow = this.container.offsetWidth <= 500;
-        if (this.arrow) {
-            this.container.classList.add('dplayer-arrow');
+        this.narrow = this.container.offsetWidth <= 500;
+        if (this.narrow) {
+            this.container.classList.add('dplayer-narrow');
         }
+
+        // observe container resize
+        this.resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.target === this.container) {
+                    this.narrow = this.container.offsetWidth <= 500;
+                    if (this.narrow) {
+                        this.container.classList.add('dplayer-narrow');
+                    } else {
+                        this.container.classList.remove('dplayer-narrow');
+                    }
+                }
+            }
+        });
+        this.resizeObserver.observe(this.container);
 
         this.template = new Template({
             container: this.container,
@@ -1002,6 +1017,7 @@ class DPlayer {
         this.video.src = '';
         this.container.innerHTML = '';
         this.events.trigger('destroy');
+        this.resizeObserver.disconnect();
     }
 
     static get version() {
