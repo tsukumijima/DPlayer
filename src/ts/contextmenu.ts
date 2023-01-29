@@ -1,8 +1,11 @@
+import DPlayer from './player';
+
 class ContextMenu {
-    contextmenuHandler: any;
-    player: any;
-    shown: any;
-    constructor(player: any) {
+    contextmenuHandler: (e: MouseEvent) => void;
+    player: DPlayer;
+    shown: boolean;
+
+    constructor(player: DPlayer) {
         this.player = player;
         this.shown = false;
 
@@ -15,7 +18,7 @@ class ContextMenu {
             }
         });
 
-        this.contextmenuHandler = (e: any) => {
+        this.contextmenuHandler = (e: MouseEvent) => {
             const event = e || window.event;
             event.preventDefault();
 
@@ -34,7 +37,7 @@ class ContextMenu {
         this.player.container.addEventListener('contextmenu', this.contextmenuHandler);
     }
 
-    show(x: any, y: any) {
+    show(x: number, y: number): void {
         this.player.template.menu.classList.add('dplayer-menu-show');
 
         const clientRect = this.player.container.getBoundingClientRect();
@@ -59,7 +62,7 @@ class ContextMenu {
         this.player.events.trigger('contextmenu_show');
     }
 
-    hide() {
+    hide(): void {
         this.player.template.mask.classList.remove('dplayer-mask-show');
         this.player.template.menu.classList.remove('dplayer-menu-show');
 
@@ -67,7 +70,7 @@ class ContextMenu {
         this.player.events.trigger('contextmenu_hide');
     }
 
-    destroy() {
+    destroy(): void {
         this.player.container.removeEventListener('contextmenu', this.contextmenuHandler);
     }
 }

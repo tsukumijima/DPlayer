@@ -1,14 +1,17 @@
+import DPlayer from './player';
+
 class Timer {
-    enablefpsChecker: any;
-    enableinfoChecker: any;
-    enableloadingChecker: any;
-    fpsIndex: any;
-    fpsStart: any;
-    infoChecker: any;
-    loadingChecker: any;
-    player: any;
-    types: any;
-    constructor(player: any) {
+    player: DPlayer;
+    types: ('loading' | 'info' | 'fps')[];
+    enablefpsChecker!: boolean;
+    enableinfoChecker!: boolean;
+    enableloadingChecker!: boolean;
+    fpsIndex!: number;
+    fpsStart!: Date | number;
+    infoChecker!: number;
+    loadingChecker!: number;
+
+    constructor(player: DPlayer) {
         this.player = player;
 
         window.requestAnimationFrame = (() =>
@@ -30,21 +33,20 @@ class Timer {
         this.init();
     }
 
-    init() {
-        this.types.map((item: any) => {
+    init(): void {
+        this.types.map((item: 'loading' | 'info' | 'fps') => {
             if (item !== 'fps') {
-                // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 this[`init${item}Checker`]();
             }
             return item;
         });
     }
 
-    initloadingChecker() {
+    initloadingChecker(): void {
         let lastPlayPos = 0;
         let currentPlayPos = 0;
         let bufferingDetected = false;
-        this.loadingChecker = setInterval(() => {
+        this.loadingChecker = window.setInterval(() => {
             if (this.enableloadingChecker) {
                 // whether the video is buffering
                 currentPlayPos = this.player.video.currentTime;
@@ -61,7 +63,7 @@ class Timer {
         }, 100);
     }
 
-    initfpsChecker() {
+    initfpsChecker(): void {
         window.requestAnimationFrame(() => {
             if (this.enablefpsChecker) {
                 this.initfpsChecker();
@@ -86,16 +88,15 @@ class Timer {
         });
     }
 
-    initinfoChecker() {
-        this.infoChecker = setInterval(() => {
+    initinfoChecker(): void {
+        this.infoChecker = window.setInterval(() => {
             if (this.enableinfoChecker) {
                 this.player.infoPanel.update();
             }
         }, 1000);
     }
 
-    enable(type: any) {
-        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    enable(type: 'loading' | 'info' | 'fps'): void {
         this[`enable${type}Checker`] = true;
 
         if (type === 'fps') {
@@ -103,17 +104,15 @@ class Timer {
         }
     }
 
-    disable(type: any) {
-        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    disable(type: 'loading' | 'info' | 'fps'): void {
         this[`enable${type}Checker`] = false;
     }
 
-    destroy() {
-        this.types.map((item: any) => {
-            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    destroy(): void {
+        this.types.map((item) => {
             this[`enable${item}Checker`] = false;
             // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-            this[`${item}Checker`] && clearInterval(this[`${item}Checker`]);
+            this[`${item}Checker`] && window.clearInterval(this[`${item}Checker`]);
             return item;
         });
     }

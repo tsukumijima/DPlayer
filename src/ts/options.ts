@@ -1,5 +1,5 @@
 /* global DPLAYER_VERSION */
-import defaultApiBackend from './api.js';
+import defaultApiBackend from './api';
 
 export default (options: any) => {
     // default options

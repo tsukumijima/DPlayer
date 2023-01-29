@@ -1,6 +1,9 @@
+import DPlayer from './player';
+
 class Comment {
-    player: any;
-    constructor(player: any) {
+    player: DPlayer;
+
+    constructor(player: DPlayer) {
         this.player = player;
 
         this.player.template.mask.addEventListener('click', () => {
@@ -16,7 +19,7 @@ class Comment {
         this.player.template.commentColorSettingBox.addEventListener('click', () => {
             const spanElem = this.player.template.commentColorSettingBox.querySelector('input:checked+span');
             if (spanElem) {
-                const color = this.player.template.commentColorSettingBox.querySelector('input:checked').value;
+                const color = this.player.template.commentColorSettingBox.querySelector<HTMLInputElement>('input:checked')!.value;
                 this.player.template.commentSettingFill.style.fill = color;
                 this.player.template.commentInput.style.color = color;
                 this.player.template.commentSendFill.style.fill = color;
@@ -38,7 +41,7 @@ class Comment {
         });
     }
 
-    show() {
+    show(): void {
         this.player.controller.disableAutoHide = true;
         this.player.template.controller.classList.add('dplayer-controller-comment');
         this.player.template.mask.classList.add('dplayer-mask-show');
@@ -46,7 +49,7 @@ class Comment {
         this.player.template.commentInput.focus();
     }
 
-    hide() {
+    hide(): void {
         this.player.template.controller.classList.remove('dplayer-controller-comment');
         this.player.template.mask.classList.remove('dplayer-mask-show');
         this.player.container.classList.remove('dplayer-show-controller');
@@ -54,15 +57,15 @@ class Comment {
         this.hideSetting();
     }
 
-    showSetting() {
+    showSetting(): void {
         this.player.template.commentSettingBox.classList.add('dplayer-comment-setting-open');
     }
 
-    hideSetting() {
+    hideSetting(): void {
         this.player.template.commentSettingBox.classList.remove('dplayer-comment-setting-open');
     }
 
-    toggleSetting() {
+    toggleSetting(): void {
         if (this.player.template.commentSettingBox.classList.contains('dplayer-comment-setting-open')) {
             this.hideSetting();
         } else {
@@ -70,7 +73,7 @@ class Comment {
         }
     }
 
-    send() {
+    send(): void {
         this.player.template.commentInput.blur();
 
         // text can't be empty
@@ -79,19 +82,21 @@ class Comment {
             return;
         }
 
-        this.player.danmaku.send(
-            {
-                text: this.player.template.commentInput.value,
-                color: this.player.container.querySelector('.dplayer-comment-setting-color input:checked').value,
-                type: this.player.container.querySelector('.dplayer-comment-setting-type input:checked').value,
-                size: this.player.container.querySelector('.dplayer-comment-setting-size input:checked').value,
-            },
-            () => {
-                this.hide();
-                this.player.controller.setAutoHide(750);
-            },
-            true,
-        );
+        if (this.player.danmaku !== null) {
+            this.player.danmaku.send(
+                {
+                    text: this.player.template.commentInput.value,
+                    color: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-color input:checked')!.value,
+                    type: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-type input:checked')!.value as 'right' | 'bottom' | 'top',
+                    size: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-size input:checked')!.value as 'big' | 'medium' | 'small',
+                },
+                () => {
+                    this.hide();
+                    this.player.controller.setAutoHide(750);
+                },
+                true,
+            );
+        }
 
         // prevent double send
         this.player.template.commentInput.value = '';

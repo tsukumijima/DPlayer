@@ -1,8 +1,11 @@
+import DPlayer from './player';
+
 class HotKey {
-    cancelFullScreenHandler: any;
-    doHotKeyHandler: any;
-    player: any;
-    constructor(player: any) {
+    player: DPlayer;
+    doHotKeyHandler: (e: KeyboardEvent) => void;
+    cancelFullScreenHandler: (e: KeyboardEvent) => void;
+
+    constructor(player: DPlayer) {
         this.player = player;
         this.doHotKeyHandler = this.doHotKey.bind(this);
         this.cancelFullScreenHandler = this.cancelFullScreen.bind(this);
@@ -12,11 +15,9 @@ class HotKey {
         document.addEventListener('keydown', this.cancelFullScreenHandler);
     }
 
-    doHotKey(e: any) {
-        // @ts-expect-error TS(2531): Object is possibly 'null'.
-        const tag = document.activeElement.tagName.toUpperCase();
-        // @ts-expect-error TS(2531): Object is possibly 'null'.
-        const editable = document.activeElement.getAttribute('contenteditable');
+    doHotKey(e: KeyboardEvent): void {
+        const tag = document.activeElement?.tagName.toUpperCase();
+        const editable = document.activeElement?.getAttribute('contenteditable');
         if (tag !== 'INPUT' && tag !== 'TEXTAREA' && editable !== '' && editable !== 'true') {
             const event = e || window.event;
             let percentage;
@@ -102,7 +103,9 @@ class HotKey {
                         if (!event.ctrlKey && !event.metaKey) {
                             event.preventDefault();
                             this.player.controller.show();
-                            this.player.comment.show();
+                            if (this.player.comment != null) {
+                                this.player.comment.show();
+                            }
                         }
                     }
                     break;
@@ -123,12 +126,14 @@ class HotKey {
                     if (this.player.options.subtitle) {
                         if (!event.ctrlKey && !event.metaKey) {
                             event.preventDefault();
-                            if (this.player.subtitle.container.classList.contains('dplayer-subtitle-hide')) {
-                                this.player.notice(`${this.player.tran('Show subtitle')}`);
-                            } else {
-                                this.player.notice(`${this.player.tran('Hide subtitle')}`);
+                            if (this.player.subtitle !== null) {
+                                if (this.player.subtitle.container.classList.contains('dplayer-subtitle-hide')) {
+                                    this.player.notice(`${this.player.tran('Show subtitle')}`);
+                                } else {
+                                    this.player.notice(`${this.player.tran('Hide subtitle')}`);
+                                }
+                                this.player.subtitle.toggle();
                             }
-                            this.player.subtitle.toggle();
                         }
                     }
                     break;
@@ -136,7 +141,7 @@ class HotKey {
         }
     }
 
-    cancelFullScreen(e: any) {
+    cancelFullScreen(e: KeyboardEvent): void {
         const event = e || window.event;
         switch (event.keyCode) {
             case 27:
@@ -147,7 +152,7 @@ class HotKey {
         }
     }
 
-    destroy() {
+    destroy(): void {
         if (this.player.options.hotkey) {
             document.removeEventListener('keydown', this.doHotKeyHandler);
         }

@@ -7,3 +7,4 @@ DPlayer.log*
 wxw
 .vscode
 docs/.vuepress/dist
+dist/src/*.js

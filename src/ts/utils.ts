@@ -1,3 +1,5 @@
+import Template from './template';
+
 const isMobile = /iPhone|iPad|iPod|Windows|Macintosh|Android|Mobile/i.test(navigator.userAgent) && 'ontouchend' in document;
 
 const utils = {
@@ -7,7 +9,7 @@ const utils = {
      * @param {Number} second
      * @return {String} 00:00 or 00:00:00
      */
-    secondToTime: (second: any) => {
+    secondToTime: (second: number): string => {
         second = second || 0;
         if (second === 0 || second === Infinity || second.toString() === 'NaN') {
             return '00:00';
@@ -24,9 +26,10 @@ const utils = {
      * compatibility: measures against video length becoming Infinity during HLS playback on native HLS player of Safari
      *
      * @param {HTMLVideoElement} video
-     * @param {Object} template
+     * @param {Template} template
+     * @returns {Number}
      */
-    getVideoDuration: (video: any, template: any) => {
+    getVideoDuration: (video: HTMLVideoElement, template: Template): number => {
         let duration = video.duration;
         if (duration === Infinity) {
             if (video.seekable.length > 0) {
@@ -47,19 +50,23 @@ const utils = {
      * @param {HTMLElement} element
      * @returns {Number}
      */
-    getElementViewLeft: (element: any) => {
+    getElementViewLeft: (element: HTMLElement): number => {
         let actualLeft = element.offsetLeft;
         let current = element.offsetParent;
         const elementScrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
         // @ts-expect-error TS(2339): Property 'mozFullScreenElement' does not exist on ... Remove this comment to see the full error message
         if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
             while (current !== null) {
+                // @ts-ignore
                 actualLeft += current.offsetLeft;
+                // @ts-ignore
                 current = current.offsetParent;
             }
         } else {
             while (current !== null && current !== element) {
+                // @ts-ignore
                 actualLeft += current.offsetLeft;
+                // @ts-ignore
                 current = current.offsetParent;
             }
         }
@@ -76,8 +83,7 @@ const utils = {
      * @param {HTMLElement} element
      * @returns {Number}
      */
-    // @ts-expect-error TS(7023): 'getBoundingClientRectViewLeft' implicitly has ret... Remove this comment to see the full error message
-    getBoundingClientRectViewLeft(element: any) {
+    getBoundingClientRectViewLeft(element: HTMLElement): number {
         const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + ((document.documentElement && document.documentElement.scrollTop) || 0);
 
         if (element.getBoundingClientRect) {
@@ -103,14 +109,14 @@ const utils = {
         }
     },
 
-    getScrollPosition() {
+    getScrollPosition(): { left: number; top: number } {
         return {
             left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
             top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0,
         };
     },
 
-    setScrollPosition({ left = 0, top = 0 }) {
+    setScrollPosition({ left = 0, top = 0 }: { left: number, top: number }): void {
         if (this.isFirefox) {
             document.documentElement.scrollLeft = left;
             document.documentElement.scrollTop = top;
@@ -126,11 +132,11 @@ const utils = {
     isChrome: /chrome/i.test(window.navigator.userAgent),
 
     storage: {
-        set: (key: any, value: any) => {
+        set: (key: string, value: any): void => {
             localStorage.setItem(key, value);
         },
 
-        get: (key: any) => localStorage.getItem(key),
+        get: (key: string): string | null => localStorage.getItem(key),
     },
 
     nameMap: {
@@ -140,7 +146,7 @@ const utils = {
     },
 
     // currently not used
-    color2Number: (color: any) => {
+    color2Number: (color: string): number => {
         if (color[0] === '#') {
             color = color.substr(1);
         }
@@ -150,9 +156,9 @@ const utils = {
         return (parseInt(color, 16) + 0x000000) & 0xffffff;
     },
 
-    number2Color: (number: any) => '#' + ('00000' + number.toString(16)).slice(-6),
+    number2Color: (number: number): string => '#' + ('00000' + number.toString(16)).slice(-6),
 
-    number2Type: (number: any) => {
+    number2Type: (number: number): string => {
         switch (number) {
             case 0:
                 return 'right';

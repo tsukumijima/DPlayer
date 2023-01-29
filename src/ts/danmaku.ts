@@ -1,20 +1,78 @@
+import DPlayer from './player';
+import Events from './events';
 import utils from './utils';
 
+interface DanmakuOptions {
+    player: DPlayer,
+    container: HTMLElement,
+    opacity: number,
+    callback: () => void,
+    error: (arg0: any) => void,
+    apiBackend: any,
+    borderColor: string,
+    fontSize: number,
+    time: () => number,
+    unlimited: number,
+    speedRate: number,
+    api: {
+        id: string,
+        address: string,
+        token: string,
+        maximum: number,
+        addition: string[],
+        user: string,
+    },
+    events: Events,
+    tran: (msg: string) => string,
+}
+
+interface DanmakuDrawOption {
+    text: string;
+    color: string | number;
+    type: 'top' | 'right' | 'bottom';
+    size: 'big' | 'medium' | 'small';
+    border: boolean;
+}
+
+interface DanmakuSendOption {
+    text: string;
+    color: string | number;
+    type: 'top' | 'right' | 'bottom';
+    size: 'big' | 'medium' | 'small';
+}
+
+interface Dan {
+    token: string,
+    id: string,
+    author: string,
+    time: number,
+    text: string;
+    color: string | number;
+    type: 'top' | 'right' | 'bottom';
+    size: 'big' | 'medium' | 'small';
+}
+
 class Danmaku {
-    _opacity: any;
-    container: any;
-    context: any;
-    dan: any;
-    danFontSize: any;
-    danIndex: any;
-    danTunnel: any;
-    events: any;
-    options: any;
-    paused: any;
-    player: any;
-    showing: any;
-    unlimited: any;
-    constructor(options: any) {
+    options: DanmakuOptions;
+    player: DPlayer;
+    container: HTMLElement;
+    danTunnel: {
+        right: { [key: string]: HTMLElement[] },
+        top: { [key: string]: HTMLElement[] },
+        bottom: { [key: string]: HTMLElement[] },
+    };
+    danIndex: number;
+    danFontSize: number;
+    dan: Dan[];
+    _opacity: number;
+    events: Events;
+    unlimited: boolean;
+
+    context: CanvasRenderingContext2D | null = null;
+    showing: boolean;
+    paused = false;
+
+    constructor(options: DanmakuOptions) {
         this.options = options;
         this.player = this.options.player;
         this.container = this.options.container;
@@ -29,14 +87,14 @@ class Danmaku {
         this.showing = true;
         this._opacity = this.options.opacity;
         this.events = this.options.events;
-        this.unlimited = this.options.unlimited;
+        this.unlimited = this.options.unlimited === 1;
         // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
         this._measure('');
 
         this.load();
     }
 
-    load() {
+    load(): void {
         let apiurl;
         if (this.options.api.maximum) {
             apiurl = `${this.options.api.address}?id=${this.options.api.id}&max=${this.options.api.maximum}`;
@@ -48,8 +106,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
         this._readAllEndpoints(endpoints, (results: any) => {
-            // @ts-expect-error TS(2339): Property 'time' does not exist on type 'never'.
-            this.dan = [].concat.apply([], results).sort((a, b) => a.time - b.time);
+            this.dan = [...results].sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
             });
@@ -98,7 +155,7 @@ class Danmaku {
         }
     }
 
-    send(dan: any, callback: any, isCallbackOnError = false) {
+    send(dan: DanmakuSendOption, callback: () => void, isCallbackOnError = false): void {
         const danmakuData = {
             token: this.options.api.token,
             id: this.options.api.id,
@@ -136,10 +193,11 @@ class Danmaku {
         });
     }
 
-    frame() {
+    frame(): void {
         if (this.dan.length && !this.paused && this.showing) {
             let item = this.dan[this.danIndex];
             const dan = [];
+            // @ts-ignore
             while (item && this.options.time() > parseFloat(item.time)) {
                 dan.push(item);
                 item = this.dan[++this.danIndex];
@@ -151,7 +209,7 @@ class Danmaku {
         });
     }
 
-    opacity(percentage: any) {
+    opacity(percentage: number | undefined = undefined): number {
         if (percentage !== undefined) {
             this.container.style.setProperty('--dplayer-danmaku-opacity', `${percentage}`);
             this._opacity = percentage;
@@ -170,13 +228,15 @@ class Danmaku {
      * type - danmaku type, `right` `top` `bottom`, default: `right`
      * size - danmaku size, `medium` `big` `small`, default: `medium`
      */
-    draw(dan: any) {
+    draw(dan: DanmakuDrawOption | DanmakuDrawOption[] | Dan[]) {
         if (this.showing) {
 
             // if the dan variable is an object, create and assign an array of only one object
             if (Object.prototype.toString.call(dan) !== '[object Array]') {
+                // @ts-ignore
                 dan = [dan];
             }
+            dan = dan as DanmakuDrawOption[] | Dan[];
 
             // adjust the font size according to the screen size
             const ratioRate = 1.25; // magic!
@@ -190,16 +250,16 @@ class Danmaku {
             // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
             const itemY = parseInt(danHeight / itemHeight);
 
-            const danItemRight = (danmakuItem: any) => {
+            const danItemRight = (danmakuItem: HTMLElement) => {
                 const danmakuItemWidth = danmakuItem.offsetWidth || parseInt(danmakuItem.style.width);
                 const danmakuItemRight =
                     danmakuItem.getBoundingClientRect().right || this.container.getBoundingClientRect().right + danmakuItemWidth;
                 return this.container.getBoundingClientRect().right - danmakuItemRight;
             };
 
-            const danSpeed = (width: any) => (danWidth + width) / 5;
+            const danSpeed = (width: number) => (danWidth + width) / 5;
 
-            const getTunnel = (danmakuItem: any, type: any, width: any) => {
+            const getTunnel = (danmakuItem: HTMLElement, type: 'top' | 'right' | 'bottom', width: number) => {
                 const tmp = danWidth / danSpeed(width);
 
                 for (let i = 0; this.unlimited || i < itemY; i++) {
@@ -237,10 +297,14 @@ class Danmaku {
             for (let i = 0; i < dan.length; i++) {
 
                 // Whether the type is numeric (for compatibility)
+                // @ts-ignore
                 if (isFinite(dan[i].color)) {
+                    // @ts-ignore
                     dan[i].color = utils.number2Color(dan[i].color);
                 }
+                // @ts-ignore
                 if (isFinite(dan[i].type)) {
+                    // @ts-ignore
                     dan[i].type = utils.number2Type(dan[i].type);
                 }
 
@@ -294,9 +358,11 @@ class Danmaku {
                     danmakuItem.classList.add(`dplayer-danmaku-size-${dan[i].size}`); // set danmaku size (CSS)
 
                     // set danmaku color
+                    // @ts-ignore
                     danmakuItem.style.color = dan[i].color;
 
                     // set danmaku text
+                    // @ts-ignore
                     if (dan[i].border) {
                         danmakuItem.innerHTML = `<span style='border: 2px solid ${this.options.borderColor};'>${line}</span>`;
                     } else {
@@ -357,24 +423,24 @@ class Danmaku {
         }
     }
 
-    play() {
+    play(): void {
         this.paused = false;
     }
 
-    pause() {
+    pause(): void {
         this.paused = true;
     }
 
-    _measure(text: any, itemFontSize: any) {
+    _measure(text: string, itemFontSize: number): number {
         if (!this.context || this.danFontSize !== itemFontSize) {
             this.danFontSize = itemFontSize;
             this.context = document.createElement('canvas').getContext('2d');
-            this.context.font = `bold ${this.danFontSize}px "Segoe UI", Arial`;
+            this.context!.font = `bold ${this.danFontSize}px "Segoe UI", Arial`;
         }
-        return this.context.measureText(text).width;
+        return this.context!.measureText(text).width;
     }
 
-    seek() {
+    seek(): void {
         this.clear();
         for (let i = 0; i < this.dan.length; i++) {
             if (this.dan[i].time >= this.options.time()) {
@@ -385,7 +451,7 @@ class Danmaku {
         }
     }
 
-    clear() {
+    clear(): void {
         this.danTunnel = {
             right: {},
             top: {},
@@ -397,7 +463,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_clear');
     }
 
-    htmlEncode(str: any) {
+    htmlEncode(str: string): string {
         return str
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -407,15 +473,15 @@ class Danmaku {
             .replace(/\//g, '&#x2f;');
     }
 
-    resize() {
+    resize(): void {
         const danWidth = this.container.offsetWidth;
-        const items = this.container.getElementsByClassName('dplayer-danmaku-item');
+        const items = this.container.getElementsByClassName('dplayer-danmaku-item') as HTMLCollectionOf<HTMLElement>;
         for (let i = 0; i < items.length; i++) {
             items[i].style.transform = `translateX(-${danWidth}px)`;
         }
     }
 
-    hide() {
+    hide(): void {
         this.showing = false;
         this.pause();
         this.clear();
@@ -423,7 +489,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_hide');
     }
 
-    show() {
+    show(): void {
         this.seek();
         this.showing = true;
         this.play();
@@ -431,7 +497,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_show');
     }
 
-    toggle() {
+    toggle(): void {
         if (this.showing) {
             this.hide();
         } else {
@@ -439,15 +505,15 @@ class Danmaku {
         }
     }
 
-    unlimit(boolean: any) {
+    unlimit(boolean: boolean): void {
         this.unlimited = boolean;
     }
 
-    speed(rate: any) {
+    speed(rate: number): void {
         this.options.speedRate = rate;
     }
 
-    _danAnimation(position: any) {
+    _danAnimation(position: 'top' | 'right' | 'bottom'): string {
         const rate = this.options.speedRate || 1;
         const isFullScreen =
             this.player.fullScreen.isFullScreen('browser') ||
@@ -457,7 +523,6 @@ class Danmaku {
             right: `${(isFullScreen ? 5.5 : 5) / rate}s`,
             bottom: `${(isFullScreen ? 4.5 : 4) / rate}s`,
         };
-        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         return animations[position];
     }
 }

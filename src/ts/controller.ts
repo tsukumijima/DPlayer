@@ -1,17 +1,19 @@
+import DPlayer from './player';
 import utils from './utils';
 import Thumbnails from './thumbnails';
 import Icons from './icons';
 
 class Controller {
-    autoHideTimer: any;
-    disableAutoHide: any;
-    mobileBackwardTime: any;
-    mobileForwardTime: any;
-    mobileSkipTimer: any;
-    player: any;
-    setAutoHideHandler: any;
-    thumbnails: any;
-    constructor(player: any) {
+    player: DPlayer;
+    disableAutoHide = false;
+    autoHideTimer: number;
+    mobileSkipTimer: number;
+    mobileBackwardTime: number;
+    mobileForwardTime: number;
+    setAutoHideHandler: () => void;
+    thumbnails: Thumbnails | null = null;
+
+    constructor(player: DPlayer) {
         this.player = player;
 
         this.autoHideTimer = 0;
@@ -43,7 +45,7 @@ class Controller {
         }
     }
 
-    initPlayButton() {
+    initPlayButton(): void {
         this.player.template.playButton.addEventListener('click', () => {
             this.player.toggle();
         });
@@ -81,8 +83,8 @@ class Controller {
             this.player.notice(`${this.player.tran('REW')} ${this.mobileBackwardTime.toFixed(0)} ${this.player.tran('s')}`);
             // extend count reset
             // if the REW button is not pressed within 1 second, the count will be reset automatically
-            clearTimeout(this.mobileSkipTimer);
-            this.mobileSkipTimer = setTimeout(() => {
+            window.clearTimeout(this.mobileSkipTimer);
+            this.mobileSkipTimer = window.setTimeout(() => {
                 this.mobileBackwardTime = 0;
             }, 1000);
             this.setAutoHide();
@@ -95,15 +97,15 @@ class Controller {
             this.player.notice(`${this.player.tran('FF')} ${this.mobileForwardTime.toFixed(0)} ${this.player.tran('s')}`);
             // extend count reset
             // if the FF button is not pressed within 1 second, the count will be reset automatically
-            clearTimeout(this.mobileSkipTimer);
-            this.mobileSkipTimer = setTimeout(() => {
+            window.clearTimeout(this.mobileSkipTimer);
+            this.mobileSkipTimer = window.setTimeout(() => {
                 this.mobileForwardTime = 0;
             }, 1000);
             this.setAutoHide();
         });
     }
 
-    initHighlights() {
+    initHighlights(): void {
         this.player.on('durationchange', () => {
             if (this.player.video.duration !== 1 && this.player.video.duration !== Infinity) {
                 if (this.player.options.highlight) {
@@ -126,7 +128,7 @@ class Controller {
         });
     }
 
-    initThumbnails() {
+    initThumbnails(): void {
         if (this.player.options.video.thumbnails) {
             this.thumbnails = new Thumbnails({
                 container: this.player.template.barPreview,
@@ -136,13 +138,13 @@ class Controller {
             });
 
             this.player.on('loadedmetadata', () => {
-                this.thumbnails.resize(160, (this.player.video.videoHeight / this.player.video.videoWidth) * 160, this.player.template.barWrap.offsetWidth);
+                this.thumbnails!.resize(160, (this.player.video.videoHeight / this.player.video.videoWidth) * 160, this.player.template.barWrap.offsetWidth);
             });
         }
     }
 
-    initPlayedBar() {
-        let paused: any;
+    initPlayedBar(): void {
+        let paused: boolean;
 
         const thumbMove = (e: any) => {
             let percentage = ((e.clientX || (e.changedTouches && e.changedTouches[0].clientX)) - utils.getBoundingClientRectViewLeft(this.player.template.playedBarWrap)) / this.player.template.playedBarWrap.clientWidth;
@@ -166,7 +168,6 @@ class Controller {
             this.player.bar.set('played', percentage, 'width');
             const duration = utils.getVideoDuration(this.player.video, this.player.template);
             this.player.seek(this.player.bar.get('played') * duration);
-            this.player.timer.enable('progress');
             if (!paused) {
                 this.player.video.play();
             }
@@ -174,7 +175,6 @@ class Controller {
         };
 
         this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragStart, () => {
-            this.player.timer.disable('progress');
             paused = this.player.video.paused;
             document.addEventListener(utils.nameMap.dragMove, thumbMove);
             document.addEventListener(utils.nameMap.dragEnd, thumbUp);
@@ -222,7 +222,7 @@ class Controller {
         }
     }
 
-    initFullButton() {
+    initFullButton(): void {
         this.player.template.browserFullButton.addEventListener('click', () => {
             this.player.fullScreen.toggle('browser');
         });
@@ -232,11 +232,11 @@ class Controller {
         });
     }
 
-    initPipButton() {
+    initPipButton(): void {
         if (document.pictureInPictureEnabled) {
             this.player.template.pipButton.addEventListener('click', () => {
                 if (!document.pictureInPictureElement) {
-                    this.player.video.requestPictureInPicture().catch((reason: any) => {
+                    this.player.video.requestPictureInPicture().catch((reason) => {
                         console.error(reason);
                         if (this.player.options.lang === 'ja' || this.player.options.lang === 'ja-jp') {
                             this.player.notice('Picture-in-Picture を開始できませんでした。');
@@ -253,7 +253,7 @@ class Controller {
         }
     }
 
-    initVolumeButton() {
+    initVolumeButton(): void {
         const vWidth = 35;
 
         const volumeMove = (event: any) => {
@@ -290,7 +290,7 @@ class Controller {
         });
     }
 
-    initSyncButton() {
+    initSyncButton(): void {
         if (this.player.options.live) {
             this.player.template.syncButton.addEventListener('click', () => {
                 this.player.sync();
@@ -298,7 +298,7 @@ class Controller {
         }
     }
 
-    initScreenshotButton() {
+    initScreenshotButton(): void {
         if (this.player.options.screenshot) {
             this.player.template.cameraButton.addEventListener('click', () => {
                 const canvas = document.createElement('canvas');
@@ -340,25 +340,27 @@ class Controller {
         }
     }
 
-    initAirplayButton() {
+    initAirplayButton(): void {
         if (this.player.options.airplay) {
             // @ts-expect-error TS(2339): Property 'WebKitPlaybackTargetAvailabilityEvent' d... Remove this comment to see the full error message
             if (window.WebKitPlaybackTargetAvailabilityEvent) {
                 this.player.video.addEventListener(
                     'webkitplaybacktargetavailabilitychanged',
-                    function(this: any, event: any) {
+                    function(this: DPlayer, event: any) {
                         switch (event.availability) {
                             case 'available':
+                                // @ts-ignore
                                 this.template.airplayButton.disable = false;
                                 break;
 
                             default:
+                                // @ts-ignore
                                 this.template.airplayButton.disable = true;
                         }
 
                         this.template.airplayButton.addEventListener(
                             'click',
-                            function(this: any) {
+                            function(this: DPlayer) {
                                 this.video.webkitShowPlaybackTargetPicker();
                             }.bind(this)
                         );
@@ -370,7 +372,7 @@ class Controller {
         }
     }
 
-    initSubtitleButton() {
+    initSubtitleButton(): void {
         if (this.player.options.subtitle) {
             this.player.events.on('subtitle_show', () => {
                 this.player.template.subtitleButton.ariaLabel = this.player.tran('Hide subtitle');
@@ -384,36 +386,38 @@ class Controller {
             });
 
             this.player.template.subtitleButton.addEventListener('click', () => {
-                this.player.subtitle.toggle();
+                if (this.player.subtitle !== null) {
+                    this.player.subtitle.toggle();
+                }
             });
         }
     }
 
-    setAutoHide(time = 3000) {
+    setAutoHide(time = 3000): void {
         this.show();
-        clearTimeout(this.autoHideTimer);
-        this.autoHideTimer = setTimeout(() => {
+        window.clearTimeout(this.autoHideTimer);
+        this.autoHideTimer = window.setTimeout(() => {
             if (this.player.video.played.length && !this.player.paused && !this.disableAutoHide) {
                 this.hide();
             }
         }, time);
     }
 
-    show() {
+    show(): void {
         this.player.container.classList.remove('dplayer-hide-controller');
     }
 
-    hide() {
+    hide() : void{
         this.player.container.classList.add('dplayer-hide-controller');
         this.player.setting.hide();
         this.player.comment && this.player.comment.hide();
     }
 
-    isShow() {
+    isShow(): boolean {
         return !this.player.container.classList.contains('dplayer-hide-controller');
     }
 
-    toggle() {
+    toggle(): void {
         if (this.isShow()) {
             this.hide();
         } else {
@@ -421,14 +425,14 @@ class Controller {
         }
     }
 
-    destroy() {
+    destroy(): void {
         if (!utils.isMobile) {
             this.player.container.removeEventListener('mousemove', this.setAutoHideHandler);
             this.player.container.removeEventListener('click', this.setAutoHideHandler);
         } else {
             this.player.container.removeEventListener('touchmove', this.setAutoHideHandler);
         }
-        clearTimeout(this.autoHideTimer);
+        window.clearTimeout(this.autoHideTimer);
     }
 }
 

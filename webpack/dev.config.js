@@ -57,10 +57,24 @@ module.exports = {
         }
     },
 
+    // resolve modules
+    resolve: {
+        extensions: ['.ts', '.js', '.scss'],
+    },
+
     // loader settings
     module: {
         strictExportPresence: true,
         rules: [
+            {
+                test: /\.ts$/,
+                use: [
+                    // compile TypeScript to JavaScript
+                    {
+                        loader: 'ts-loader',
+                    },
+                ],
+            },
             {
                 test: /\.js$/,
                 use: [

@@ -1,10 +1,12 @@
+import DPlayer from './player';
 import utils from './utils';
 
 class FullScreen {
-    fullscreenchange: any;
-    lastScrollPosition: any;
-    player: any;
-    constructor(player: any) {
+    player: DPlayer;
+    lastScrollPosition: { left: number; top: number }
+    fullscreenchange: () => void;
+
+    constructor(player: DPlayer) {
         this.player = player;
         this.lastScrollPosition = { left: 0, top: 0 };
         this.player.events.on('webfullscreen', () => {
@@ -32,10 +34,9 @@ class FullScreen {
         }
     }
 
-    isFullScreen(type = 'browser') {
+    isFullScreen(type: 'browser' | 'web' = 'browser'): boolean {
         switch (type) {
             case 'browser': {
-                // @ts-expect-error TS(2339): Property 'webkitFullscreenElement' does not exist ... Remove this comment to see the full error message
                 const fullEle = document.fullscreenElement || document.webkitFullscreenElement;
                 if (fullEle && fullEle === this.player.container) {
                     return true;
@@ -49,7 +50,7 @@ class FullScreen {
         }
     }
 
-    request(type = 'browser') {
+    request(type: 'browser' | 'web' = 'browser'): void {
         const anotherType = type === 'browser' ? 'web' : 'browser';
         const anotherTypeOn = this.isFullScreen(anotherType);
         if (!anotherTypeOn) {
@@ -63,7 +64,7 @@ class FullScreen {
                     this.player.container.requestFullscreen || // HTML5 standard
                     this.player.container.webkitRequestFullscreen; // Webkit
                 // request fullscreen
-                if (this.player.container.requestFullscreen) {
+                if (this.player.container.requestFullscreen !== undefined) {
                     this.player.container.requestFullscreen();
                 } else if (this.player.video.webkitEnterFullscreen) {
                     // compatibility: Fullscreen API is not supported in Safari for iOS, so fallback to video.webkitEnterFullscreen()
@@ -73,13 +74,15 @@ class FullScreen {
                 // lock screen to landscape (if supported)
                 if (screen.orientation) {
                     try {
-                        screen.orientation.lock('landscape').catch(() => {});
+                        screen.orientation.lock('landscape').catch(() => {
+                            // pass
+                        });
                     } catch (e) {
                         // pass
                     }
                 }
                 // video.webkitEnterFullscreen() does not dispatch the event that exit fullscreen, so the 'dplayer-fulled-browser' class is not added
-                if (this.player.container.requestFullscreen) {
+                if (this.player.container.requestFullscreen !== undefined) {
                     this.player.container.classList.add('dplayer-fulled-browser');
                 }
                 break;
@@ -95,13 +98,12 @@ class FullScreen {
         }
     }
 
-    cancel(type = 'browser') {
+    cancel(type: 'browser' | 'web' = 'browser'): void {
         switch (type) {
             case 'browser':
                 // unify method names
                 document.exitFullscreen =
                     document.exitFullscreen || // HTML5 standard
-                    // @ts-expect-error TS(2339): Property 'webkitExitFullscreen' does not exist on ... Remove this comment to see the full error message
                     document.webkitExitFullscreen; // Webkit
                 // exit fullscreen
                 if (document.exitFullscreen) {
@@ -125,7 +127,7 @@ class FullScreen {
         }
     }
 
-    toggle(type = 'browser') {
+    toggle(type: 'browser' | 'web' = 'browser'): void {
         if (this.isFullScreen(type)) {
             this.cancel(type);
         } else {
@@ -133,7 +135,7 @@ class FullScreen {
         }
     }
 
-    destroy() {
+    destroy(): void {
         this.player.container.removeEventListener('fullscreenchange', this.fullscreenchange);
         this.player.container.removeEventListener('webkitfullscreenchange', this.fullscreenchange);
     }

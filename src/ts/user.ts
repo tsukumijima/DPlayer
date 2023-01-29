@@ -1,10 +1,12 @@
+import DPlayer from './player';
 import utils from './utils';
 
 class User {
-    data: any;
-    default: any;
-    storageName: any;
-    constructor(player: any) {
+    storageName: { [key: string]: string };
+    default: { [key: string]: number};
+    data: { [key: string]: number};
+
+    constructor(player: DPlayer) {
         this.storageName = {
             opacity: 'dplayer-danmaku-opacity',
             volume: 'dplayer-volume',
@@ -24,18 +26,18 @@ class User {
         this.init();
     }
 
-    init() {
+    init(): void {
         for (const item in this.storageName) {
             const name = this.storageName[item];
-            this.data[item] = parseFloat(utils.storage.get(name) || this.default[item]);
+            this.data[item] = parseFloat(utils.storage.get(name)! || this.default[item].toString());
         }
     }
 
-    get(key: any) {
+    get(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle'): number {
         return this.data[key];
     }
 
-    set(key: any, value: any) {
+    set(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle', value: number): void {
         this.data[key] = value;
         utils.storage.set(this.storageName[key], value);
     }

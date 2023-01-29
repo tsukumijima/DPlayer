@@ -1,11 +1,13 @@
+import DPlayer from './player';
 import utils from './utils';
 
 class Setting {
-    loop: any;
-    player: any;
-    showDanmaku: any;
-    unlimitDanmaku: any;
-    constructor(player: any) {
+    player: DPlayer;
+    loop: boolean;
+    showDanmaku: boolean;
+    unlimitDanmaku: boolean;
+
+    constructor(player: DPlayer) {
         this.player = player;
 
         this.player.template.mask.addEventListener('click', () => {
@@ -16,7 +18,7 @@ class Setting {
         });
 
         // clip setting box
-        setTimeout(() => {
+        window.setTimeout(() => {
             const settingOriginPanelHeight = this.player.template.settingOriginPanel.scrollHeight;
             this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
         }, 300);
@@ -35,7 +37,7 @@ class Setting {
                     if (this.player.switchingQuality) {
                         return;
                     }
-                    this.player.switchQuality(parseInt(this.player.template.qualityItem[i].dataset.index));
+                    this.player.switchQuality(parseInt(this.player.template.qualityItem[i].dataset.index!));
                 });
             }
         }
@@ -102,7 +104,7 @@ class Setting {
         });
 
         // show danmaku
-        this.showDanmaku = this.player.user.get('danmaku');
+        this.showDanmaku = this.player.user.get('danmaku') === 1;
         if (!this.showDanmaku) {
             this.player.danmaku && this.player.danmaku.hide();
         }
@@ -111,25 +113,33 @@ class Setting {
             this.player.template.showDanmakuToggle.checked = !this.player.template.showDanmakuToggle.checked;
             if (this.player.template.showDanmakuToggle.checked) {
                 this.showDanmaku = true;
-                this.player.danmaku.show();
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.show();
+                }
             } else {
                 this.showDanmaku = false;
-                this.player.danmaku.hide();
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.hide();
+                }
             }
             this.player.user.set('danmaku', this.showDanmaku ? 1 : 0);
         });
 
         // unlimit danmaku
-        this.unlimitDanmaku = this.player.user.get('unlimited');
+        this.unlimitDanmaku = this.player.user.get('unlimited') === 1;
         this.player.template.unlimitDanmakuToggle.checked = this.unlimitDanmaku;
         this.player.template.unlimitDanmaku.addEventListener('click', () => {
             this.player.template.unlimitDanmakuToggle.checked = !this.player.template.unlimitDanmakuToggle.checked;
             if (this.player.template.unlimitDanmakuToggle.checked) {
                 this.unlimitDanmaku = true;
-                this.player.danmaku.unlimit(true);
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.unlimit(true);
+                }
             } else {
                 this.unlimitDanmaku = false;
-                this.player.danmaku.unlimit(false);
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.unlimit(false);
+                }
             }
             this.player.user.set('unlimited', this.unlimitDanmaku ? 1 : 0);
         });
@@ -137,7 +147,7 @@ class Setting {
         // danmaku opacity
         if (this.player.danmaku) {
             const barWidth = 190;
-            this.player.on('danmaku_opacity', (percentage: any) => {
+            this.player.on('danmaku_opacity', (percentage: number) => {
                 this.player.bar.set('danmaku', percentage, 'width');
                 this.player.user.set('opacity', percentage);
                 this.player.template.danmakuOpacityValue.textContent = percentage.toFixed(1);
@@ -150,7 +160,9 @@ class Setting {
                 let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
-                this.player.danmaku.opacity(percentage);
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.opacity(percentage);
+                }
             };
             const danmakuUp = () => {
                 document.removeEventListener(utils.nameMap.dragEnd, danmakuUp);
@@ -163,7 +175,9 @@ class Setting {
                 let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
-                this.player.danmaku.opacity(percentage);
+                if (this.player.danmaku !== null) {
+                    this.player.danmaku.opacity(percentage);
+                }
             });
             this.player.template.danmakuOpacityBarWrapWrap.addEventListener(utils.nameMap.dragStart, () => {
                 document.addEventListener(utils.nameMap.dragMove, danmakuMove);
@@ -173,11 +187,11 @@ class Setting {
         }
     }
 
-    hide() {
+    hide(): void {
         this.player.template.container.classList.remove('dplayer-show-controller');
         this.player.template.settingBox.classList.remove('dplayer-setting-box-open');
         this.player.template.mask.classList.remove('dplayer-mask-show');
-        setTimeout(() => {
+        window.setTimeout(() => {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
             this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
         }, 300);
@@ -185,7 +199,7 @@ class Setting {
         this.player.controller.disableAutoHide = false;
     }
 
-    show() {
+    show(): void {
         this.player.template.container.classList.add('dplayer-show-controller');
         this.player.template.settingBox.classList.add('dplayer-setting-box-open');
         this.player.template.mask.classList.add('dplayer-mask-show');

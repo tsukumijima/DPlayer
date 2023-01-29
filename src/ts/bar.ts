@@ -1,6 +1,9 @@
+import Template from './template';
+
 class Bar {
-    elements: any;
-    constructor(template: any) {
+    elements: { [key: string]: HTMLElement; };
+
+    constructor(template: Template) {
         this.elements = {};
         this.elements.volume = template.volumeBar;
         this.elements.played = template.playedBar;
@@ -15,13 +18,13 @@ class Bar {
      * @param {Number} percentage
      * @param {String} direction - Point out the direction of this bar, Should be height or width
      */
-    set(type: any, percentage: any, direction: any) {
+    set(type: 'volume' | 'played' | 'loaded' | 'danmaku', percentage: number, direction: 'width' | 'height'): void {
         percentage = Math.max(percentage, 0);
         percentage = Math.min(percentage, 1);
         this.elements[type].style[direction] = percentage * 100 + '%';
     }
 
-    get(type: any) {
+    get(type: 'volume' | 'played' | 'loaded' | 'danmaku'): number {
         return parseFloat(this.elements[type].style.width) / 100;
     }
 }

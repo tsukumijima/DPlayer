@@ -56,10 +56,24 @@ module.exports = {
     // report the first error as a hard error instead of tolerating it
     bail: true,
 
+    // resolve modules
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
+
     // loader settings
     module: {
         strictExportPresence: true,
         rules: [
+            {
+                test: /\.ts$/,
+                use: [
+                    // compile TypeScript to JavaScript
+                    {
+                        loader: 'ts-loader',
+                    },
+                ],
+            },
             {
                 test: /\.js$/,
                 use: [

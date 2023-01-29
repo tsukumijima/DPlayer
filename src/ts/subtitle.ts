@@ -1,10 +1,13 @@
+import Events from './events';
+
 class Subtitle {
-    container: any;
-    events: any;
-    options: any;
+    container: HTMLElement;
+    video: HTMLVideoElement;
     plugins: any;
-    video: any;
-    constructor(container: any, video: any, plugins: any, options: any, events: any) {
+    options: any;
+    events: Events;
+
+    constructor(container: HTMLElement, video: HTMLVideoElement, plugins: any, options: any, events: Events) {
         this.container = container;
         this.video = video;
         this.plugins = plugins;
@@ -14,7 +17,7 @@ class Subtitle {
         this.init();
     }
 
-    init() {
+    init(): void {
         this.container.style.fontSize = this.options.fontSize;
         this.container.style.bottom = this.options.bottom;
         this.container.style.color = this.options.color;
@@ -23,7 +26,7 @@ class Subtitle {
             const track = this.video.textTracks[0];
 
             track.oncuechange = () => {
-                const cue = track.activeCues[0];
+                const cue = track.activeCues![0] as VTTCue;
                 this.container.innerHTML = '';
                 if (cue) {
                     const template = document.createElement('div');
@@ -39,7 +42,7 @@ class Subtitle {
         }
     }
 
-    show() {
+    show(): void {
         this.container.classList.remove('dplayer-subtitle-hide');
         // for aribb24.js
         if (this.options.type === 'aribb24' && this.plugins.aribb24Caption) {
@@ -51,7 +54,7 @@ class Subtitle {
         this.events.trigger('subtitle_show');
     }
 
-    hide() {
+    hide(): void {
         this.container.classList.add('dplayer-subtitle-hide');
         // for aribb24.js
         if (this.options.type === 'aribb24' && this.plugins.aribb24Caption) {
@@ -63,7 +66,7 @@ class Subtitle {
         this.events.trigger('subtitle_hide');
     }
 
-    toggle() {
+    toggle(): void {
         if (this.container.classList.contains('dplayer-subtitle-hide')) {
             this.show();
         } else {

@@ -29,38 +29,40 @@ let index = 0;
 const instances: any = [];
 
 class DPlayer {
-    bar: any;
-    bezel: any;
-    comment: any;
-    container: any;
-    containerClickFun: any;
-    contextmenu: any;
-    controller: any;
-    danmaku: any;
-    docClickFun: any;
-    events: any;
-    focus: any;
-    fullScreen: any;
-    hotkey: any;
-    infoPanel: any;
-    narrow: any;
-    noticeTime: any;
+    bar: Bar;
+    bezel: Bezel;
+    comment: Comment | null = null;
+    contextmenu: ContextMenu;
+    controller: Controller;
+    danmaku: Danmaku | null = null;
+    events: Events;
+    fullScreen: FullScreen;
+    hotkey: HotKey;
+    infoPanel: InfoPanel;
+    setting: Setting;
+    subtitle: Subtitle | null = null;
+    template: Template;
+    timer: Timer;
+    user: User;
+
+    container: HTMLElement;
+    containerClickFun: () => void;
+    docClickFun: () => void;
+    focus = false;
+    narrow = false;
+    noticeTime: number | null = null;
     options: any;
-    paused: any;
+    paused = false;
     plugins: any;
-    prevVideo: any;
+    prevVideo: HTMLVideoElement | null = null;
     quality: any;
-    qualityIndex: any;
-    resizeObserver: any;
-    setting: any;
-    subtitle: any;
-    switchingQuality: any;
-    template: any;
-    timer: any;
-    tran: any;
-    type: any;
-    user: any;
-    video: any;
+    qualityIndex: number | null = null;
+    switchingQuality = false;
+    resizeObserver: ResizeObserver;
+    tran: (text: string) => string;
+    type = 'auto';
+    video: HTMLVideoElement;
+
     /**
      * DPlayer constructor function
      *
@@ -140,12 +142,11 @@ class DPlayer {
 
                         // autoplay
                         if (this.options.autoplay) {
-                            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                             this.play();
                         }
                     }, 0);
                 },
-                error: (msg: any) => {
+                error: (msg: string) => {
                     this.notice(msg);
                 },
                 apiBackend: this.options.apiBackend,
@@ -163,7 +164,7 @@ class DPlayer {
                     user: this.options.danmaku.user,
                 },
                 events: this.events,
-                tran: (msg: any) => this.tran(msg),
+                tran: (msg: string) => this.tran(msg),
             });
 
             this.comment = new Comment(this);
@@ -194,7 +195,6 @@ class DPlayer {
         this.infoPanel = new InfoPanel(this);
 
         if (!this.danmaku && this.options.autoplay) {
-            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.play();
         }
 
@@ -205,7 +205,7 @@ class DPlayer {
     /**
      * Seek video
      */
-    seek(time: any) {
+    seek(time: number): void {
         time = Math.max(time, 0);
         const duration = utils.getVideoDuration(this.video, this.template);
         if (duration) {
@@ -230,7 +230,7 @@ class DPlayer {
     /**
      * Sync video (live only)
      */
-    sync(quiet = false) {
+    sync(quiet = false): void {
         if (this.options.live) {
             const time = utils.getVideoDuration(this.video, this.template) - this.options.liveSyncMinBufferSize;
             try {
@@ -254,7 +254,7 @@ class DPlayer {
     /**
      * Play video
      */
-    play(fromNative: any) {
+    play(fromNative = false): void {
         this.paused = false;
         if (this.video.paused && !utils.isMobile) {
             this.bezel.switch(Icons.play);
@@ -272,10 +272,11 @@ class DPlayer {
             const playedPromise = Promise.resolve(this.video.play());
             playedPromise
                 .catch(() => {
-                    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                     this.pause();
                 })
-                .then(() => {});
+                .then(() => {
+                    // pass
+                });
         }
         this.timer.enable('loading');
         this.container.classList.remove('dplayer-paused');
@@ -295,7 +296,7 @@ class DPlayer {
     /**
      * Pause video
      */
-    pause(fromNative: any) {
+    pause(fromNative = false): void {
         this.paused = true;
         this.container.classList.remove('dplayer-loading');
 
@@ -316,11 +317,9 @@ class DPlayer {
         }
     }
 
-    switchVolumeIcon() {
-        // @ts-expect-error TS(2554): Expected 3 arguments, but got 0.
+    switchVolumeIcon(): void {
         if (this.volume() >= 0.95) {
             this.template.volumeIcon.innerHTML = Icons.volumeUp;
-        // @ts-expect-error TS(2554): Expected 3 arguments, but got 0.
         } else if (this.volume() > 0) {
             this.template.volumeIcon.innerHTML = Icons.volumeDown;
         } else {
@@ -331,8 +330,10 @@ class DPlayer {
     /**
      * Set volume
      */
-    volume(percentage: any, nostorage: any, nonotice: any) {
-        percentage = parseFloat(percentage);
+    volume(percentage: number | string = NaN, nostorage = false, nonotice = false): number {
+        if (typeof percentage === 'string') {
+            percentage = parseFloat(percentage);
+        }
         if (!isNaN(percentage)) {
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
@@ -359,12 +360,10 @@ class DPlayer {
     /**
      * Toggle between play and pause
      */
-    toggle() {
+    toggle(): void {
         if (this.video.paused) {
-            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.play();
         } else {
-            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.pause();
         }
     }
@@ -372,7 +371,7 @@ class DPlayer {
     /**
      * attach event
      */
-    on(name: any, callback: any) {
+    on(name: any, callback: any): void {
         this.events.on(name, callback);
     }
 
@@ -382,8 +381,7 @@ class DPlayer {
      * @param {Object} video - new video info
      * @param {Object} danmaku - new danmaku info
      */
-    switchVideo(video: any, danmakuAPI: any) {
-        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
+    switchVideo(video: any, danmakuAPI: any): void {
         this.pause();
         this.video.poster = video.pic ? video.pic : '';
         this.video.src = video.url;
@@ -407,7 +405,7 @@ class DPlayer {
         }
     }
 
-    initMSE(video: any, type: any) {
+    initMSE(video: HTMLVideoElement, type: string): void {
         this.type = type;
         if (this.options.video.customType && this.options.video.customType[type]) {
             if (Object.prototype.toString.call(this.options.video.customType[type]) === '[object Function]') {
@@ -855,7 +853,7 @@ class DPlayer {
         }
     }
 
-    initVideo(video: any, type: any) {
+    initVideo(video: HTMLVideoElement, type: string): void {
         this.initMSE(video, type);
 
         /**
@@ -884,13 +882,14 @@ class DPlayer {
             }
             // quality switching failed
             if (this.switchingQuality) {
-                this.template.videoWrapAspect.removeChild(this.prevVideo);
+                if (this.prevVideo !== null) {
+                    this.template.videoWrapAspect.removeChild(this.prevVideo);
+                }
                 this.video.classList.add('dplayer-video-current');
                 this.prevVideo = null;
                 this.switchingQuality = false;
                 this.events.trigger('quality_end');
             }
-            // @ts-expect-error TS(2774): This condition will always return true since this ... Remove this comment to see the full error message
             if (this.tran && this.notice && this.type !== 'webtorrent' && this.type !== 'live-llhls-for-KonomiTV') {
                 this.notice(this.tran('Video load failed'), -1);
             }
@@ -901,11 +900,9 @@ class DPlayer {
         this.on('ended', () => {
             this.bar.set('played', 1, 'width');
             if (!this.setting.loop) {
-                // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                 this.pause();
             } else {
                 this.seek(0);
-                // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                 this.play();
             }
             if (this.danmaku) {
@@ -950,7 +947,7 @@ class DPlayer {
         }
     }
 
-    switchQuality(index: any) {
+    switchQuality(index: number): void {
         index = typeof index === 'string' ? parseInt(index) : index;
         if (this.qualityIndex === index || this.switchingQuality) {
             return;
@@ -970,7 +967,7 @@ class DPlayer {
             url: this.quality.type === 'live-llhls-for-KonomiTV' ? '' : this.quality.url,
             subtitle: this.options.subtitle,
         });
-        const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild;
+        const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild as HTMLVideoElement;
         this.template.videoWrapAspect.insertBefore(videoEle, this.template.videoWrapAspect.getElementsByTagName('div')[0]);
         this.prevVideo = this.video;
         this.video = videoEle;
@@ -1015,11 +1012,11 @@ class DPlayer {
                 this.switchingQuality = false;
 
                 // restore speed
-                const speed = parseFloat(this.template.settingBox.querySelector('.dplayer-setting-speed-current').dataset.speed);
+                const speed = parseFloat(this.template.settingBox.querySelector<HTMLElement>('.dplayer-setting-speed-current')!.dataset.speed!);
                 this.speed(speed);
 
                 // restore audio
-                const audio = this.template.settingBox.querySelector('.dplayer-setting-audio-current').dataset.audio;
+                const audio = this.template.settingBox.querySelector<HTMLElement>('.dplayer-setting-audio-current')!.dataset.audio!;
                 if (audio === 'secondary') {
                     // switch secondary audio
                     if (this.plugins.mpegts) {
@@ -1035,22 +1032,22 @@ class DPlayer {
         });
     }
 
-    notice(text: any, time = 2000, opacity = 0.8) {
+    notice(text: string, time = 2000, opacity = 0.8): void {
         this.template.notice.innerHTML = text;
-        this.template.notice.style.opacity = opacity;
+        this.template.notice.style.opacity = `${opacity}`;
         if (this.noticeTime) {
-            clearTimeout(this.noticeTime);
+            window.clearTimeout(this.noticeTime);
         }
         this.events.trigger('notice_show', text);
         if (time > 0) {
-            this.noticeTime = setTimeout(() => {
-                this.template.notice.style.opacity = 0;
+            this.noticeTime = window.setTimeout(() => {
+                this.template.notice.style.opacity = '0';
                 this.events.trigger('notice_hide');
             }, time);
         }
     }
 
-    resize() {
+    resize(): void {
         if (this.danmaku) {
             this.danmaku.resize();
         }
@@ -1066,25 +1063,24 @@ class DPlayer {
         this.events.trigger('resize');
     }
 
-    speed(rate: any) {
+    speed(rate: number): void {
         this.video.playbackRate = rate;
-        this.template.speedItem.forEach((elem: any) => {
+        this.template.speedItem.forEach((elem) => {
             elem.classList.remove('dplayer-setting-speed-current');
-            if (parseFloat(elem.dataset.speed) === rate) {
+            if (parseFloat(elem.dataset.speed!) === rate) {
                 elem.classList.add('dplayer-setting-speed-current');
-                if (parseFloat(elem.dataset.speed) === 1) {
+                if (parseFloat(elem.dataset.speed!) === 1) {
                     this.template.speedValue.textContent = this.tran('Normal');
                 } else {
-                    this.template.speedValue.textContent = rate;
+                    this.template.speedValue.textContent = `${rate}`;
                 }
                 this.template.settingBox.classList.remove('dplayer-setting-box-speed');
             }
         });
     }
 
-    destroy() {
+    destroy(): void {
         instances.splice(instances.indexOf(this), 1);
-        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
         this.pause();
         document.removeEventListener('click', this.docClickFun, true);
         this.container.removeEventListener('click', this.containerClickFun, true);
@@ -1099,7 +1095,7 @@ class DPlayer {
         this.resizeObserver.disconnect();
     }
 
-    static get version() {
+    static get version(): string {
         /* global DPLAYER_VERSION */
         // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
         return DPLAYER_VERSION;

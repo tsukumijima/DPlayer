@@ -1,16 +1,19 @@
 /* global DPLAYER_VERSION GIT_HASH */
+import DPlayer from './player';
+import Template from './template';
 
 class InfoPanel {
-    beginTime: any;
-    container: any;
-    player: any;
-    template: any;
-    video: any;
-    constructor(player: any) {
+    player: DPlayer;
+    container: HTMLElement;
+    template: Template;
+    video: HTMLVideoElement;
+    beginTime = 0;
+
+    constructor(player: DPlayer) {
+        this.player = player;
         this.container = player.template.infoPanel;
         this.template = player.template;
         this.video = player.video;
-        this.player = player;
 
         this.template.infoPanelClose.addEventListener('click', () => {
             this.hide();
@@ -25,13 +28,13 @@ class InfoPanel {
         this.container.classList.remove('dplayer-info-panel-hide');
     }
 
-    hide() {
+    hide(): void {
         this.player.timer.disable('info');
         this.player.timer.disable('fps');
         this.container.classList.add('dplayer-info-panel-hide');
     }
 
-    toggle() {
+    toggle(): void {
         if (this.container.classList.contains('dplayer-info-panel-hide')) {
             this.show();
         } else {
@@ -39,21 +42,21 @@ class InfoPanel {
         }
     }
 
-    update() {
+    update(): void {
         // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
         this.template.infoVersion.innerHTML = `v${DPLAYER_VERSION} ${GIT_HASH}`;
         this.template.infoType.innerHTML = this.player.type;
         this.template.infoUrl.innerHTML = this.player.options.video.url;
         this.template.infoResolution.innerHTML = `${this.player.video.videoWidth} x ${this.player.video.videoHeight}`;
-        this.template.infoDuration.innerHTML = this.player.video.duration;
-        if (this.player.options.danmaku) {
+        this.template.infoDuration.innerHTML = `${this.player.video.duration}`;
+        if (this.player.options.danmaku && this.player.danmaku !== null) {
             this.template.infoDanmakuId.innerHTML = this.player.options.danmaku.id;
             this.template.infoDanmakuApi.innerHTML = this.player.options.danmaku.api;
-            this.template.infoDanmakuAmount.innerHTML = this.player.danmaku.dan.length;
+            this.template.infoDanmakuAmount.innerHTML = `${this.player.danmaku.dan.length}`;
         }
     }
 
-    fps(value: any) {
+    fps(value: number): void {
         this.template.infoFPS.innerHTML = `${value.toFixed(1)}`;
     }
 }
