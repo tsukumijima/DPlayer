@@ -1,7 +1,20 @@
 import utils from './utils';
 
 class Danmaku {
-    constructor(options) {
+    _opacity: any;
+    container: any;
+    context: any;
+    dan: any;
+    danFontSize: any;
+    danIndex: any;
+    danTunnel: any;
+    events: any;
+    options: any;
+    paused: any;
+    player: any;
+    showing: any;
+    unlimited: any;
+    constructor(options: any) {
         this.options = options;
         this.player = this.options.player;
         this.container = this.options.container;
@@ -17,6 +30,7 @@ class Danmaku {
         this._opacity = this.options.opacity;
         this.events = this.options.events;
         this.unlimited = this.options.unlimited;
+        // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
         this._measure('');
 
         this.load();
@@ -33,7 +47,8 @@ class Danmaku {
         endpoints.push(apiurl);
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
-        this._readAllEndpoints(endpoints, (results) => {
+        this._readAllEndpoints(endpoints, (results: any) => {
+            // @ts-expect-error TS(2339): Property 'time' does not exist on type 'never'.
             this.dan = [].concat.apply([], results).sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
@@ -45,7 +60,7 @@ class Danmaku {
         });
     }
 
-    reload(newAPI) {
+    reload(newAPI: any) {
         this.options.api = newAPI;
         this.dan = [];
         this.clear();
@@ -55,14 +70,14 @@ class Danmaku {
     /**
      * Asynchronously read danmaku from all API endpoints
      */
-    _readAllEndpoints(endpoints, callback) {
-        const results = [];
+    _readAllEndpoints(endpoints: any, callback: any) {
+        const results: any = [];
         let readCount = 0;
 
         for (let i = 0; i < endpoints.length; ++i) {
             this.options.apiBackend.read({
                 url: endpoints[i],
-                success: (data) => {
+                success: (data: any) => {
                     results[i] = data;
 
                     ++readCount;
@@ -70,7 +85,7 @@ class Danmaku {
                         callback(results);
                     }
                 },
-                error: (message) => {
+                error: (message: any) => {
                     this.options.error(message || this.options.tran('Danmaku load failed'));
                     results[i] = [];
 
@@ -83,7 +98,7 @@ class Danmaku {
         }
     }
 
-    send(dan, callback, isCallbackOnError = false) {
+    send(dan: any, callback: any, isCallbackOnError = false) {
         const danmakuData = {
             token: this.options.api.token,
             id: this.options.api.id,
@@ -112,7 +127,7 @@ class Danmaku {
                 this.events && this.events.trigger('danmaku_send', danmakuData);
                 callback();
             },
-            error: (message) => {
+            error: (message: any) => {
                 this.options.error(message || this.options.tran('Danmaku send failed'));
                 if (isCallbackOnError === true) {
                     callback();
@@ -136,7 +151,7 @@ class Danmaku {
         });
     }
 
-    opacity(percentage) {
+    opacity(percentage: any) {
         if (percentage !== undefined) {
             this.container.style.setProperty('--dplayer-danmaku-opacity', `${percentage}`);
             this._opacity = percentage;
@@ -155,7 +170,7 @@ class Danmaku {
      * type - danmaku type, `right` `top` `bottom`, default: `right`
      * size - danmaku size, `medium` `big` `small`, default: `medium`
      */
-    draw(dan) {
+    draw(dan: any) {
         if (this.showing) {
 
             // if the dan variable is an object, create and assign an array of only one object
@@ -172,18 +187,19 @@ class Danmaku {
 
             const danWidth = this.container.offsetWidth;
             const danHeight = this.container.offsetHeight;
+            // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
             const itemY = parseInt(danHeight / itemHeight);
 
-            const danItemRight = (danmakuItem) => {
+            const danItemRight = (danmakuItem: any) => {
                 const danmakuItemWidth = danmakuItem.offsetWidth || parseInt(danmakuItem.style.width);
                 const danmakuItemRight =
                     danmakuItem.getBoundingClientRect().right || this.container.getBoundingClientRect().right + danmakuItemWidth;
                 return this.container.getBoundingClientRect().right - danmakuItemRight;
             };
 
-            const danSpeed = (width) => (danWidth + width) / 5;
+            const danSpeed = (width: any) => (danWidth + width) / 5;
 
-            const getTunnel = (danmakuItem, type, width) => {
+            const getTunnel = (danmakuItem: any, type: any, width: any) => {
                 const tmp = danWidth / danSpeed(width);
 
                 for (let i = 0; this.unlimited || i < itemY; i++) {
@@ -349,7 +365,7 @@ class Danmaku {
         this.paused = true;
     }
 
-    _measure(text, itemFontSize) {
+    _measure(text: any, itemFontSize: any) {
         if (!this.context || this.danFontSize !== itemFontSize) {
             this.danFontSize = itemFontSize;
             this.context = document.createElement('canvas').getContext('2d');
@@ -381,7 +397,7 @@ class Danmaku {
         this.events && this.events.trigger('danmaku_clear');
     }
 
-    htmlEncode(str) {
+    htmlEncode(str: any) {
         return str
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -423,15 +439,15 @@ class Danmaku {
         }
     }
 
-    unlimit(boolean) {
+    unlimit(boolean: any) {
         this.unlimited = boolean;
     }
 
-    speed(rate) {
+    speed(rate: any) {
         this.options.speedRate = rate;
     }
 
-    _danAnimation(position) {
+    _danAnimation(position: any) {
         const rate = this.options.speedRate || 1;
         const isFullScreen =
             this.player.fullScreen.isFullScreen('browser') ||
@@ -441,6 +457,7 @@ class Danmaku {
             right: `${(isFullScreen ? 5.5 : 5) / rate}s`,
             bottom: `${(isFullScreen ? 4.5 : 4) / rate}s`,
         };
+        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         return animations[position];
     }
 }

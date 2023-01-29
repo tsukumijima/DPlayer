@@ -7,12 +7,12 @@ const utils = {
      * @param {Number} second
      * @return {String} 00:00 or 00:00:00
      */
-    secondToTime: (second) => {
+    secondToTime: (second: any) => {
         second = second || 0;
         if (second === 0 || second === Infinity || second.toString() === 'NaN') {
             return '00:00';
         }
-        const add0 = (num) => (num < 10 ? '0' + num : '' + num);
+        const add0 = (num: any) => num < 10 ? '0' + num : '' + num;
         const hour = Math.floor(second / 3600);
         const min = Math.floor((second - hour * 3600) / 60);
         const sec = Math.floor(second - hour * 3600 - min * 60);
@@ -26,7 +26,7 @@ const utils = {
      * @param {HTMLVideoElement} video
      * @param {Object} template
      */
-    getVideoDuration: (video, template) => {
+    getVideoDuration: (video: any, template: any) => {
         let duration = video.duration;
         if (duration === Infinity) {
             if (video.seekable.length > 0) {
@@ -47,10 +47,11 @@ const utils = {
      * @param {HTMLElement} element
      * @returns {Number}
      */
-    getElementViewLeft: (element) => {
+    getElementViewLeft: (element: any) => {
         let actualLeft = element.offsetLeft;
         let current = element.offsetParent;
         const elementScrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
+        // @ts-expect-error TS(2339): Property 'mozFullScreenElement' does not exist on ... Remove this comment to see the full error message
         if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
             while (current !== null) {
                 actualLeft += current.offsetLeft;
@@ -75,19 +76,24 @@ const utils = {
      * @param {HTMLElement} element
      * @returns {Number}
      */
-    getBoundingClientRectViewLeft(element) {
+    // @ts-expect-error TS(7023): 'getBoundingClientRectViewLeft' implicitly has ret... Remove this comment to see the full error message
+    getBoundingClientRectViewLeft(element: any) {
         const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + ((document.documentElement && document.documentElement.scrollTop) || 0);
 
         if (element.getBoundingClientRect) {
+            // @ts-expect-error TS(2339): Property 'offset' does not exist on type '(element... Remove this comment to see the full error message
             if (typeof this.getBoundingClientRectViewLeft.offset !== 'number') {
                 let temp = document.createElement('div');
                 temp.style.cssText = 'position:absolute;top:0;left:0;';
                 document.body.appendChild(temp);
+                // @ts-expect-error TS(2339): Property 'offset' does not exist on type '(element... Remove this comment to see the full error message
                 this.getBoundingClientRectViewLeft.offset = -temp.getBoundingClientRect().top - scrollTop;
                 document.body.removeChild(temp);
+                // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'HTMLDivElem... Remove this comment to see the full error message
                 temp = null;
             }
             const rect = element.getBoundingClientRect();
+            // @ts-expect-error TS(7022): 'offset' implicitly has type 'any' because it does... Remove this comment to see the full error message
             const offset = this.getBoundingClientRectViewLeft.offset;
 
             return rect.left + offset;
@@ -120,11 +126,11 @@ const utils = {
     isChrome: /chrome/i.test(window.navigator.userAgent),
 
     storage: {
-        set: (key, value) => {
+        set: (key: any, value: any) => {
             localStorage.setItem(key, value);
         },
 
-        get: (key) => localStorage.getItem(key),
+        get: (key: any) => localStorage.getItem(key),
     },
 
     nameMap: {
@@ -134,7 +140,7 @@ const utils = {
     },
 
     // currently not used
-    color2Number: (color) => {
+    color2Number: (color: any) => {
         if (color[0] === '#') {
             color = color.substr(1);
         }
@@ -144,9 +150,9 @@ const utils = {
         return (parseInt(color, 16) + 0x000000) & 0xffffff;
     },
 
-    number2Color: (number) => '#' + ('00000' + number.toString(16)).slice(-6),
+    number2Color: (number: any) => '#' + ('00000' + number.toString(16)).slice(-6),
 
-    number2Type: (number) => {
+    number2Type: (number: any) => {
         switch (number) {
             case 0:
                 return 'right';

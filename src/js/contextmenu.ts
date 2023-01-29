@@ -1,5 +1,8 @@
 class ContextMenu {
-    constructor(player) {
+    contextmenuHandler: any;
+    player: any;
+    shown: any;
+    constructor(player: any) {
         this.player = player;
         this.shown = false;
 
@@ -12,7 +15,7 @@ class ContextMenu {
             }
         });
 
-        this.contextmenuHandler = (e) => {
+        this.contextmenuHandler = (e: any) => {
             const event = e || window.event;
             event.preventDefault();
 
@@ -31,7 +34,7 @@ class ContextMenu {
         this.player.container.addEventListener('contextmenu', this.contextmenuHandler);
     }
 
-    show(x, y) {
+    show(x: any, y: any) {
         this.player.template.menu.classList.add('dplayer-menu-show');
 
         const clientRect = this.player.container.getBoundingClientRect();

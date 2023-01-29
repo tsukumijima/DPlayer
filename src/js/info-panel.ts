@@ -1,7 +1,12 @@
 /* global DPLAYER_VERSION GIT_HASH */
 
 class InfoPanel {
-    constructor(player) {
+    beginTime: any;
+    container: any;
+    player: any;
+    template: any;
+    video: any;
+    constructor(player: any) {
         this.container = player.template.infoPanel;
         this.template = player.template;
         this.video = player.video;
@@ -35,6 +40,7 @@ class InfoPanel {
     }
 
     update() {
+        // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
         this.template.infoVersion.innerHTML = `v${DPLAYER_VERSION} ${GIT_HASH}`;
         this.template.infoType.innerHTML = this.player.type;
         this.template.infoUrl.innerHTML = this.player.options.video.url;
@@ -47,7 +53,7 @@ class InfoPanel {
         }
     }
 
-    fps(value) {
+    fps(value: any) {
         this.template.infoFPS.innerHTML = `${value.toFixed(1)}`;
     }
 }

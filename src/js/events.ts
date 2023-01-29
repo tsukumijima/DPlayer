@@ -1,4 +1,7 @@
 class Events {
+    events: any;
+    playerEvents: any;
+    videoEvents: any;
     constructor() {
         this.events = {};
 
@@ -56,7 +59,7 @@ class Events {
         ];
     }
 
-    on(name, callback) {
+    on(name: any, callback: any) {
         if (this.type(name) && typeof callback === 'function') {
             if (!this.events[name]) {
                 this.events[name] = [];
@@ -65,7 +68,7 @@ class Events {
         }
     }
 
-    trigger(name, info) {
+    trigger(name: any, info: any) {
         if (this.events[name] && this.events[name].length) {
             for (let i = 0; i < this.events[name].length; i++) {
                 this.events[name][i](info);
@@ -73,7 +76,7 @@ class Events {
         }
     }
 
-    type(name) {
+    type(name: any) {
         if (this.playerEvents.indexOf(name) !== -1) {
             return 'player';
         } else if (this.videoEvents.indexOf(name) !== -1) {

@@ -1,7 +1,10 @@
 import utils from './utils';
 
 class User {
-    constructor(player) {
+    data: any;
+    default: any;
+    storageName: any;
+    constructor(player: any) {
         this.storageName = {
             opacity: 'dplayer-danmaku-opacity',
             volume: 'dplayer-volume',
@@ -28,11 +31,11 @@ class User {
         }
     }
 
-    get(key) {
+    get(key: any) {
         return this.data[key];
     }
 
-    set(key, value) {
+    set(key: any, value: any) {
         this.data[key] = value;
         utils.storage.set(this.storageName[key], value);
     }

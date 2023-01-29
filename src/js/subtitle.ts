@@ -1,5 +1,10 @@
 class Subtitle {
-    constructor(container, video, plugins, options, events) {
+    container: any;
+    events: any;
+    options: any;
+    plugins: any;
+    video: any;
+    constructor(container: any, video: any, plugins: any, options: any, events: any) {
         this.container = container;
         this.video = video;
         this.plugins = plugins;

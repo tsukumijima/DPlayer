@@ -1,3 +1,4 @@
+// @ts-expect-error TS(2529): Duplicate identifier 'Promise'. Compiler reserves ... Remove this comment to see the full error message
 import Promise from 'promise-polyfill';
 import axios from 'axios';
 import * as aribb24js from 'aribb24.js';
@@ -21,25 +22,59 @@ import Comment from './comment';
 import HotKey from './hotkey';
 import ContextMenu from './contextmenu';
 import InfoPanel from './info-panel';
+// @ts-expect-error TS(2307): Cannot find module '../template/video.art' or its ... Remove this comment to see the full error message
 import tplVideo from '../template/video.art';
 
 let index = 0;
-const instances = [];
+const instances: any = [];
 
 class DPlayer {
+    bar: any;
+    bezel: any;
+    comment: any;
+    container: any;
+    containerClickFun: any;
+    contextmenu: any;
+    controller: any;
+    danmaku: any;
+    docClickFun: any;
+    events: any;
+    focus: any;
+    fullScreen: any;
+    hotkey: any;
+    infoPanel: any;
+    narrow: any;
+    noticeTime: any;
+    options: any;
+    paused: any;
+    plugins: any;
+    prevVideo: any;
+    quality: any;
+    qualityIndex: any;
+    resizeObserver: any;
+    setting: any;
+    subtitle: any;
+    switchingQuality: any;
+    template: any;
+    timer: any;
+    tran: any;
+    type: any;
+    user: any;
+    video: any;
     /**
      * DPlayer constructor function
      *
      * @param {Object} options - See README
      * @constructor
      */
-    constructor(options) {
+    constructor(options: any) {
         this.options = handleOption({ preload: options.video.type === 'webtorrent' ? 'none' : 'metadata', ...options });
 
         if (this.options.video.quality) {
             this.qualityIndex = this.options.video.defaultQuality;
             this.quality = this.options.video.quality[this.options.video.defaultQuality];
         }
+        // @ts-expect-error TS(7009): 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
         this.tran = new i18n(this.options.lang).tran;
         this.events = new Events();
         this.user = new User(this);
@@ -105,11 +140,12 @@ class DPlayer {
 
                         // autoplay
                         if (this.options.autoplay) {
+                            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                             this.play();
                         }
                     }, 0);
                 },
-                error: (msg) => {
+                error: (msg: any) => {
                     this.notice(msg);
                 },
                 apiBackend: this.options.apiBackend,
@@ -127,7 +163,7 @@ class DPlayer {
                     user: this.options.danmaku.user,
                 },
                 events: this.events,
-                tran: (msg) => this.tran(msg),
+                tran: (msg: any) => this.tran(msg),
             });
 
             this.comment = new Comment(this);
@@ -158,6 +194,7 @@ class DPlayer {
         this.infoPanel = new InfoPanel(this);
 
         if (!this.danmaku && this.options.autoplay) {
+            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.play();
         }
 
@@ -168,7 +205,7 @@ class DPlayer {
     /**
      * Seek video
      */
-    seek(time) {
+    seek(time: any) {
         time = Math.max(time, 0);
         const duration = utils.getVideoDuration(this.video, this.template);
         if (duration) {
@@ -217,7 +254,7 @@ class DPlayer {
     /**
      * Play video
      */
-    play(fromNative) {
+    play(fromNative: any) {
         this.paused = false;
         if (this.video.paused && !utils.isMobile) {
             this.bezel.switch(Icons.play);
@@ -235,6 +272,7 @@ class DPlayer {
             const playedPromise = Promise.resolve(this.video.play());
             playedPromise
                 .catch(() => {
+                    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                     this.pause();
                 })
                 .then(() => {});
@@ -257,7 +295,7 @@ class DPlayer {
     /**
      * Pause video
      */
-    pause(fromNative) {
+    pause(fromNative: any) {
         this.paused = true;
         this.container.classList.remove('dplayer-loading');
 
@@ -279,8 +317,10 @@ class DPlayer {
     }
 
     switchVolumeIcon() {
+        // @ts-expect-error TS(2554): Expected 3 arguments, but got 0.
         if (this.volume() >= 0.95) {
             this.template.volumeIcon.innerHTML = Icons.volumeUp;
+        // @ts-expect-error TS(2554): Expected 3 arguments, but got 0.
         } else if (this.volume() > 0) {
             this.template.volumeIcon.innerHTML = Icons.volumeDown;
         } else {
@@ -291,7 +331,7 @@ class DPlayer {
     /**
      * Set volume
      */
-    volume(percentage, nostorage, nonotice) {
+    volume(percentage: any, nostorage: any, nonotice: any) {
         percentage = parseFloat(percentage);
         if (!isNaN(percentage)) {
             percentage = Math.max(percentage, 0);
@@ -321,8 +361,10 @@ class DPlayer {
      */
     toggle() {
         if (this.video.paused) {
+            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.play();
         } else {
+            // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
             this.pause();
         }
     }
@@ -330,7 +372,7 @@ class DPlayer {
     /**
      * attach event
      */
-    on(name, callback) {
+    on(name: any, callback: any) {
         this.events.on(name, callback);
     }
 
@@ -340,7 +382,8 @@ class DPlayer {
      * @param {Object} video - new video info
      * @param {Object} danmaku - new danmaku info
      */
-    switchVideo(video, danmakuAPI) {
+    switchVideo(video: any, danmakuAPI: any) {
+        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
         this.pause();
         this.video.poster = video.pic ? video.pic : '';
         this.video.src = video.url;
@@ -364,7 +407,7 @@ class DPlayer {
         }
     }
 
-    initMSE(video, type) {
+    initMSE(video: any, type: any) {
         this.type = type;
         if (this.options.video.customType && this.options.video.customType[type]) {
             if (Object.prototype.toString.call(this.options.video.customType[type]) === '[object Function]') {
@@ -394,6 +437,7 @@ class DPlayer {
             switch (this.type) {
                 // https://github.com/video-dev/hls.js
                 case 'hls':
+                    // @ts-expect-error TS(2339): Property 'Hls' does not exist on type 'Window & ty... Remove this comment to see the full error message
                     if (window.Hls) {
                         // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
                         const isiPadSafari = (
@@ -401,6 +445,7 @@ class DPlayer {
                             (/iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document) &&
                             (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
                         );
+                        // @ts-expect-error TS(2339): Property 'Hls' does not exist on type 'Window & ty... Remove this comment to see the full error message
                         if (window.Hls.isSupported() && !isiPadSafari) {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
@@ -420,6 +465,7 @@ class DPlayer {
 
                             // Initialize hls.js
                             const hlsOptions = this.options.pluginOptions.hls;
+                            // @ts-expect-error TS(2339): Property 'Hls' does not exist on type 'Window & ty... Remove this comment to see the full error message
                             const hls = new window.Hls(hlsOptions);
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
@@ -463,7 +509,8 @@ class DPlayer {
                                 aribb24Superimpose.show();
 
                                 // Push caption data into CanvasRenderer
-                                hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
+                                // @ts-expect-error TS(2339): Property 'Hls' does not exist on type 'Window & ty... Remove this comment to see the full error message
+                                hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event: any, data: any) => {
                                     for (const sample of data.samples) {
                                         aribb24Caption.pushID3v2Data(sample.pts, sample.data);
                                         aribb24Superimpose.pushID3v2Data(sample.pts, sample.data);
@@ -632,7 +679,9 @@ class DPlayer {
                     break;
                 // https://github.com/xqq/mpegts.js
                 case 'mpegts':
+                    // @ts-expect-error TS(2339): Property 'mpegts' does not exist on type 'Window &... Remove this comment to see the full error message
                     if (window.mpegts) {
+                        // @ts-expect-error TS(2339): Property 'mpegts' does not exist on type 'Window &... Remove this comment to see the full error message
                         if (window.mpegts.isSupported()) {
                             // If it has already been initialized, destroy it once
                             const source = video.src;
@@ -654,6 +703,7 @@ class DPlayer {
                             }
 
                             // Initialize mpegts.js
+                            // @ts-expect-error TS(2339): Property 'mpegts' does not exist on type 'Window &... Remove this comment to see the full error message
                             const mpegtsPlayer = window.mpegts.createPlayer(
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
@@ -705,7 +755,8 @@ class DPlayer {
                                 aribb24Superimpose.show();
 
                                 // Push caption data into CanvasRenderer
-                                mpegtsPlayer.on(window.mpegts.Events.TIMED_ID3_METADATA_ARRIVED, (data) => {
+                                // @ts-expect-error TS(2339): Property 'mpegts' does not exist on type 'Window &... Remove this comment to see the full error message
+                                mpegtsPlayer.on(window.mpegts.Events.TIMED_ID3_METADATA_ARRIVED, (data: any) => {
                                     aribb24Caption.pushID3v2Data(data.pts / 1000, data.data);
                                     aribb24Superimpose.pushID3v2Data(data.pts / 1000, data.data);
                                 });
@@ -719,8 +770,11 @@ class DPlayer {
                     break;
                 // https://github.com/Bilibili/flv.js
                 case 'flv':
+                    // @ts-expect-error TS(2339): Property 'flvjs' does not exist on type 'Window & ... Remove this comment to see the full error message
                     if (window.flvjs) {
+                        // @ts-expect-error TS(2339): Property 'flvjs' does not exist on type 'Window & ... Remove this comment to see the full error message
                         if (window.flvjs.isSupported()) {
+                            // @ts-expect-error TS(2339): Property 'flvjs' does not exist on type 'Window & ... Remove this comment to see the full error message
                             const flvPlayer = window.flvjs.createPlayer(
                                 Object.assign(this.options.pluginOptions.flv.mediaDataSource || {}, {
                                     type: 'flv',
@@ -746,12 +800,15 @@ class DPlayer {
                     break;
                 // https://github.com/Dash-Industry-Forum/dash.js
                 case 'dash':
+                    // @ts-expect-error TS(2339): Property 'dashjs' does not exist on type 'Window &... Remove this comment to see the full error message
                     if (window.dashjs) {
+                        // @ts-expect-error TS(2339): Property 'dashjs' does not exist on type 'Window &... Remove this comment to see the full error message
                         const dashjsPlayer = window.dashjs.MediaPlayer().create().initialize(video, video.src, false);
                         const options = this.options.pluginOptions.dash;
                         dashjsPlayer.updateSettings(options);
                         this.plugins.dash = dashjsPlayer;
                         this.events.on('destroy', () => {
+                            // @ts-expect-error TS(2339): Property 'dashjs' does not exist on type 'Window &... Remove this comment to see the full error message
                             window.dashjs.MediaPlayer().reset();
                             delete this.plugins.dash;
                         });
@@ -762,18 +819,21 @@ class DPlayer {
 
                 // https://github.com/webtorrent/webtorrent
                 case 'webtorrent':
+                    // @ts-expect-error TS(2339): Property 'WebTorrent' does not exist on type 'Wind... Remove this comment to see the full error message
                     if (window.WebTorrent) {
+                        // @ts-expect-error TS(2339): Property 'WebTorrent' does not exist on type 'Wind... Remove this comment to see the full error message
                         if (window.WebTorrent.WEBRTC_SUPPORT) {
                             this.container.classList.add('dplayer-loading');
                             const options = this.options.pluginOptions.webtorrent;
+                            // @ts-expect-error TS(2339): Property 'WebTorrent' does not exist on type 'Wind... Remove this comment to see the full error message
                             const client = new window.WebTorrent(options);
                             this.plugins.webtorrent = client;
                             const torrentId = video.src;
                             video.src = '';
                             video.preload = 'metadata';
                             video.addEventListener('durationchange', () => this.container.classList.remove('dplayer-loading'), { once: true });
-                            client.add(torrentId, (torrent) => {
-                                const file = torrent.files.find((file) => file.name.endsWith('.mp4'));
+                            client.add(torrentId, (torrent: any) => {
+                                const file = torrent.files.find((file: any) => file.name.endsWith('.mp4'));
                                 file.renderTo(this.video, {
                                     autoplay: this.options.autoplay,
                                     controls: false,
@@ -795,7 +855,7 @@ class DPlayer {
         }
     }
 
-    initVideo(video, type) {
+    initVideo(video: any, type: any) {
         this.initMSE(video, type);
 
         /**
@@ -830,6 +890,7 @@ class DPlayer {
                 this.switchingQuality = false;
                 this.events.trigger('quality_end');
             }
+            // @ts-expect-error TS(2774): This condition will always return true since this ... Remove this comment to see the full error message
             if (this.tran && this.notice && this.type !== 'webtorrent' && this.type !== 'live-llhls-for-KonomiTV') {
                 this.notice(this.tran('Video load failed'), -1);
             }
@@ -840,9 +901,11 @@ class DPlayer {
         this.on('ended', () => {
             this.bar.set('played', 1, 'width');
             if (!this.setting.loop) {
+                // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                 this.pause();
             } else {
                 this.seek(0);
+                // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
                 this.play();
             }
             if (this.danmaku) {
@@ -887,7 +950,7 @@ class DPlayer {
         }
     }
 
-    switchQuality(index) {
+    switchQuality(index: any) {
         index = typeof index === 'string' ? parseInt(index) : index;
         if (this.qualityIndex === index || this.switchingQuality) {
             return;
@@ -923,7 +986,7 @@ class DPlayer {
         this.container.classList.add('dplayer-loading');
         this.events.trigger('quality_start', this.quality);
 
-        this.template.qualityItem.forEach((elem) => {
+        this.template.qualityItem.forEach((elem: any) => {
             elem.classList.remove('dplayer-setting-quality-current');
             if (parseInt(elem.dataset.index) === index) {
                 elem.classList.add('dplayer-setting-quality-current');
@@ -972,7 +1035,7 @@ class DPlayer {
         });
     }
 
-    notice(text, time = 2000, opacity = 0.8) {
+    notice(text: any, time = 2000, opacity = 0.8) {
         this.template.notice.innerHTML = text;
         this.template.notice.style.opacity = opacity;
         if (this.noticeTime) {
@@ -1003,9 +1066,9 @@ class DPlayer {
         this.events.trigger('resize');
     }
 
-    speed(rate) {
+    speed(rate: any) {
         this.video.playbackRate = rate;
-        this.template.speedItem.forEach((elem) => {
+        this.template.speedItem.forEach((elem: any) => {
             elem.classList.remove('dplayer-setting-speed-current');
             if (parseFloat(elem.dataset.speed) === rate) {
                 elem.classList.add('dplayer-setting-speed-current');
@@ -1021,6 +1084,7 @@ class DPlayer {
 
     destroy() {
         instances.splice(instances.indexOf(this), 1);
+        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
         this.pause();
         document.removeEventListener('click', this.docClickFun, true);
         this.container.removeEventListener('click', this.containerClickFun, true);
@@ -1037,6 +1101,7 @@ class DPlayer {
 
     static get version() {
         /* global DPLAYER_VERSION */
+        // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
         return DPLAYER_VERSION;
     }
 }

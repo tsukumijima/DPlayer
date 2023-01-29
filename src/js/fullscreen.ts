@@ -1,7 +1,10 @@
 import utils from './utils';
 
 class FullScreen {
-    constructor(player) {
+    fullscreenchange: any;
+    lastScrollPosition: any;
+    player: any;
+    constructor(player: any) {
         this.player = player;
         this.lastScrollPosition = { left: 0, top: 0 };
         this.player.events.on('webfullscreen', () => {
@@ -32,6 +35,7 @@ class FullScreen {
     isFullScreen(type = 'browser') {
         switch (type) {
             case 'browser': {
+                // @ts-expect-error TS(2339): Property 'webkitFullscreenElement' does not exist ... Remove this comment to see the full error message
                 const fullEle = document.fullscreenElement || document.webkitFullscreenElement;
                 if (fullEle && fullEle === this.player.container) {
                     return true;
@@ -97,6 +101,7 @@ class FullScreen {
                 // unify method names
                 document.exitFullscreen =
                     document.exitFullscreen || // HTML5 standard
+                    // @ts-expect-error TS(2339): Property 'webkitExitFullscreen' does not exist on ... Remove this comment to see the full error message
                     document.webkitExitFullscreen; // Webkit
                 // exit fullscreen
                 if (document.exitFullscreen) {

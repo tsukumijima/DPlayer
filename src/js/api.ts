@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default {
-    send: (options) => {
+    send: (options: any) => {
         axios
             .post(options.url, options.data)
             .then((response) => {
@@ -18,7 +18,7 @@ export default {
             });
     },
 
-    read: (options) => {
+    read: (options: any) => {
         axios
             .get(options.url)
             .then((response) => {
@@ -30,13 +30,13 @@ export default {
                 if (data.data) {
                     options.success &&
                         options.success(
-                            data.data.map((item) => ({
+                            data.data.map((item: any) => ({
                                 time: item[0],
                                 type: item[1],
                                 color: item[2],
                                 author: item[3],
                                 text: item[4],
-                                size: (item[5] ? (((item[5] === 'big') || (item[5] === 'small')) ? item[5] : 'medium') : 'medium'),
+                                size: (item[5] ? (((item[5] === 'big') || (item[5] === 'small')) ? item[5] : 'medium') : 'medium')
                             }))
                         );
                 } else {

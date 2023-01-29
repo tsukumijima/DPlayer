@@ -7,13 +7,15 @@ W3C def language codes is :
 NOTE: use lowercase to prevent case typo from user!
 Use this as shown below..... */
 
-function i18n(lang) {
+function i18n(this: any, lang: any) {
     this.lang = lang;
     if (this.lang === 'ja') {
         this.lang = 'ja-jp';
     }
-    this.tran = (text) => {
+    this.tran = (text: any) => {
+        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (tranTxt[this.lang] && tranTxt[this.lang][text]) {
+            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             return tranTxt[this.lang][text];
         } else {
             return text;

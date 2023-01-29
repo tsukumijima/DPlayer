@@ -1,12 +1,15 @@
 class Thumbnails {
-    constructor(options) {
+    barWidth: any;
+    container: any;
+    events: any;
+    constructor(options: any) {
         this.container = options.container;
         this.barWidth = options.barWidth;
         this.container.style.backgroundImage = `url('${options.url}')`;
         this.events = options.events;
     }
 
-    resize(width, height, barWrapWidth) {
+    resize(width: any, height: any, barWrapWidth: any) {
         this.container.style.width = `${width}px`;
         this.container.style.height = `${height}px`;
         this.container.style.top = `${-height + 2}px`;
@@ -18,7 +21,7 @@ class Thumbnails {
         this.events && this.events.trigger('thumbnails_show');
     }
 
-    move(position) {
+    move(position: any) {
         this.container.style.backgroundPosition = `-${(Math.ceil((position / this.barWidth) * 100) - 1) * 160}px 0`;
         this.container.style.left = `${Math.min(Math.max(position - this.container.offsetWidth / 2, -10), this.barWidth - 150)}px`;
     }

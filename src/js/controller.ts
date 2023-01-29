@@ -3,7 +3,15 @@ import Thumbnails from './thumbnails';
 import Icons from './icons';
 
 class Controller {
-    constructor(player) {
+    autoHideTimer: any;
+    disableAutoHide: any;
+    mobileBackwardTime: any;
+    mobileForwardTime: any;
+    mobileSkipTimer: any;
+    player: any;
+    setAutoHideHandler: any;
+    thumbnails: any;
+    constructor(player: any) {
         this.player = player;
 
         this.autoHideTimer = 0;
@@ -134,9 +142,9 @@ class Controller {
     }
 
     initPlayedBar() {
-        let paused;
+        let paused: any;
 
-        const thumbMove = (e) => {
+        const thumbMove = (e: any) => {
             let percentage = ((e.clientX || (e.changedTouches && e.changedTouches[0].clientX)) - utils.getBoundingClientRectViewLeft(this.player.template.playedBarWrap)) / this.player.template.playedBarWrap.clientWidth;
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
@@ -149,7 +157,7 @@ class Controller {
             }
         };
 
-        const thumbUp = (e) => {
+        const thumbUp = (e: any) => {
             document.removeEventListener(utils.nameMap.dragEnd, thumbUp);
             document.removeEventListener(utils.nameMap.dragMove, thumbMove);
             let percentage = ((e.clientX || (e.changedTouches && e.changedTouches[0].clientX)) - utils.getBoundingClientRectViewLeft(this.player.template.playedBarWrap)) / this.player.template.playedBarWrap.clientWidth;
@@ -172,7 +180,7 @@ class Controller {
             document.addEventListener(utils.nameMap.dragEnd, thumbUp);
         });
 
-        this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragMove, (e) => {
+        this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragMove, (e: any) => {
             const duration = utils.getVideoDuration(this.player.video, this.player.template);
             if (duration) {
                 const px = this.player.template.playedBarWrap.getBoundingClientRect().left;
@@ -228,7 +236,7 @@ class Controller {
         if (document.pictureInPictureEnabled) {
             this.player.template.pipButton.addEventListener('click', () => {
                 if (!document.pictureInPictureElement) {
-                    this.player.video.requestPictureInPicture().catch((reason) => {
+                    this.player.video.requestPictureInPicture().catch((reason: any) => {
                         console.error(reason);
                         if (this.player.options.lang === 'ja' || this.player.options.lang === 'ja-jp') {
                             this.player.notice('Picture-in-Picture を開始できませんでした。');
@@ -248,7 +256,7 @@ class Controller {
     initVolumeButton() {
         const vWidth = 35;
 
-        const volumeMove = (event) => {
+        const volumeMove = (event: any) => {
             const e = event || window.event;
             const percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.volumeBarWrap) - 5.5) / vWidth;
             this.player.volume(percentage);
@@ -259,7 +267,7 @@ class Controller {
             this.player.template.volumeButton.classList.remove('dplayer-volume-active');
         };
 
-        this.player.template.volumeBarWrapWrap.addEventListener('click', (event) => {
+        this.player.template.volumeBarWrapWrap.addEventListener('click', (event: any) => {
             const e = event || window.event;
             const percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.volumeBarWrap) - 5.5) / vWidth;
             this.player.volume(percentage);
@@ -296,6 +304,7 @@ class Controller {
                 const canvas = document.createElement('canvas');
                 canvas.width = this.player.video.videoWidth;
                 canvas.height = this.player.video.videoHeight;
+                // @ts-expect-error TS(2531): Object is possibly 'null'.
                 canvas.getContext('2d').drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
 
                 canvas.toBlob((blob) => {
@@ -333,10 +342,11 @@ class Controller {
 
     initAirplayButton() {
         if (this.player.options.airplay) {
+            // @ts-expect-error TS(2339): Property 'WebKitPlaybackTargetAvailabilityEvent' d... Remove this comment to see the full error message
             if (window.WebKitPlaybackTargetAvailabilityEvent) {
                 this.player.video.addEventListener(
                     'webkitplaybacktargetavailabilitychanged',
-                    function (event) {
+                    function(this: any, event: any) {
                         switch (event.availability) {
                             case 'available':
                                 this.template.airplayButton.disable = false;
@@ -348,7 +358,7 @@ class Controller {
 
                         this.template.airplayButton.addEventListener(
                             'click',
-                            function () {
+                            function(this: any) {
                                 this.video.webkitShowPlaybackTargetPicker();
                             }.bind(this)
                         );

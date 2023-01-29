@@ -1,7 +1,11 @@
 import utils from './utils';
 
 class Setting {
-    constructor(player) {
+    loop: any;
+    player: any;
+    showDanmaku: any;
+    unlimitDanmaku: any;
+    constructor(player: any) {
         this.player = player;
 
         this.player.template.mask.addEventListener('click', () => {
@@ -44,7 +48,7 @@ class Setting {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
         });
         for (let i = 0; i < this.player.template.speedItem.length; i++) {
-            this.player.template.speedItem[i].addEventListener('click', (event) => {
+            this.player.template.speedItem[i].addEventListener('click', (event: any) => {
                 this.player.speed(parseFloat(event.target.dataset.speed));
             });
         }
@@ -57,7 +61,7 @@ class Setting {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
         });
         for (let i = 0; i < this.player.template.audioItem.length; i++) {
-            this.player.template.audioItem[i].addEventListener('click', (event) => {
+            this.player.template.audioItem[i].addEventListener('click', (event: any) => {
                 if (this.player.plugins.mpegts || this.player.plugins.liveLLHLSForKonomiTV) {
                     if (event.target.dataset.audio === 'primary') {
                         // switch primary audio
@@ -133,7 +137,7 @@ class Setting {
         // danmaku opacity
         if (this.player.danmaku) {
             const barWidth = 190;
-            this.player.on('danmaku_opacity', (percentage) => {
+            this.player.on('danmaku_opacity', (percentage: any) => {
                 this.player.bar.set('danmaku', percentage, 'width');
                 this.player.user.set('opacity', percentage);
                 this.player.template.danmakuOpacityValue.textContent = percentage.toFixed(1);
@@ -141,7 +145,7 @@ class Setting {
             this.player.danmaku.opacity(this.player.user.get('opacity'));
             this.player.template.danmakuOpacityValue.textContent = this.player.user.get('opacity').toFixed(1);
 
-            const danmakuMove = (event) => {
+            const danmakuMove = (event: any) => {
                 const e = event || window.event;
                 let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
                 percentage = Math.max(percentage, 0);
@@ -154,7 +158,7 @@ class Setting {
                 this.player.template.danmakuOpacityBox.classList.remove('dplayer-setting-danmaku-active');
             };
 
-            this.player.template.danmakuOpacityBarWrapWrap.addEventListener('click', (event) => {
+            this.player.template.danmakuOpacityBarWrapWrap.addEventListener('click', (event: any) => {
                 const e = event || window.event;
                 let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
                 percentage = Math.max(percentage, 0);

@@ -1,7 +1,7 @@
 /* global DPLAYER_VERSION */
 import defaultApiBackend from './api.js';
 
-export default (options) => {
+export default (options: any) => {
     // default options
     const defaultOption = {
         container: options.element || document.getElementsByClassName('dplayer')[0],
@@ -11,6 +11,7 @@ export default (options) => {
         autoplay: false,
         theme: '#b7daff',
         loop: false,
+        // @ts-expect-error TS(2339): Property 'browserLanguage' does not exist on type ... Remove this comment to see the full error message
         lang: (navigator.language || navigator.browserLanguage).toLowerCase(),
         screenshot: false,
         airplay: true,
@@ -27,6 +28,7 @@ export default (options) => {
     };
     for (const defaultKey in defaultOption) {
         if (Object.prototype.hasOwnProperty.call(defaultOption, defaultKey) && !Object.prototype.hasOwnProperty.call(options, defaultKey)) {
+            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             options[defaultKey] = defaultOption[defaultKey];
         }
     }
@@ -46,7 +48,7 @@ export default (options) => {
     if (options.video.quality) {
         // defaultQuality can be specified as a string
         if (typeof options.video.defaultQuality === 'string') {
-            options.video.quality.forEach((quality, qualityIndex) => {
+            options.video.quality.forEach((quality: any, qualityIndex: any) => {
                 if (options.video.defaultQuality === quality.name) {
                     options.video.defaultQuality = qualityIndex;
                 }
@@ -67,11 +69,12 @@ export default (options) => {
     options.contextmenu = options.contextmenu.concat([
         {
             text: 'Video info',
-            click: (player) => {
+            click: (player: any) => {
                 player.infoPanel.toggle();
             },
         },
         {
+            // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
             text: `DPlayer v${DPLAYER_VERSION}`,
             link: 'https://github.com/tsukumijima/DPlayer',
         },

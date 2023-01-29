@@ -1,5 +1,6 @@
 class Comment {
-    constructor(player) {
+    player: any;
+    constructor(player: any) {
         this.player = player;
 
         this.player.template.mask.addEventListener('click', () => {
@@ -25,7 +26,7 @@ class Comment {
         this.player.template.commentInput.addEventListener('click', () => {
             this.hideSetting();
         });
-        this.player.template.commentInput.addEventListener('keydown', (e) => {
+        this.player.template.commentInput.addEventListener('keydown', (e: any) => {
             const event = e || window.event;
             if (event.keyCode === 13) {
                 this.send();

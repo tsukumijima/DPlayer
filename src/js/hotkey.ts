@@ -1,5 +1,8 @@
 class HotKey {
-    constructor(player) {
+    cancelFullScreenHandler: any;
+    doHotKeyHandler: any;
+    player: any;
+    constructor(player: any) {
         this.player = player;
         this.doHotKeyHandler = this.doHotKey.bind(this);
         this.cancelFullScreenHandler = this.cancelFullScreen.bind(this);
@@ -9,8 +12,10 @@ class HotKey {
         document.addEventListener('keydown', this.cancelFullScreenHandler);
     }
 
-    doHotKey(e) {
+    doHotKey(e: any) {
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         const tag = document.activeElement.tagName.toUpperCase();
+        // @ts-expect-error TS(2531): Object is possibly 'null'.
         const editable = document.activeElement.getAttribute('contenteditable');
         if (tag !== 'INPUT' && tag !== 'TEXTAREA' && editable !== '' && editable !== 'true') {
             const event = e || window.event;
@@ -131,7 +136,7 @@ class HotKey {
         }
     }
 
-    cancelFullScreen(e) {
+    cancelFullScreen(e: any) {
         const event = e || window.event;
         switch (event.keyCode) {
             case 27:
