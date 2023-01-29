@@ -1,0 +1,14 @@
+diff --git a/node_modules/vue-server-renderer/server-plugin.js b/node_modules/vue-server-renderer/server-plugin.js
+index 50e2fa9..d64d8e5 100644
+--- a/node_modules/vue-server-renderer/server-plugin.js
++++ b/node_modules/vue-server-renderer/server-plugin.js
+@@ -42,7 +42,8 @@ const webpack = require('webpack');
+ const prefix = `[vue-server-renderer-webpack-plugin]`;
+ const warn = (exports.warn = msg => console.error(red(`${prefix} ${msg}\n`)));
+ const tip = (exports.tip = msg => console.log(yellow(`${prefix} ${msg}\n`)));
+-const isWebpack5 = !!(webpack.version && webpack.version[0] > 4);
++// const isWebpack5 = !!(webpack.version && webpack.version[0] > 4);
++const isWebpack5 = false;  // always webpack 4 mode
+ const validate = compiler => {
+     if (compiler.options.target !== 'node') {
+         warn('webpack config `target` should be "node".');
