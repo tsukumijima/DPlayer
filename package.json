@@ -75,7 +75,6 @@
         "yorkie": "^2.0.0"
     },
     "gitHooks": {
-        "pre-commit": "npm run format"
     },
     "browserslist": [
         "> 2%",
