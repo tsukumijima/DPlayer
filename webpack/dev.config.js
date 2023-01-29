@@ -13,7 +13,7 @@ module.exports = {
 
     // entry point
     entry: {
-        DPlayer: './src/js/index.js',
+        DPlayer: './src/ts/index.ts',
     },
 
     // enable source map
