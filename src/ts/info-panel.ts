@@ -20,7 +20,7 @@ class InfoPanel {
         });
     }
 
-    show() {
+    show(): void {
         this.beginTime = Date.now();
         this.update();
         this.player.timer.enable('info');

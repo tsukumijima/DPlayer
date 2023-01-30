@@ -102,7 +102,7 @@ class Template {
         this.init();
     }
 
-    init() {
+    init(): void {
         this.container.innerHTML = tplPlayer({
             options: this.options,
             index: this.index,
