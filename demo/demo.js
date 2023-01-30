@@ -143,52 +143,52 @@ function initPlayers() {
     }
 
     // dp3
-    // window.dp3 = new DPlayer({
-    //     container: document.getElementById('dplayer3'),
-    //     preload: 'none',
-    //     video: {
-    //         quality: [{
-    //             name: 'HD',
-    //             url: 'https://s-sh-17-dplayercdn.oss.dogecdn.com/hikarunara.m3u8',
-    //             type: 'hls'
-    //         }, {
-    //             name: 'SD',
-    //             url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
-    //             type: 'normal'
-    //         }],
-    //         defaultQuality: 0,
-    //         pic: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png'
-    //     }
-    // });
+    window.dp3 = new DPlayer({
+        container: document.getElementById('dplayer3'),
+        preload: 'none',
+        video: {
+            quality: [{
+                name: 'HD',
+                url: 'https://test-streams.mux.dev/x36xhzz/url_8/193039199_mp4_h264_aac_fhd_7.m3u8',
+                type: 'hls'
+            }, {
+                name: 'SD',
+                url: 'https://test-streams.mux.dev/x36xhzz/url_4/193039199_mp4_h264_aac_7.m3u8',
+                type: 'hls'
+            }],
+            defaultQuality: 0,
+            pic: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png'
+        }
+    });
 
-    // // dp4
-    // window.dp4 = new DPlayer({
-    //     container: document.getElementById('dplayer4'),
-    //     preload: 'none',
-    //     video: {
-    //         url: 'https://s-sh-17-dplayercdn.oss.dogecdn.com/hikarunara.m3u8',
-    //         type: 'hls'
-    //     }
-    // });
+    // dp4
+    window.dp4 = new DPlayer({
+        container: document.getElementById('dplayer4'),
+        preload: 'none',
+        video: {
+            url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            type: 'hls'
+        }
+    });
 
-    // // dp5
-    // window.dp5 = new DPlayer({
-    //     container: document.getElementById('dplayer5'),
-    //     preload: 'none',
-    //     video: {
-    //         url: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara.flv',
-    //         type: 'flv'
-    //     }
-    // });
+    // dp5
+    window.dp5 = new DPlayer({
+        container: document.getElementById('dplayer5'),
+        preload: 'none',
+        video: {
+            url: 'http://docs.evostream.com/sample_content/assets/bun33s.flv',
+            type: 'flv'
+        }
+    });
 
-    // window.dp8 = new DPlayer({
-    //     container: document.getElementById('dplayer8'),
-    //     preload: 'none',
-    //     video: {
-    //         url: 'https://moeplayer.b0.upaiyun.com/dplayer/dash/hikarunara.mpd',
-    //         type: 'dash'
-    //     }
-    // });
+    window.dp8 = new DPlayer({
+        container: document.getElementById('dplayer8'),
+        preload: 'none',
+        video: {
+            url: 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd',
+            type: 'dash'
+        }
+    });
 
     // window.dp9 = new DPlayer({
     //     container: document.getElementById('dplayer9'),
@@ -198,26 +198,26 @@ function initPlayers() {
     //     }
     // });
 
-    // window.dp6 = new DPlayer({
-    //     container: document.getElementById('dplayer6'),
-    //     preload: 'none',
-    //     live: true,
-    //     danmaku: true,
-    //     apiBackend: {
-    //         read: function (endpoint, callback) {
-    //             console.log('假装 WebSocket 连接成功');
-    //             callback();
-    //         },
-    //         send: function (endpoint, danmakuData, callback) {
-    //             console.log('假装通过 WebSocket 发送数据', danmakuData);
-    //             callback();
-    //         }
-    //     },
-    //     video: {
-    //         url: 'https://s-sh-17-dplayercdn.oss.dogecdn.com/hikarunara.m3u8',
-    //         type: 'hls'
-    //     }
-    // });
+    window.dp6 = new DPlayer({
+        container: document.getElementById('dplayer6'),
+        preload: 'none',
+        live: true,
+        danmaku: true,
+        apiBackend: {
+            read: function (options) {
+                console.log('假装 WebSocket 连接成功');
+                options.success([]);
+            },
+            send: function (options) {
+                console.log('假装通过 WebSocket 发送数据', options.data);
+                options.success();
+            }
+        },
+        video: {
+            url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            type: 'hls'
+        }
+    });
 
     // window.dp10 = new DPlayer({
     //     container: document.getElementById('dplayer10'),
