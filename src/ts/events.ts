@@ -1,4 +1,4 @@
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 class Events {
     events: { [key: string]: ((info: any) => void)[]};

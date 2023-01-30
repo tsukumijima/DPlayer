@@ -1,7 +1,7 @@
 import Icons from './icons';
 import tplPlayer from '../template/player.art';
 import utils from './utils';
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 class Template {
     container: HTMLElement;

@@ -2,7 +2,7 @@ import Mpegts from 'mpegts.js';
 
 import DPlayer from './player';
 import utils from './utils';
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 declare let window: DPlayerType.WindowExtend;
 

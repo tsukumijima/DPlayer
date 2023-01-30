@@ -24,7 +24,7 @@ import HotKey from './hotkey';
 import ContextMenu from './contextmenu';
 import InfoPanel from './info-panel';
 import tplVideo from '../template/video.art';
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 let index = 0;
 const instances: DPlayer[] = [];
@@ -666,8 +666,7 @@ class DPlayer {
 
                         // Processing when destroy
                         this.events.on('destroy', () => {
-                            if (this.plugins.liveLLHLSForKonomiTV === undefined) return;
-                            axios.delete(`${this.plugins.liveLLHLSForKonomiTV.baseUrl}/${this.plugins.liveLLHLSForKonomiTV.clientId}`);
+                            axios.delete(`${liveLLHLSForKonomiTV.baseUrl}/${liveLLHLSForKonomiTV.clientId}`);
                             delete this.plugins.liveLLHLSForKonomiTV;
                             // destroy aribb24 caption
                             if (this.plugins.aribb24Caption) {
@@ -817,7 +816,7 @@ class DPlayer {
                         dashjsPlayer.updateSettings(options ?? {});
                         this.plugins.dash = dashjsPlayer;
                         this.events.on('destroy', () => {
-                            this.plugins.dash.reset();
+                            dashjsPlayer.reset();
                             delete this.plugins.dash;
                         });
                     } else {

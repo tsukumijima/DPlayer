@@ -3,6 +3,7 @@
     "version": "1.27.14",
     "description": "Wow, such a lovely HTML5 danmaku video player",
     "main": "dist/DPlayer.min.js",
+    "types": "dist/d.ts/ts/index.d.ts",
     "files": [
         "dist"
     ],
@@ -30,7 +31,7 @@
         "start": "npm run dev",
         "build": "cross-env NODE_ENV=production webpack build --config webpack/prod.config.js --progress",
         "dev": "cross-env NODE_ENV=development webpack serve --config webpack/dev.config.js",
-        "test": "eslint src webpack",
+        "test": "eslint src",
         "type-check": "tsc --noEmit",
         "format": "eslint \"**/*.ts\" --fix",
         "format:check": "eslint \"**/*.ts\"",

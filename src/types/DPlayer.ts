@@ -389,7 +389,7 @@ export interface PluginOptions {
 
 // ===== internal types =====
 
-interface WindowExtend extends Window {
+export interface WindowExtend extends Window {
     dashjs?: typeof dashjs;
     flvjs?: typeof FlvJs;
     Hls?: typeof Hls;
@@ -471,7 +471,7 @@ export interface Plugins {
     };
     mpegts?: Mpegts.Player | Mpegts.MSEPlayer | Mpegts.NativePlayer;
     flvjs?: FlvJs.Player;
-    dash?: dashjs.MediaPlayer;
+    dash?: dashjs.MediaPlayerClass;
     webtorrent?: WebTorrent.Instance;
     aribb24Caption?: aribb24js.CanvasRenderer;
     aribb24Superimpose?: aribb24js.CanvasRenderer;

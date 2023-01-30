@@ -66,27 +66,27 @@ module.exports = {
         strictExportPresence: true,
         rules: [
             {
+                // compile TypeScript to JavaScript
                 test: /\.ts$/,
                 use: [
-                    // compile TypeScript to JavaScript
                     {
                         loader: 'ts-loader',
                     },
                 ],
             },
             {
+                // load source map
                 test: /\.js$/,
                 use: [
-                    // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
                     {
                         loader: 'source-map-loader',
                     },
                 ],
             },
             {
+                // compile JavaScript in Babel
                 test: /\.js$/,
                 use: [
-                    // compile JavaScript in Babel
                     {
                         loader: 'babel-loader',
                         options: {

@@ -1,7 +1,7 @@
 /* global DPLAYER_VERSION */
 import defaultApiBackend from './api';
 import DPlayer from './player';
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
     // default options

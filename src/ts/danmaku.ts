@@ -1,7 +1,7 @@
 import DPlayer from './player';
 import Events from './events';
 import utils from './utils';
-import DPlayerType from '../types/DPlayer';
+import * as DPlayerType from '../types/DPlayer';
 
 interface DanmakuOptions {
     player: DPlayer,
