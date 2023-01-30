@@ -7,7 +7,8 @@
 
 この Fork は、
 
-- 日本語への対応
+- **ソースコードを TypeScript へ移行 & TypeScript サポートの追加**
+- 日本語対応の追加
 - 全体的な UI の見直しとブラッシュアップ
 - Danmaku（コメント）描画周りの大幅な修正
 - Danmaku（コメント）のサイズ変更 (big, medium, small) に対応
@@ -33,7 +34,10 @@
   - 依存パッケージの更新にともない、npm だと依存関係が解決できないことがあったため
 - そのほか多数の不具合修正と改善
 
-と、[KonomiTV](https://github.com/tsukumijima/KonomiTV)・[TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus) 向けに多くの不具合改善と大幅な変更を行った DPlayer です。
+と、[KonomiTV](https://github.com/tsukumijima/KonomiTV)・[TVRemotePlus](https://github.com/tsukumijima/TVRemotePlus) 向けに多くの不具合改善と大幅な変更・改善を行った DPlayer です。
+
+> なお、Fork 元からオプションや動作仕様がいくつか追加・変更されています (この Fork 内のドキュメントは更新されていないため注意) 。  
+> 詳しい仕様は TypeScript の型定義内のコメントを参照してください。
 
 おそらく、ニコニコ風のコメントを流せるプレイヤーの中では一番多機能なのではないでしょうか。  
 ぜひ日本でももっと広まって欲しいと思っています（コメントを流さない場合でも軽量で優秀なプレイヤーだと思います）。  
