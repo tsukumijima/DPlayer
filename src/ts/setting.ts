@@ -1,5 +1,3 @@
-import Mpegts from 'mpegts.js';
-
 import DPlayer from './player';
 import utils from './utils';
 import * as DPlayerType from '../types/DPlayer';
@@ -77,7 +75,7 @@ class Setting {
                         this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Primary audio');
                         if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                            (this.player.plugins.mpegts as Mpegts.MSEPlayer).switchPrimaryAudio();
+                            this.player.plugins.mpegts.switchPrimaryAudio();
                         } else if (this.player.plugins.liveLLHLSForKonomiTV) {
                             this.player.plugins.liveLLHLSForKonomiTV.switchPrimaryAudio();
                         }
@@ -87,7 +85,7 @@ class Setting {
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
                         if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                            (this.player.plugins.mpegts as Mpegts.MSEPlayer).switchSecondaryAudio();
+                            this.player.plugins.mpegts.switchSecondaryAudio();
                         } else if (this.player.plugins.liveLLHLSForKonomiTV) {
                             this.player.plugins.liveLLHLSForKonomiTV.switchSecondaryAudio();
                         }

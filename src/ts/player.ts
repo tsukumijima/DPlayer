@@ -2,7 +2,6 @@
 import Promise from 'promise-polyfill';
 import axios from 'axios';
 import * as aribb24js from 'aribb24.js';
-import Mpegts from 'mpegts.js';
 
 import utils from './utils';
 import handleOption from './options';
@@ -1028,7 +1027,7 @@ class DPlayer {
                 if (audio === 'secondary') {
                     // switch secondary audio
                     if (window.mpegts && this.plugins.mpegts && this.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                        (this.plugins.mpegts as Mpegts.MSEPlayer).switchSecondaryAudio();
+                        this.plugins.mpegts.switchSecondaryAudio();
                     } else if (this.plugins.liveLLHLSForKonomiTV) {
                         this.plugins.liveLLHLSForKonomiTV.switchSecondaryAudio();
                     }
