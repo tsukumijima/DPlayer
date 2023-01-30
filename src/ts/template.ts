@@ -1,11 +1,11 @@
 import Icons from './icons';
-// @ts-expect-error TS(2307): Cannot find module '../template/player.art' or its... Remove this comment to see the full error message
 import tplPlayer from '../template/player.art';
 import utils from './utils';
+import DPlayerType from '../types/DPlayer';
 
 class Template {
     container: HTMLElement;
-    options: any;
+    options: DPlayerType.OptionsInternal;
     index: number;
     tran: (text: string) => string;
 
@@ -94,7 +94,7 @@ class Template {
     infoDanmakuApi!: HTMLElement;
     infoDanmakuAmount!: HTMLElement;
 
-    constructor(options: { container: HTMLElement; options: any; index: number; tran: any; }) {
+    constructor(options: { container: HTMLElement; options: DPlayerType.OptionsInternal; index: number; tran: (text: string) => string; }) {
         this.container = options.container;
         this.options = options.options;
         this.index = options.index;

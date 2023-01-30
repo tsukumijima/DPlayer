@@ -1,9 +1,10 @@
 import DPlayer from './player';
 import utils from './utils';
+import DPlayerType from '../types/DPlayer';
 
 class FullScreen {
     player: DPlayer;
-    lastScrollPosition: { left: number; top: number }
+    lastScrollPosition: { left: number; top: number; };
     fullscreenchange: () => void;
 
     constructor(player: DPlayer) {
@@ -34,7 +35,7 @@ class FullScreen {
         }
     }
 
-    isFullScreen(type: 'browser' | 'web' = 'browser'): boolean {
+    isFullScreen(type: DPlayerType.FullscreenType = 'browser'): boolean {
         switch (type) {
             case 'browser': {
                 const fullEle = document.fullscreenElement || document.webkitFullscreenElement;
@@ -50,7 +51,7 @@ class FullScreen {
         }
     }
 
-    request(type: 'browser' | 'web' = 'browser'): void {
+    request(type: DPlayerType.FullscreenType = 'browser'): void {
         const anotherType = type === 'browser' ? 'web' : 'browser';
         const anotherTypeOn = this.isFullScreen(anotherType);
         if (!anotherTypeOn) {
@@ -98,7 +99,7 @@ class FullScreen {
         }
     }
 
-    cancel(type: 'browser' | 'web' = 'browser'): void {
+    cancel(type: DPlayerType.FullscreenType = 'browser'): void {
         switch (type) {
             case 'browser':
                 // unify method names
@@ -127,7 +128,7 @@ class FullScreen {
         }
     }
 
-    toggle(type: 'browser' | 'web' = 'browser'): void {
+    toggle(type: DPlayerType.FullscreenType = 'browser'): void {
         if (this.isFullScreen(type)) {
             this.cancel(type);
         } else {

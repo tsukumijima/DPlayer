@@ -1,19 +1,21 @@
 /* global DPLAYER_VERSION */
 import defaultApiBackend from './api';
+import DPlayer from './player';
+import DPlayerType from '../types/DPlayer';
 
-export default (options: any) => {
+export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
     // default options
-    const defaultOption = {
-        container: options.element || document.getElementsByClassName('dplayer')[0],
+    const defaultOption: DPlayerType.Options = {
+        container: options.container || document.querySelector<HTMLElement>('.dplayer') || undefined,
         live: false,
         liveSyncMinBufferSize: 0.8,
         syncWhenPlayingLive: true,
         autoplay: false,
         theme: '#b7daff',
         loop: false,
-        // @ts-expect-error TS(2339): Property 'browserLanguage' does not exist on type ... Remove this comment to see the full error message
-        lang: (navigator.language || navigator.browserLanguage).toLowerCase(),
+        lang: navigator.language.toLowerCase(),
         screenshot: false,
+        pictureInPicture: true,
         airplay: true,
         hotkey: true,
         preload: 'metadata',
@@ -23,12 +25,11 @@ export default (options: any) => {
         video: {},
         contextmenu: [],
         mutex: true,
-        pictureInPicture: true,
-        pluginOptions: { hls: {}, mpegts: {}, flv: {}, dash: {}, webtorrent: {}, aribb24: {} },
+        pluginOptions: {},
     };
     for (const defaultKey in defaultOption) {
         if (Object.prototype.hasOwnProperty.call(defaultOption, defaultKey) && !Object.prototype.hasOwnProperty.call(options, defaultKey)) {
-            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+            // @ts-ignore
             options[defaultKey] = defaultOption[defaultKey];
         }
     }
@@ -37,6 +38,8 @@ export default (options: any) => {
     }
     if (typeof options.danmaku === 'object' && options.danmaku) {
         !options.danmaku.user && (options.danmaku.user = 'DPlayer');
+        !options.danmaku.speedRate && (options.danmaku.speedRate = 1);
+        !options.danmaku.fontSize && (options.danmaku.fontSize = 35);
     }
     if (options.subtitle) {
         !options.subtitle.type && (options.subtitle.type = 'webvtt');
@@ -48,7 +51,7 @@ export default (options: any) => {
     if (options.video.quality) {
         // defaultQuality can be specified as a string
         if (typeof options.video.defaultQuality === 'string') {
-            options.video.quality.forEach((quality: any, qualityIndex: any) => {
+            options.video.quality.forEach((quality, qualityIndex) => {
                 if (options.video.defaultQuality === quality.name) {
                     options.video.defaultQuality = qualityIndex;
                 }
@@ -58,6 +61,10 @@ export default (options: any) => {
                 options.video.defaultQuality = 0;
             }
         }
+        // failsafe
+        if (options.video.defaultQuality === undefined) {
+            options.video.defaultQuality = 0;
+        }
         options.video.type = options.video.quality[options.video.defaultQuality].type;
         options.video.url = options.video.quality[options.video.defaultQuality].url;
     }
@@ -66,19 +73,46 @@ export default (options: any) => {
         options.lang = options.lang.toLowerCase();
     }
 
-    options.contextmenu = options.contextmenu.concat([
+    options.contextmenu = options.contextmenu!.concat([
         {
             text: 'Video info',
-            click: (player: any) => {
+            click: (player: DPlayer) => {
                 player.infoPanel.toggle();
             },
         },
         {
-            // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
+            // @ts-ignore
             text: `DPlayer v${DPLAYER_VERSION}`,
             link: 'https://github.com/tsukumijima/DPlayer',
         },
     ]);
 
-    return options;
+    const optionsInternal: DPlayerType.OptionsInternal = {
+        container: options.container!,
+        live: options.live!,
+        liveSyncMinBufferSize: options.liveSyncMinBufferSize!,
+        syncWhenPlayingLive: options.syncWhenPlayingLive!,
+        autoplay: options.autoplay!,
+        theme: options.theme!,
+        loop: options.loop!,
+        lang: options.lang!,
+        screenshot: options.screenshot!,
+        pictureInPicture: options.pictureInPicture!,
+        airplay: options.airplay!,
+        hotkey: options.hotkey!,
+        preload: options.preload!,
+        volume: options.volume!,
+        playbackSpeed: options.playbackSpeed!,
+        logo: options.logo,  // optional
+        apiBackend: options.apiBackend!,
+        video: options.video as DPlayerType.VideoInternal,
+        subtitle: options.subtitle as DPlayerType.SubtitleInternal,  // optional
+        danmaku: options.danmaku as DPlayerType.DanmakuInternal,  // optional
+        contextmenu: options.contextmenu!,
+        highlight: options.highlight,  // optional
+        mutex: options.mutex!,
+        pluginOptions: options.pluginOptions!,
+    };
+
+    return optionsInternal;
 };

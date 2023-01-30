@@ -12,7 +12,8 @@ class ContextMenu {
         Array.prototype.slice.call(this.player.template.menuItem).forEach((item, index) => {
             if (this.player.options.contextmenu[index].click) {
                 item.addEventListener('click', () => {
-                    this.player.options.contextmenu[index].click(this.player);
+                    const contextmenu = this.player.options.contextmenu[index];
+                    if (contextmenu.click) contextmenu.click(this.player);
                     this.hide();
                 });
             }

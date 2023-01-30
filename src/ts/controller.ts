@@ -304,8 +304,7 @@ class Controller {
                 const canvas = document.createElement('canvas');
                 canvas.width = this.player.video.videoWidth;
                 canvas.height = this.player.video.videoHeight;
-                // @ts-expect-error TS(2531): Object is possibly 'null'.
-                canvas.getContext('2d').drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
+                canvas.getContext('2d')!.drawImage(this.player.video, 0, 0, canvas.width, canvas.height);
 
                 canvas.toBlob((blob) => {
                     if (blob === null) return;
@@ -342,11 +341,10 @@ class Controller {
 
     initAirplayButton(): void {
         if (this.player.options.airplay) {
-            // @ts-expect-error TS(2339): Property 'WebKitPlaybackTargetAvailabilityEvent' d... Remove this comment to see the full error message
             if (window.WebKitPlaybackTargetAvailabilityEvent) {
                 this.player.video.addEventListener(
                     'webkitplaybacktargetavailabilitychanged',
-                    function(this: DPlayer, event: any) {
+                    function(this: DPlayer, event: WebKitPlaybackTargetAvailabilityEvent) {
                         switch (event.availability) {
                             case 'available':
                                 // @ts-ignore
@@ -362,9 +360,9 @@ class Controller {
                             'click',
                             function(this: DPlayer) {
                                 this.video.webkitShowPlaybackTargetPicker();
-                            }.bind(this)
+                            }.bind(this),
                         );
-                    }.bind(this.player)
+                    }.bind(this.player),
                 );
             } else {
                 this.player.template.airplayButton.style.display = 'none';

@@ -14,7 +14,7 @@ const utils = {
         if (second === 0 || second === Infinity || second.toString() === 'NaN') {
             return '00:00';
         }
-        const add0 = (num: any) => num < 10 ? '0' + num : '' + num;
+        const add0 = (num: number): string => num < 10 ? '0' + num : '' + num;
         const hour = Math.floor(second / 3600);
         const min = Math.floor((second - hour * 3600) / 60);
         const sec = Math.floor(second - hour * 3600 - min * 60);
@@ -52,22 +52,17 @@ const utils = {
      */
     getElementViewLeft: (element: HTMLElement): number => {
         let actualLeft = element.offsetLeft;
-        let current = element.offsetParent;
+        let current = element.offsetParent as HTMLElement | null;
         const elementScrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
-        // @ts-expect-error TS(2339): Property 'mozFullScreenElement' does not exist on ... Remove this comment to see the full error message
-        if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
             while (current !== null) {
-                // @ts-ignore
                 actualLeft += current.offsetLeft;
-                // @ts-ignore
-                current = current.offsetParent;
+                current = current.offsetParent as HTMLElement | null;
             }
         } else {
             while (current !== null && current !== element) {
-                // @ts-ignore
                 actualLeft += current.offsetLeft;
-                // @ts-ignore
-                current = current.offsetParent;
+                current = current.offsetParent as HTMLElement | null;
             }
         }
         return actualLeft - elementScrollLeft;
@@ -116,7 +111,7 @@ const utils = {
         };
     },
 
-    setScrollPosition({ left = 0, top = 0 }: { left: number, top: number }): void {
+    setScrollPosition({ left = 0, top = 0 }: { left: number; top: number; }): void {
         if (this.isFirefox) {
             document.documentElement.scrollLeft = left;
             document.documentElement.scrollTop = top;

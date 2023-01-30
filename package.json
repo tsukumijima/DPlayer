@@ -31,6 +31,7 @@
         "build": "cross-env NODE_ENV=production webpack build --config webpack/prod.config.js --progress",
         "dev": "cross-env NODE_ENV=development webpack serve --config webpack/dev.config.js",
         "test": "eslint src webpack",
+        "type-check": "tsc --noEmit",
         "format": "eslint \"**/*.ts\" --fix",
         "format:check": "eslint \"**/*.ts\"",
         "docs:dev": "vuepress dev docs",
@@ -111,7 +112,13 @@
         ],
         "rules": {
             "@typescript-eslint/ban-ts-comment": 0,
-            "@typescript-eslint/no-non-null-assertion": 0
+            "comma-dangle": ["error", "always-multiline"],
+            "semi": ["error", "always"],
+            "semi-spacing": ["error", {"after": true, "before": false}],
+            "semi-style": ["error", "last"],
+            "no-extra-semi": "error",
+            "no-unexpected-multiline": "error",
+            "no-unreachable": "error"
         }
     }
 }

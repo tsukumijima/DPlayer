@@ -1,13 +1,14 @@
 import Events from './events';
+import DPlayerType from '../types/DPlayer';
 
 class Subtitle {
     container: HTMLElement;
     video: HTMLVideoElement;
-    plugins: any;
-    options: any;
+    plugins: DPlayerType.Plugins;
+    options: DPlayerType.SubtitleInternal;
     events: Events;
 
-    constructor(container: HTMLElement, video: HTMLVideoElement, plugins: any, options: any, events: Events) {
+    constructor(container: HTMLElement, video: HTMLVideoElement, plugins: DPlayerType.Plugins, options: DPlayerType.SubtitleInternal, events: Events) {
         this.container = container;
         this.video = video;
         this.plugins = plugins;

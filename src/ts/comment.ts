@@ -1,4 +1,5 @@
 import DPlayer from './player';
+import DPlayerType from '../types/DPlayer';
 
 class Comment {
     player: DPlayer;
@@ -29,7 +30,7 @@ class Comment {
         this.player.template.commentInput.addEventListener('click', () => {
             this.hideSetting();
         });
-        this.player.template.commentInput.addEventListener('keydown', (e: any) => {
+        this.player.template.commentInput.addEventListener('keydown', (e) => {
             const event = e || window.event;
             if (event.keyCode === 13) {
                 this.send();
@@ -87,8 +88,8 @@ class Comment {
                 {
                     text: this.player.template.commentInput.value,
                     color: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-color input:checked')!.value,
-                    type: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-type input:checked')!.value as 'right' | 'bottom' | 'top',
-                    size: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-size input:checked')!.value as 'big' | 'medium' | 'small',
+                    type: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-type input:checked')!.value as DPlayerType.DanmakuType,
+                    size: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-size input:checked')!.value as DPlayerType.DanmakuSize,
                 },
                 () => {
                     this.hide();

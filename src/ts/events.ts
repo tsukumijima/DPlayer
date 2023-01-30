@@ -1,7 +1,9 @@
+import DPlayerType from '../types/DPlayer';
+
 class Events {
     events: { [key: string]: ((info: any) => void)[]};
-    videoEvents: string[];
-    playerEvents: string[];
+    videoEvents: DPlayerType.VideoEvents[];
+    playerEvents: DPlayerType.PlayerEvents[];
 
     constructor() {
         this.events = {};
@@ -60,7 +62,7 @@ class Events {
         ];
     }
 
-    on(name: string, callback: (info: any) => void): void {
+    on(name: DPlayerType.Events, callback: (info?: any) => void): void {
         if (this.type(name) && typeof callback === 'function') {
             if (!this.events[name]) {
                 this.events[name] = [];
@@ -69,7 +71,7 @@ class Events {
         }
     }
 
-    trigger(name: string, info: any = null): void {
+    trigger(name: DPlayerType.Events, info?: any): void {
         if (this.events[name] && this.events[name].length) {
             for (let i = 0; i < this.events[name].length; i++) {
                 this.events[name][i](info);
@@ -77,10 +79,10 @@ class Events {
         }
     }
 
-    type(name: string): 'player' | 'video' | null {
-        if (this.playerEvents.indexOf(name) !== -1) {
+    type(name: DPlayerType.Events): 'player' | 'video' | null {
+        if ((this.playerEvents as DPlayerType.Events[]).indexOf(name) !== -1) {
             return 'player';
-        } else if (this.videoEvents.indexOf(name) !== -1) {
+        } else if ((this.videoEvents as DPlayerType.Events[]).indexOf(name) !== -1) {
             return 'video';
         }
 

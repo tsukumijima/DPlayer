@@ -8,6 +8,7 @@ class Timer {
     enableloadingChecker!: boolean;
     fpsIndex!: number;
     fpsStart!: Date | number;
+    fpsChecker!: number;  // dummy
     infoChecker!: number;
     loadingChecker!: number;
 
@@ -16,13 +17,9 @@ class Timer {
 
         window.requestAnimationFrame = (() =>
             window.requestAnimationFrame ||
-            // @ts-expect-error TS(2339): Property 'webkitRequestAnimationFrame' does not ex... Remove this comment to see the full error message
             window.webkitRequestAnimationFrame ||
-            // @ts-expect-error TS(2339): Property 'mozRequestAnimationFrame' does not exist... Remove this comment to see the full error message
             window.mozRequestAnimationFrame ||
-            // @ts-expect-error TS(2551): Property 'oRequestAnimationFrame' does not exist o... Remove this comment to see the full error message
             window.oRequestAnimationFrame ||
-            // @ts-expect-error TS(2551): Property 'msRequestAnimationFrame' does not exist ... Remove this comment to see the full error message
             window.msRequestAnimationFrame ||
             function (callback) {
                 window.setTimeout(callback, 1000 / 60);
@@ -111,7 +108,6 @@ class Timer {
     destroy(): void {
         this.types.map((item) => {
             this[`enable${item}Checker`] = false;
-            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this[`${item}Checker`] && window.clearInterval(this[`${item}Checker`]);
             return item;
         });

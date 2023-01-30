@@ -1,7 +1,12 @@
 import axios from 'axios';
+import DPlayerType from '../types/DPlayer';
 
-export default {
-    send: (options: any) => {
+const defaultApiBackend: DPlayerType.APIBackend = {
+    send: (options) => {
+        if (options.url === undefined) {
+            options.error && options.error();
+            return;
+        }
         axios
             .post(options.url, options.data)
             .then((response) => {
@@ -10,7 +15,7 @@ export default {
                     options.error && options.error(data && data.msg);
                     return;
                 }
-                options.success && options.success(data);
+                options.success && options.success();
             })
             .catch((e) => {
                 console.error(e);
@@ -18,7 +23,11 @@ export default {
             });
     },
 
-    read: (options: any) => {
+    read: (options) => {
+        if (options.url === undefined) {
+            options.error && options.error();
+            return;
+        }
         axios
             .get(options.url)
             .then((response) => {
@@ -29,26 +38,24 @@ export default {
                 }
                 if (data.data) {
                     options.success &&
-                        options.success(
-                            data.data.map((item: any) => ({
-                                time: item[0],
-                                type: item[1],
-                                color: item[2],
-                                author: item[3],
-                                text: item[4],
-                                size: (item[5] ? (((item[5] === 'big') || (item[5] === 'small')) ? item[5] : 'medium') : 'medium')
-                            }))
-                        );
+                        options.success((data.data as any[][]).map((item) => ({
+                            author: item[3],
+                            time: item[0],
+                            text: item[4],
+                            color: item[2],
+                            type: item[1],
+                            size: (item[5] ? (((item[5] === 'big') || (item[5] === 'small')) ? item[5] : 'medium') : 'medium'),
+                        })));
                 } else {
                     options.success &&
-                        options.success({
-                            time: 0,
-                            type: 0,
-                            color: '#ffeaea',
+                        options.success([{
                             author: '',
+                            time: 0,
                             text: '',
+                            color: '#ffeaea',
+                            type: 'right',
                             size: 'medium',
-                        });
+                        }]);
                 }
             })
             .catch((e) => {
@@ -57,3 +64,4 @@ export default {
             });
     },
 };
+export default defaultApiBackend;

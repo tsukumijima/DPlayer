@@ -1,55 +1,32 @@
 import DPlayer from './player';
 import Events from './events';
 import utils from './utils';
+import DPlayerType from '../types/DPlayer';
 
 interface DanmakuOptions {
     player: DPlayer,
     container: HTMLElement,
     opacity: number,
     callback: () => void,
-    error: (arg0: any) => void,
-    apiBackend: any,
+    error: (msg: string) => void,
+    apiBackend: DPlayerType.APIBackend,
     borderColor: string,
     fontSize: number,
     time: () => number,
     unlimited: number,
     speedRate: number,
-    api: {
-        id: string,
-        address: string,
-        token: string,
-        maximum: number,
-        addition: string[],
-        user: string,
-    },
+    api: DanmakuOptionsAPI,
     events: Events,
     tran: (msg: string) => string,
 }
 
-interface DanmakuDrawOption {
-    text: string;
-    color: string | number;
-    type: 'top' | 'right' | 'bottom';
-    size: 'big' | 'medium' | 'small';
-    border: boolean;
-}
-
-interface DanmakuSendOption {
-    text: string;
-    color: string | number;
-    type: 'top' | 'right' | 'bottom';
-    size: 'big' | 'medium' | 'small';
-}
-
-interface Dan {
-    token: string,
-    id: string,
-    author: string,
-    time: number,
-    text: string;
-    color: string | number;
-    type: 'top' | 'right' | 'bottom';
-    size: 'big' | 'medium' | 'small';
+interface DanmakuOptionsAPI {
+    id?: string,
+    address?: string,
+    token?: string,
+    maximum?: number,
+    addition?: string[],
+    user?: string,
 }
 
 class Danmaku {
@@ -63,7 +40,7 @@ class Danmaku {
     };
     danIndex: number;
     danFontSize: number;
-    dan: Dan[];
+    dan: DPlayerType.Dan[];
     _opacity: number;
     events: Events;
     unlimited: boolean;
@@ -88,8 +65,7 @@ class Danmaku {
         this._opacity = this.options.opacity;
         this.events = this.options.events;
         this.unlimited = this.options.unlimited === 1;
-        // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
-        this._measure('');
+        this._measure('', 0);
 
         this.load();
     }
@@ -105,8 +81,8 @@ class Danmaku {
         endpoints.push(apiurl);
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
-        this._readAllEndpoints(endpoints, (results: any) => {
-            this.dan = [...results].sort((a, b) => a.time - b.time);
+        this._readAllEndpoints(endpoints, (results) => {
+            this.dan = ([] as DPlayerType.Dan[]).concat(...results).sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
             });
@@ -117,7 +93,7 @@ class Danmaku {
         });
     }
 
-    reload(newAPI: any) {
+    reload(newAPI: DanmakuOptionsAPI) {
         this.options.api = newAPI;
         this.dan = [];
         this.clear();
@@ -127,14 +103,14 @@ class Danmaku {
     /**
      * Asynchronously read danmaku from all API endpoints
      */
-    _readAllEndpoints(endpoints: any, callback: any) {
-        const results: any = [];
+    _readAllEndpoints(endpoints: string[], callback: (results: DPlayerType.Dan[][]) => void): void {
+        const results: DPlayerType.Dan[][] = [];
         let readCount = 0;
 
         for (let i = 0; i < endpoints.length; ++i) {
             this.options.apiBackend.read({
                 url: endpoints[i],
-                success: (data: any) => {
+                success: (data) => {
                     results[i] = data;
 
                     ++readCount;
@@ -142,7 +118,7 @@ class Danmaku {
                         callback(results);
                     }
                 },
-                error: (message: any) => {
+                error: (message) => {
                     this.options.error(message || this.options.tran('Danmaku load failed'));
                     results[i] = [];
 
@@ -155,8 +131,8 @@ class Danmaku {
         }
     }
 
-    send(dan: DanmakuSendOption, callback: () => void, isCallbackOnError = false): void {
-        const danmakuData = {
+    send(dan: DPlayerType.DanmakuItem, callback: () => void, isCallbackOnError = false): void {
+        const danmakuData: DPlayerType.Dan = {
             token: this.options.api.token,
             id: this.options.api.id,
             author: this.options.api.user,
@@ -184,7 +160,7 @@ class Danmaku {
                 this.events && this.events.trigger('danmaku_send', danmakuData);
                 callback();
             },
-            error: (message: any) => {
+            error: (message) => {
                 this.options.error(message || this.options.tran('Danmaku send failed'));
                 if (isCallbackOnError === true) {
                     callback();
@@ -209,7 +185,7 @@ class Danmaku {
         });
     }
 
-    opacity(percentage: number | undefined = undefined): number {
+    opacity(percentage?: number): number {
         if (percentage !== undefined) {
             this.container.style.setProperty('--dplayer-danmaku-opacity', `${percentage}`);
             this._opacity = percentage;
@@ -228,7 +204,7 @@ class Danmaku {
      * type - danmaku type, `right` `top` `bottom`, default: `right`
      * size - danmaku size, `medium` `big` `small`, default: `medium`
      */
-    draw(dan: DanmakuDrawOption | DanmakuDrawOption[] | Dan[]) {
+    draw(dan: DPlayerType.DanmakuItem | DPlayerType.DanmakuItem[] | DPlayerType.Dan[]): DocumentFragment | null {
         if (this.showing) {
 
             // if the dan variable is an object, create and assign an array of only one object
@@ -236,7 +212,7 @@ class Danmaku {
                 // @ts-ignore
                 dan = [dan];
             }
-            dan = dan as DanmakuDrawOption[] | Dan[];
+            dan = dan as DPlayerType.DanmakuItem[] | DPlayerType.Dan[];
 
             // adjust the font size according to the screen size
             const ratioRate = 1.25; // magic!
@@ -247,7 +223,7 @@ class Danmaku {
 
             const danWidth = this.container.offsetWidth;
             const danHeight = this.container.offsetHeight;
-            // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
+            // @ts-ignore
             const itemY = parseInt(danHeight / itemHeight);
 
             const danItemRight = (danmakuItem: HTMLElement) => {
@@ -259,7 +235,7 @@ class Danmaku {
 
             const danSpeed = (width: number) => (danWidth + width) / 5;
 
-            const getTunnel = (danmakuItem: HTMLElement, type: 'top' | 'right' | 'bottom', width: number) => {
+            const getTunnel = (danmakuItem: HTMLElement, type: DPlayerType.DanmakuType, width: number) => {
                 const tmp = danWidth / danSpeed(width);
 
                 for (let i = 0; this.unlimited || i < itemY; i++) {
@@ -358,7 +334,6 @@ class Danmaku {
                     danmakuItem.classList.add(`dplayer-danmaku-size-${dan[i].size}`); // set danmaku size (CSS)
 
                     // set danmaku color
-                    // @ts-ignore
                     danmakuItem.style.color = dan[i].color;
 
                     // set danmaku text
@@ -421,6 +396,8 @@ class Danmaku {
             this.container.appendChild(docFragment);
             return docFragment;
         }
+
+        return null;
     }
 
     play(): void {
@@ -475,7 +452,7 @@ class Danmaku {
 
     resize(): void {
         const danWidth = this.container.offsetWidth;
-        const items = this.container.getElementsByClassName('dplayer-danmaku-item') as HTMLCollectionOf<HTMLElement>;
+        const items = this.container.querySelectorAll<HTMLElement>('.dplayer-danmaku-item');
         for (let i = 0; i < items.length; i++) {
             items[i].style.transform = `translateX(-${danWidth}px)`;
         }
@@ -513,8 +490,8 @@ class Danmaku {
         this.options.speedRate = rate;
     }
 
-    _danAnimation(position: 'top' | 'right' | 'bottom'): string {
-        const rate = this.options.speedRate || 1;
+    _danAnimation(position: DPlayerType.DanmakuType): string {
+        const rate = this.options.speedRate;
         const isFullScreen =
             this.player.fullScreen.isFullScreen('browser') ||
             this.player.fullScreen.isFullScreen('web');

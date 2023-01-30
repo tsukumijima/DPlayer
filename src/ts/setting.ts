@@ -1,5 +1,10 @@
+import Mpegts from 'mpegts.js';
+
 import DPlayer from './player';
 import utils from './utils';
+import DPlayerType from '../types/DPlayer';
+
+declare let window: DPlayerType.WindowExtend;
 
 class Setting {
     player: DPlayer;
@@ -63,15 +68,16 @@ class Setting {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
         });
         for (let i = 0; i < this.player.template.audioItem.length; i++) {
-            this.player.template.audioItem[i].addEventListener('click', (event: any) => {
+            this.player.template.audioItem[i].addEventListener('click', (event) => {
                 if (this.player.plugins.mpegts || this.player.plugins.liveLLHLSForKonomiTV) {
+                    if (!(event.target instanceof HTMLElement)) return;
                     if (event.target.dataset.audio === 'primary') {
                         // switch primary audio
                         this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Primary audio');
-                        if (this.player.plugins.mpegts) {
-                            this.player.plugins.mpegts.switchPrimaryAudio();
+                        if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
+                            (this.player.plugins.mpegts as Mpegts.MSEPlayer).switchPrimaryAudio();
                         } else if (this.player.plugins.liveLLHLSForKonomiTV) {
                             this.player.plugins.liveLLHLSForKonomiTV.switchPrimaryAudio();
                         }
@@ -80,8 +86,8 @@ class Setting {
                         this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
-                        if (this.player.plugins.mpegts) {
-                            this.player.plugins.mpegts.switchSecondaryAudio();
+                        if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
+                            (this.player.plugins.mpegts as Mpegts.MSEPlayer).switchSecondaryAudio();
                         } else if (this.player.plugins.liveLLHLSForKonomiTV) {
                             this.player.plugins.liveLLHLSForKonomiTV.switchSecondaryAudio();
                         }

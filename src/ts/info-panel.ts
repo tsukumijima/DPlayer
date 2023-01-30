@@ -43,15 +43,15 @@ class InfoPanel {
     }
 
     update(): void {
-        // @ts-expect-error TS(2304): Cannot find name 'DPLAYER_VERSION'.
+        // @ts-ignore
         this.template.infoVersion.innerHTML = `v${DPLAYER_VERSION} ${GIT_HASH}`;
         this.template.infoType.innerHTML = this.player.type;
-        this.template.infoUrl.innerHTML = this.player.options.video.url;
+        this.template.infoUrl.innerHTML = this.player.options.video.url ?? 'N/A';
         this.template.infoResolution.innerHTML = `${this.player.video.videoWidth} x ${this.player.video.videoHeight}`;
         this.template.infoDuration.innerHTML = `${this.player.video.duration}`;
         if (this.player.options.danmaku && this.player.danmaku !== null) {
-            this.template.infoDanmakuId.innerHTML = this.player.options.danmaku.id;
-            this.template.infoDanmakuApi.innerHTML = this.player.options.danmaku.api;
+            this.template.infoDanmakuId.innerHTML = this.player.options.danmaku.id ?? 'N/A';
+            this.template.infoDanmakuApi.innerHTML = this.player.options.danmaku.api ?? 'N/A';
             this.template.infoDanmakuAmount.innerHTML = `${this.player.danmaku.dan.length}`;
         }
     }
