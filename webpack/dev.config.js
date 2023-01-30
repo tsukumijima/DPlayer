@@ -78,6 +78,15 @@ module.exports = {
             {
                 test: /\.js$/,
                 use: [
+                    // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+                    {
+                        loader: 'source-map-loader',
+                    },
+                ],
+            },
+            {
+                test: /\.js$/,
+                use: [
                     // compile JavaScript in Babel
                     {
                         loader: 'babel-loader',

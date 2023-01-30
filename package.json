@@ -72,6 +72,7 @@
         "postcss-loader": "^7.0.2",
         "sass": "1.57.0",
         "sass-loader": "^13.2.0",
+        "source-map-loader": "^4.0.1",
         "style-loader": "^3.3.1",
         "svg-inline-loader": "0.8.2",
         "ts-loader": "^9.4.2",
@@ -112,10 +113,25 @@
         ],
         "rules": {
             "@typescript-eslint/ban-ts-comment": 0,
-            "comma-dangle": ["error", "always-multiline"],
-            "semi": ["error", "always"],
-            "semi-spacing": ["error", {"after": true, "before": false}],
-            "semi-style": ["error", "last"],
+            "comma-dangle": [
+                "error",
+                "always-multiline"
+            ],
+            "semi": [
+                "error",
+                "always"
+            ],
+            "semi-spacing": [
+                "error",
+                {
+                    "after": true,
+                    "before": false
+                }
+            ],
+            "semi-style": [
+                "error",
+                "last"
+            ],
             "no-extra-semi": "error",
             "no-unexpected-multiline": "error",
             "no-unreachable": "error"
