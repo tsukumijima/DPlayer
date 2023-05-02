@@ -8,3 +8,4 @@ wxw
 .vscode
 docs/.vuepress/dist
 dist/src/*
+.node-version
