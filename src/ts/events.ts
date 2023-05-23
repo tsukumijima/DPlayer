@@ -1,7 +1,7 @@
 import * as DPlayerType from './types';
 
 class Events {
-    events: { [key: string]: ((info: any) => void)[]};
+    events: {[key: string]: ((info: Event | any) => void)[]};
     videoEvents: DPlayerType.VideoEvents[];
     playerEvents: DPlayerType.PlayerEvents[];
 
@@ -62,7 +62,7 @@ class Events {
         ];
     }
 
-    on(name: DPlayerType.Events, callback: (info?: any) => void): void {
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
         if (this.type(name) && typeof callback === 'function') {
             if (!this.events[name]) {
                 this.events[name] = [];
@@ -71,7 +71,7 @@ class Events {
         }
     }
 
-    trigger(name: DPlayerType.Events, info?: any): void {
+    trigger(name: DPlayerType.Events, info?: Event | any): void {
         if (this.events[name] && this.events[name].length) {
             for (let i = 0; i < this.events[name].length; i++) {
                 this.events[name][i](info);

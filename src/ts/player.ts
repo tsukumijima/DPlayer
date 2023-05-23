@@ -373,7 +373,7 @@ class DPlayer {
     /**
      * attach event
      */
-    on(name: DPlayerType.Events, callback: (info?: any) => void): void {
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
         this.events.on(name, callback);
     }
 
@@ -939,8 +939,8 @@ class DPlayer {
         });
 
         for (let i = 0; i < this.events.videoEvents.length; i++) {
-            video.addEventListener(this.events.videoEvents[i], () => {
-                this.events.trigger(this.events.videoEvents[i]);
+            video.addEventListener(this.events.videoEvents[i], (event) => {
+                this.events.trigger(this.events.videoEvents[i], event);
             });
         }
 
