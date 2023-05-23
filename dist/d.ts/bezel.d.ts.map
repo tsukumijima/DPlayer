@@ -1,0 +1,1 @@
+{"version":3,"file":"bezel.d.ts","sourceRoot":"","sources":["../../src/ts/bezel.ts"],"names":[],"mappings":"AAAA,cAAM,KAAK;IACP,SAAS,EAAE,WAAW,CAAC;gBAEX,SAAS,EAAE,WAAW;IAQlC,MAAM,CAAC,IAAI,EAAE,MAAM,GAAG,IAAI;CAI7B;AAED,eAAe,KAAK,CAAC"}
