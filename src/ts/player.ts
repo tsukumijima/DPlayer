@@ -1,5 +1,3 @@
-// @ts-ignore
-import Promise from 'promise-polyfill';
 import axios from 'axios';
 import * as aribb24js from 'aribb24.js';
 

@@ -2,9 +2,9 @@ import DPlayer from './player';
 import utils from './utils';
 
 class User {
-    storageName: { [key: string]: string };
-    default: { [key: string]: number};
-    data: { [key: string]: number};
+    storageName: {[key: string]: string};
+    default: {[key: string]: number};
+    data: {[key: string]: number};
 
     constructor(player: DPlayer) {
         this.storageName = {

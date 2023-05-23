@@ -34,9 +34,9 @@ class Danmaku {
     player: DPlayer;
     container: HTMLElement;
     danTunnel: {
-        right: { [key: string]: HTMLElement[] },
-        top: { [key: string]: HTMLElement[] },
-        bottom: { [key: string]: HTMLElement[] },
+        right: {[key: string]: HTMLElement[]},
+        top: {[key: string]: HTMLElement[]},
+        bottom: {[key: string]: HTMLElement[]},
     };
     danIndex: number;
     danFontSize: number;

@@ -1,7 +1,7 @@
 import Template from './template';
 
 class Bar {
-    elements: { [key: string]: HTMLElement; };
+    elements: {[key: string]: HTMLElement};
 
     constructor(template: Template) {
         this.elements = {};

@@ -260,7 +260,7 @@ export interface Video {
     /**
      * @description custom video export type implementation
      */
-    customType?: { [key: string]: (video: HTMLVideoElement, player: DPlayer) => void };
+    customType?: {[key: string]: (video: HTMLVideoElement, player: DPlayer) => void};
 }
 
 export interface VideoQuality {
@@ -431,7 +431,7 @@ export interface VideoInternal {
     pic?: string;
     thumbnails?: string;
     type: VideoType | string;
-    customType?: { [key: string]: (video: HTMLVideoElement, player: DPlayer) => void };
+    customType?: {[key: string]: (video: HTMLVideoElement, player: DPlayer) => void};
 }
 
 export interface VideoQualityInternal {

@@ -41,8 +41,7 @@
     "dependencies": {
         "aribb24.js": "1.11.0",
         "axios": "^1.4.0",
-        "balloon-css": "^1.2.0",
-        "promise-polyfill": "^8.3.0"
+        "balloon-css": "^1.2.0"
     },
     "devDependencies": {
         "@babel/core": "^7.21.8",
