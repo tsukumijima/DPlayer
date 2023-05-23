@@ -1039,9 +1039,14 @@ class DPlayer {
         });
     }
 
-    notice(text: string, time = 2000, opacity = 0.8): void {
+    notice(text: string, time = 2000, opacity = 0.8, color?: string): void {
         this.template.notice.innerHTML = text;
         this.template.notice.style.opacity = `${opacity}`;
+        if (color && color !== '') {
+            this.template.notice.style.color = color;
+        } else {
+            this.template.notice.style.color = '';
+        }
         if (this.noticeTime) {
             window.clearTimeout(this.noticeTime);
         }
