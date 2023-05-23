@@ -1,6 +1,6 @@
 import DPlayer from './player';
 import utils from './utils';
-import * as DPlayerType from '../types/DPlayer';
+import * as DPlayerType from './types';
 
 declare let window: DPlayerType.WindowExtend;
 

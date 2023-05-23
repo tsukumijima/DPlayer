@@ -1,5 +1,5 @@
 import Events from './events';
-import * as DPlayerType from '../types/DPlayer';
+import * as DPlayerType from './types';
 
 class Subtitle {
     container: HTMLElement;

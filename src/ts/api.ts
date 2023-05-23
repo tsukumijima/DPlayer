@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as DPlayerType from '../types/DPlayer';
+import * as DPlayerType from './types';
 
 const defaultApiBackend: DPlayerType.APIBackend = {
     send: (options) => {

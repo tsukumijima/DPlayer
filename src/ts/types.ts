@@ -5,7 +5,7 @@ import dashjs from 'dashjs';
 import WebTorrent from 'webtorrent';
 import * as aribb24js from 'aribb24.js';
 
-import DPlayer from '../ts/player';
+import DPlayer from './player';
 
 export type Lang = 'en' | 'zh-cn' | 'zh-tw' | 'ja' | 'ja-jp';
 export type Preload = 'none' | 'metadata' | 'auto';

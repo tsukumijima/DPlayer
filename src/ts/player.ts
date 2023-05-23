@@ -23,7 +23,7 @@ import HotKey from './hotkey';
 import ContextMenu from './contextmenu';
 import InfoPanel from './info-panel';
 import tplVideo from '../template/video.art';
-import * as DPlayerType from '../types/DPlayer';
+import * as DPlayerType from './types';
 
 let index = 0;
 const instances: DPlayer[] = [];

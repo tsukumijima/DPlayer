@@ -1,5 +1,5 @@
 import DPlayer from './player';
-import * as DPlayerType from '../types/DPlayer';
+import * as DPlayerType from './types';
 
 class Comment {
     player: DPlayer;

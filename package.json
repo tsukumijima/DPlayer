@@ -114,25 +114,10 @@
         ],
         "rules": {
             "@typescript-eslint/ban-ts-comment": 0,
-            "comma-dangle": [
-                "error",
-                "always-multiline"
-            ],
-            "semi": [
-                "error",
-                "always"
-            ],
-            "semi-spacing": [
-                "error",
-                {
-                    "after": true,
-                    "before": false
-                }
-            ],
-            "semi-style": [
-                "error",
-                "last"
-            ],
+            "comma-dangle": ["error", "always-multiline"],
+            "semi": ["error", "always"],
+            "semi-spacing": ["error", {"after": true, "before": false}],
+            "semi-style": ["error", "last"],
             "no-extra-semi": "error",
             "no-unexpected-multiline": "error",
             "no-unreachable": "error"
