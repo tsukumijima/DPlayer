@@ -217,7 +217,9 @@ class DPlayer {
             this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
         }
 
-        this.video.currentTime = time;
+        if (isFinite(time)) {  // ignore NaN, Infinity, -Infinity
+            this.video.currentTime = time;
+        }
 
         if (this.danmaku) {
             this.danmaku.seek();
@@ -445,8 +447,6 @@ class DPlayer {
                         if (window.Hls.isSupported() && !isiPadSafari) {
                             // If it has already been initialized, destroy it once
                             if (this.plugins.hls) {
-                                this.plugins.hls.destroy();
-                                delete this.plugins.hls;
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -457,6 +457,8 @@ class DPlayer {
                                     this.plugins.aribb24Superimpose.dispose();
                                     delete this.plugins.aribb24Superimpose;
                                 }
+                                this.plugins.hls.destroy();
+                                delete this.plugins.hls;
                             }
 
                             // Initialize hls.js
@@ -468,8 +470,6 @@ class DPlayer {
 
                             // Processing when destroy
                             this.events.on('destroy', () => {
-                                hls.destroy();
-                                delete this.plugins.hls;
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -480,6 +480,8 @@ class DPlayer {
                                     this.plugins.aribb24Superimpose.dispose();
                                     delete this.plugins.aribb24Superimpose;
                                 }
+                                hls.destroy();
+                                delete this.plugins.hls;
                             });
 
                             // Initialize aribb24.js
@@ -577,8 +579,6 @@ class DPlayer {
 
                     // If it has already been initialized, destroy it once
                     if (this.plugins.liveLLHLSForKonomiTV) {
-                        axios.delete(`${this.plugins.liveLLHLSForKonomiTV.baseUrl}/${this.plugins.liveLLHLSForKonomiTV.clientId}`);
-                        delete this.plugins.liveLLHLSForKonomiTV;
                         if (this.plugins.aribb24Caption) {
                             this.plugins.aribb24Caption.dispose();
                             delete this.plugins.aribb24Caption;
@@ -587,6 +587,8 @@ class DPlayer {
                             this.plugins.aribb24Superimpose.dispose();
                             delete this.plugins.aribb24Superimpose;
                         }
+                        axios.delete(`${this.plugins.liveLLHLSForKonomiTV.baseUrl}/${this.plugins.liveLLHLSForKonomiTV.clientId}`);
+                        delete this.plugins.liveLLHLSForKonomiTV;
                     }
 
                     (async () => {
@@ -663,8 +665,6 @@ class DPlayer {
 
                         // Processing when destroy
                         this.events.on('destroy', () => {
-                            axios.delete(`${liveLLHLSForKonomiTV.baseUrl}/${liveLLHLSForKonomiTV.clientId}`);
-                            delete this.plugins.liveLLHLSForKonomiTV;
                             // destroy aribb24 caption
                             if (this.plugins.aribb24Caption) {
                                 this.plugins.aribb24Caption.dispose();
@@ -675,6 +675,8 @@ class DPlayer {
                                 this.plugins.aribb24Superimpose.dispose();
                                 delete this.plugins.aribb24Superimpose;
                             }
+                            axios.delete(`${liveLLHLSForKonomiTV.baseUrl}/${liveLLHLSForKonomiTV.clientId}`);
+                            delete this.plugins.liveLLHLSForKonomiTV;
                         });
 
                     })();
@@ -685,12 +687,7 @@ class DPlayer {
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
                             // If it has already been initialized, destroy it once
-                            const source = video.src;
                             if (this.plugins.mpegts) {
-                                this.plugins.mpegts.unload();
-                                this.plugins.mpegts.detachMediaElement();
-                                this.plugins.mpegts.destroy();
-                                delete this.plugins.mpegts;
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -701,12 +698,19 @@ class DPlayer {
                                     this.plugins.aribb24Superimpose.dispose();
                                     delete this.plugins.aribb24Superimpose;
                                 }
+                                this.plugins.mpegts.unload();
+                                this.plugins.mpegts.detachMediaElement();
+                                this.plugins.mpegts.destroy();
+                                delete this.plugins.mpegts;
                             }
 
                             // Initialize mpegts.js
                             if (this.options.pluginOptions.mpegts === undefined) {
                                 this.options.pluginOptions.mpegts = {};
                             }
+                            const source = video.src;
+                            video.src = '';
+                            video.preload = 'metadata';
                             const mpegtsPlayer = window.mpegts.createPlayer(
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
@@ -721,10 +725,6 @@ class DPlayer {
 
                             // Processing when destroy
                             this.events.on('destroy', () => {
-                                mpegtsPlayer.unload();
-                                mpegtsPlayer.detachMediaElement();
-                                mpegtsPlayer.destroy();
-                                delete this.plugins.mpegts;
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -735,6 +735,10 @@ class DPlayer {
                                     this.plugins.aribb24Superimpose.dispose();
                                     delete this.plugins.aribb24Superimpose;
                                 }
+                                mpegtsPlayer.unload();
+                                mpegtsPlayer.detachMediaElement();
+                                mpegtsPlayer.destroy();
+                                delete this.plugins.mpegts;
                             });
 
                             // Initialize aribb24.js
