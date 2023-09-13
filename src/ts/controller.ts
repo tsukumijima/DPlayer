@@ -152,7 +152,7 @@ class Controller {
             percentage = Math.min(percentage, 1);
             this.player.bar.set('played', percentage, 'width');
             const duration = utils.getVideoDuration(this.player.video, this.player.template);
-            this.player.template.ptime.innerHTML = utils.secondToTime(percentage * duration);
+            this.player.template.ptime.textContent = utils.secondToTime(percentage * duration);
             this.player.container.classList.add('dplayer-seeking');
             if (!this.player.video.paused) {
                 this.player.video.pause();

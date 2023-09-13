@@ -226,7 +226,7 @@ class DPlayer {
         }
 
         this.bar.set('played', time / duration, 'width');
-        this.template.ptime.innerHTML = utils.secondToTime(time);
+        this.template.ptime.textContent = utils.secondToTime(time);
     }
 
     /**
@@ -246,7 +246,7 @@ class DPlayer {
                 this.danmaku.seek();
             }
 
-            this.template.ptime.innerHTML = utils.secondToTime(time);
+            this.template.ptime.textContent = utils.secondToTime(time);
             if (!quiet) {
                 this.notice(this.tran('Synchronized'));
             }
@@ -392,7 +392,7 @@ class DPlayer {
             this.template.danmakuLoading.style.display = 'block';
             this.bar.set('played', 0, 'width');
             this.bar.set('loaded', 0, 'width');
-            this.template.ptime.innerHTML = '00:00';
+            this.template.ptime.textContent = '00:00';
             this.template.danmaku.innerHTML = '';
             if (this.danmaku) {
                 this.danmaku.reload({
@@ -872,7 +872,7 @@ class DPlayer {
         this.on('durationchange', () => {
             // compatibility: Android browsers will output 1 or Infinity at first
             if (video.duration !== 1 && video.duration !== Infinity) {
-                this.template.dtime.innerHTML = utils.secondToTime(video.duration);
+                this.template.dtime.textContent = utils.secondToTime(video.duration);
             }
         });
 
@@ -935,8 +935,8 @@ class DPlayer {
             const duration = utils.getVideoDuration(this.video, this.template);
             this.bar.set('played', this.video.currentTime / duration, 'width');
             const currentTime = utils.secondToTime(this.video.currentTime);
-            if (this.template.ptime.innerHTML !== currentTime) {
-                this.template.ptime.innerHTML = currentTime;
+            if (this.template.ptime.textContent !== currentTime) {
+                this.template.ptime.textContent = currentTime;
             }
         });
 
@@ -1042,7 +1042,7 @@ class DPlayer {
     }
 
     notice(text: string, time = 2000, opacity = 0.8, color?: string): void {
-        this.template.notice.innerHTML = text;
+        this.template.notice.textContent = text;
         this.template.notice.style.opacity = `${opacity}`;
         if (color && color !== '') {
             this.template.notice.style.color = color;

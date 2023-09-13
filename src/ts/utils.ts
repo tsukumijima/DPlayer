@@ -33,10 +33,10 @@ const utils = {
         let duration = video.duration;
         if (duration === Infinity) {
             if (video.seekable.length > 0) {
-                template.dtime.innerHTML = utils.secondToTime(video.seekable.end(0));
+                template.dtime.textContent = utils.secondToTime(video.seekable.end(0));
                 duration = video.seekable.end(0);
             } else if (video.buffered.length > 0) {
-                template.dtime.innerHTML = utils.secondToTime(video.buffered.end(0));
+                template.dtime.textContent = utils.secondToTime(video.buffered.end(0));
                 duration = video.buffered.end(0);
             }
         }
