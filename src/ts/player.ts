@@ -371,7 +371,7 @@ class DPlayer {
     }
 
     /**
-     * attach event
+     * Attach event
      */
     on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
         this.events.on(name, callback);
@@ -445,7 +445,7 @@ class DPlayer {
                             (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
                         );
                         if (window.Hls.isSupported() && !isiPadSafari) {
-                            // If it has already been initialized, destroy it once
+                            // if it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
@@ -461,14 +461,14 @@ class DPlayer {
                                 delete this.plugins.hls;
                             }
 
-                            // Initialize hls.js
+                            // initialize hls.js
                             const hlsOptions = this.options.pluginOptions.hls;
                             const hls = new window.Hls(hlsOptions);
                             this.plugins.hls = hls;
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
 
-                            // Processing when destroy
+                            // processing when destroy
                             this.events.on('destroy', () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
@@ -484,31 +484,31 @@ class DPlayer {
                                 delete this.plugins.hls;
                             });
 
-                            // Initialize aribb24.js
+                            // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                // Set options
+                                // set options
                                 if (this.options.pluginOptions.aribb24 === undefined) {
                                     this.options.pluginOptions.aribb24 = {};
                                 }
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for hls.js
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
-                                // Initialize aribb24 caption
+                                // initialize aribb24 caption
                                 const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x80},
                                 );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
-                                // Initialize aribb24 superimpose
+                                // initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x81},
                                 );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
-                                // Push caption data into CanvasRenderer
+                                // push caption data into CanvasRenderer
                                 hls.on(window.Hls.Events.FRAG_PARSING_METADATA, (event, data) => {
                                     for (const sample of data.samples) {
                                         aribb24Caption.pushID3v2Data(sample.pts, sample.data);
@@ -517,8 +517,8 @@ class DPlayer {
                                 });
                             }
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
-                            // Normal playback
-                            // If it has already been initialized, destroy it once
+                            // normal playback
+                            // if it has already been initialized, destroy it once
                             if (this.plugins.aribb24Caption) {
                                 this.plugins.aribb24Caption.dispose();
                                 delete this.plugins.aribb24Caption;
@@ -528,7 +528,7 @@ class DPlayer {
                                 delete this.plugins.aribb24Superimpose;
                             }
 
-                            // Processing when destroy
+                            // processing when destroy
                             this.events.on('destroy', () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
@@ -542,24 +542,24 @@ class DPlayer {
                                 }
                             });
 
-                            // Initialize aribb24.js
+                            // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                // Set options
+                                // set options
                                 if (this.options.pluginOptions.aribb24 === undefined) {
                                     this.options.pluginOptions.aribb24 = {};
                                 }
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
-                                // Initialize aribb24 caption
+                                // initialize aribb24 caption
                                 const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x80},
                                 );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
-                                // Initialize aribb24 superimpose
+                                // initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x81},
                                 );
@@ -577,7 +577,7 @@ class DPlayer {
                 // https://github.com/tsukumijima/KonomiTV
                 case 'live-llhls-for-KonomiTV':
 
-                    // If it has already been initialized, destroy it once
+                    // if it has already been initialized, destroy it once
                     if (this.plugins.liveLLHLSForKonomiTV) {
                         if (this.plugins.aribb24Caption) {
                             this.plugins.aribb24Caption.dispose();
@@ -593,7 +593,7 @@ class DPlayer {
 
                     (async () => {
 
-                        // Initialize LL-HLS streaming session for KonomiTV
+                        // initialize LL-HLS streaming session for KonomiTV
 
                         // get client id (API: /api/streams/live/:channel_id/:quality/ll-hls)
                         const baseUrl = this.quality !== null ? this.quality.url : this.options.video.url!;
@@ -613,7 +613,7 @@ class DPlayer {
                             video.src = sourceUrl;
                             video.load();
 
-                            // Initialize aribb24.js
+                            // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.plugins.aribb24Caption) {
                                 this.plugins.aribb24Caption.dispose();
@@ -622,21 +622,21 @@ class DPlayer {
                                 this.plugins.aribb24Superimpose.dispose();
                             }
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                // Set options
+                                // set options
                                 if (this.options.pluginOptions.aribb24 === undefined) {
                                     this.options.pluginOptions.aribb24 = {};
                                 }
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
-                                // Initialize aribb24 caption
+                                // initialize aribb24 caption
                                 const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x80},
                                 );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
-                                // Initialize aribb24 superimpose
+                                // initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x81},
                                 );
@@ -663,7 +663,7 @@ class DPlayer {
                         // replace video source
                         switchSource(false);
 
-                        // Processing when destroy
+                        // processing when destroy
                         this.events.on('destroy', () => {
                             // destroy aribb24 caption
                             if (this.plugins.aribb24Caption) {
@@ -686,7 +686,7 @@ class DPlayer {
                 case 'mpegts':
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
-                            // If it has already been initialized, destroy it once
+                            // if it has already been initialized, destroy it once
                             if (this.plugins.mpegts) {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
@@ -704,13 +704,12 @@ class DPlayer {
                                 delete this.plugins.mpegts;
                             }
 
-                            // Initialize mpegts.js
+                            // initialize mpegts.js
                             if (this.options.pluginOptions.mpegts === undefined) {
                                 this.options.pluginOptions.mpegts = {};
                             }
                             const source = video.src;
-                            video.src = '';
-                            video.preload = 'metadata';
+                            video.removeAttribute('src');  // important for mpegts.js
                             const mpegtsPlayer = window.mpegts.createPlayer(
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
@@ -723,7 +722,7 @@ class DPlayer {
                             mpegtsPlayer.attachMediaElement(video);
                             mpegtsPlayer.load();
 
-                            // Processing when destroy
+                            // processing when destroy
                             this.events.on('destroy', () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
@@ -741,31 +740,31 @@ class DPlayer {
                                 delete this.plugins.mpegts;
                             });
 
-                            // Initialize aribb24.js
+                            // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
                             if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                // Set options
+                                // set options
                                 if (this.options.pluginOptions.aribb24 === undefined) {
                                     this.options.pluginOptions.aribb24 = {};
                                 }
                                 this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false; // for mpegts.js
                                 const aribb24Options = this.options.pluginOptions.aribb24;
 
-                                // Initialize aribb24 caption
+                                // initialize aribb24 caption
                                 const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x80},
                                 );
                                 aribb24Caption.attachMedia(video);
                                 aribb24Caption.show();
 
-                                // Initialize aribb24 superimpose
+                                // initialize aribb24 superimpose
                                 const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
                                     {...aribb24Options, data_identifier: 0x81},
                                 );
                                 aribb24Superimpose.attachMedia(video);
                                 aribb24Superimpose.show();
 
-                                // Push caption data into CanvasRenderer
+                                // push caption data into CanvasRenderer
                                 mpegtsPlayer.on(window.mpegts.Events.TIMED_ID3_METADATA_ARRIVED, (data) => {
                                     aribb24Caption.pushID3v2Data(data.pts / 1000, data.data);
                                     aribb24Superimpose.pushID3v2Data(data.pts / 1000, data.data);
