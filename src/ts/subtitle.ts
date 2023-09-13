@@ -27,7 +27,10 @@ class Subtitle {
             const track = this.video.textTracks[0];
 
             track.oncuechange = () => {
-                const cue = track.activeCues![0] as VTTCue;
+                if (!track.activeCues) {
+                    return;
+                }
+                const cue = track.activeCues[0] as VTTCue;
                 this.container.innerHTML = '';
                 if (cue) {
                     const template = document.createElement('div');

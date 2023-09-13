@@ -120,7 +120,10 @@ class Controller {
                         const p = document.createElement('div');
                         p.classList.add('dplayer-highlight');
                         p.style.left = (this.player.options.highlight[i].time / this.player.video.duration) * 100 + '%';
-                        p.innerHTML = '<span class="dplayer-highlight-text">' + this.player.options.highlight[i].text + '</span>';
+                        const span = document.createElement('span');
+                        span.classList.add('dplayer-highlight-text');
+                        span.textContent = this.player.options.highlight[i].text;
+                        p.appendChild(span);
                         this.player.template.playedBarWrap.insertBefore(p, this.player.template.playedBarTime);
                     }
                 }
@@ -194,7 +197,7 @@ class Controller {
                 }
                 this.thumbnails && this.thumbnails.move(tx);
                 this.player.template.playedBarTime.style.left = `${tx - (time >= 3600 ? 25 : 20)}px`;
-                this.player.template.playedBarTime.innerText = utils.secondToTime(time);
+                this.player.template.playedBarTime.textContent = utils.secondToTime(time);
                 this.player.template.playedBarTime.classList.remove('hidden');
             }
         });
