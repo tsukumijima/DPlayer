@@ -986,6 +986,9 @@ class DPlayer {
         if (!this.options.live) {
             this.seek(this.prevVideoCurrentTime);
         }
+        if (!paused) {
+            this.video.play();
+        }
         if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
             this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
         } else {
