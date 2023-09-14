@@ -54,6 +54,7 @@ class DPlayer {
     options: DPlayerType.OptionsInternal;
     paused = false;
     plugins: DPlayerType.Plugins;
+    prevVideoCurrentTime = 0;
     prevVideo: HTMLVideoElement | null = null;
     quality: DPlayerType.VideoQualityInternal | null = null;
     qualityIndex: number | null = null;
@@ -271,7 +272,8 @@ class DPlayer {
         }
 
         if (!fromNative) {
-            const playedPromise = Promise.resolve(this.video.play());
+            const playFunc = (this.type === 'mpegts' && this.plugins.mpegts && this.plugins.mpegts.play.bind(this.plugins.mpegts)) || this.video.play.bind(this.video);
+            const playedPromise = Promise.resolve(playFunc());
             playedPromise
                 .catch(() => {
                     this.pause();
@@ -977,11 +979,12 @@ class DPlayer {
         });
         const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild as HTMLVideoElement;
         this.template.videoWrapAspect.insertBefore(videoEle, this.template.videoWrapAspect.getElementsByTagName('div')[0]);
+        this.prevVideoCurrentTime = this.video.currentTime;
         this.prevVideo = this.video;
         this.video = videoEle;
         this.initVideo(this.video, this.quality.type || this.options.video.type);
         if (!this.options.live) {
-            this.seek(this.prevVideo.currentTime);
+            this.seek(this.prevVideoCurrentTime);
         }
         if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
             this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
@@ -1002,8 +1005,8 @@ class DPlayer {
 
         this.on('canplay', () => {
             if (this.prevVideo !== null) {
-                if (!this.options.live && this.video.currentTime !== this.prevVideo.currentTime) {
-                    this.seek(this.prevVideo.currentTime);
+                if (!this.options.live && this.video.currentTime !== this.prevVideoCurrentTime) {
+                    this.seek(this.prevVideoCurrentTime);
                     return;
                 }
                 this.template.videoWrapAspect.removeChild(this.prevVideo);

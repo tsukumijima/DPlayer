@@ -39,6 +39,7 @@ declare class DPlayer {
     options: DPlayerType.OptionsInternal;
     paused: boolean;
     plugins: DPlayerType.Plugins;
+    prevVideoCurrentTime: number;
     prevVideo: HTMLVideoElement | null;
     quality: DPlayerType.VideoQualityInternal | null;
     qualityIndex: number | null;
@@ -80,7 +81,7 @@ declare class DPlayer {
      */
     toggle(): void;
     /**
-     * attach event
+     * Attach event
      */
     on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void;
     /**

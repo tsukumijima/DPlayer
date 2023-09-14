@@ -66,7 +66,7 @@
         "git-revision-webpack-plugin": "^5.0.0",
         "hls.js": "^1.4.12",
         "mini-css-extract-plugin": "2.7.6",
-        "mpegts.js": "github:tsukumijima/mpegts.js#a685d4c4747b2120a9121ec8befe830d7d2451d7",
+        "mpegts.js": "github:tsukumijima/mpegts.js#a4ff3ff4627f2555dfcb85efa41e45b701982c2c",
         "patch-package": "^7.0.2",
         "postcss": "^8.4.29",
         "postcss-loader": "^7.3.3",
