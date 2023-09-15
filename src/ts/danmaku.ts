@@ -338,6 +338,7 @@ class Danmaku {
                         const span = document.createElement('span');
                         span.style.border = `2px solid ${this.options.borderColor}`;
                         span.textContent = line;
+                        danmakuItem.appendChild(span);
                     } else {
                         danmakuItem.textContent = line;
                     }

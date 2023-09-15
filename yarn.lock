@@ -7646,9 +7646,9 @@ move-concurrently@^1.0.1:
     rimraf "^2.5.4"
     run-queue "^1.0.3"
 
-"mpegts.js@github:tsukumijima/mpegts.js#a4ff3ff4627f2555dfcb85efa41e45b701982c2c":
+"mpegts.js@github:tsukumijima/mpegts.js#0b23d670f4575619d5a58e9fd00b24b5e101876e":
   version "1.7.3"
-  resolved "https://codeload.github.com/tsukumijima/mpegts.js/tar.gz/a4ff3ff4627f2555dfcb85efa41e45b701982c2c"
+  resolved "https://codeload.github.com/tsukumijima/mpegts.js/tar.gz/0b23d670f4575619d5a58e9fd00b24b5e101876e"
   dependencies:
     es6-promise "^4.2.5"
     webworkify-webpack "^2.1.5"
