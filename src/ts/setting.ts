@@ -9,6 +9,7 @@ class Setting {
     loop: boolean;
     showDanmaku: boolean;
     unlimitDanmaku: boolean;
+    currentAudio: 'primary' | 'secondary' = 'primary';
 
     constructor(player: DPlayer) {
         this.player = player;
@@ -66,11 +67,14 @@ class Setting {
             this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
         });
         for (let i = 0; i < this.player.template.audioItem.length; i++) {
-            this.player.template.audioItem[i].addEventListener('click', (event) => {
+            this.player.template.audioItem[i].addEventListener('click', () => {
                 if (this.player.plugins.mpegts || this.player.plugins.liveLLHLSForKonomiTV) {
-                    if (!(event.target instanceof HTMLElement)) return;
-                    if (event.target.dataset.audio === 'primary') {
+                    if (this.player.template.audioItem[i].dataset.audio === this.currentAudio) {
+                        return;
+                    }
+                    if (this.player.template.audioItem[i].dataset.audio === 'primary') {
                         // switch primary audio
+                        this.currentAudio = 'primary';
                         this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Primary audio');
@@ -79,8 +83,9 @@ class Setting {
                         } else if (this.player.plugins.liveLLHLSForKonomiTV) {
                             this.player.plugins.liveLLHLSForKonomiTV.switchPrimaryAudio();
                         }
-                    } else if (event.target.dataset.audio === 'secondary') {
+                    } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
                         // switch secondary audio
+                        this.currentAudio = 'secondary';
                         this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
