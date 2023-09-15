@@ -710,13 +710,11 @@ class DPlayer {
                             if (this.options.pluginOptions.mpegts === undefined) {
                                 this.options.pluginOptions.mpegts = {};
                             }
-                            const source = video.src;
-                            video.removeAttribute('src');  // important for mpegts.js
                             const mpegtsPlayer = window.mpegts.createPlayer(
                                 Object.assign(this.options.pluginOptions.mpegts.mediaDataSource || {}, {
                                     type: 'mpegts',
                                     isLive: this.options.live,
-                                    url: source,
+                                    url: video.src,
                                 }),
                                 this.options.pluginOptions.mpegts.config,
                             );
