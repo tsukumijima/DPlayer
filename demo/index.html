@@ -11,11 +11,53 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tsukumijima/mpegts.js@master/dist/mpegts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pearplayer"></script>
     <script src="DPlayer.js"></script>
 </head>
 
 <body class="markdown-body">
+
+    <h2 id="for-konomitv">for KonomiTV</h2>
+    <div class="example">
+        <div id="dplayer0"></div>
+        <p>
+            <span>API Base URL</span>
+            <input type="text" id="api_base_url" style="width: 100%;"
+                onchange="localStorage.setItem('api_base_url', this.value); location.reload();">
+        </p>
+        <p>
+            <span>Display Channel ID</span>
+            <input type="text" id="display_channel_id" style="width: 100%;"
+                onchange="localStorage.setItem('display_channel_id', this.value); location.reload();">
+        </p>
+        <p>
+            <span>Streaming Quality</span>
+            <input type="text" id="tv_streaming_quality" style="width: 100%;"
+                onchange="localStorage.setItem('tv_streaming_quality', this.value); location.reload();">
+        </p>
+        <p>
+            <input type="checkbox" id="is_radiochannel"
+               onchange="localStorage.setItem('is_radiochannel', this.checked); location.reload();">
+            <label for="is_radiochannel">Tune Radio Channel</label>
+        </p>
+        <p>
+            <input type="checkbox" id="tv_data_saver_mode"
+               onchange="localStorage.setItem('tv_data_saver_mode', this.checked); location.reload();">
+            <label for="tv_data_saver_mode">Enable H.265/HEVC</label>
+        </p>
+        <p>
+            <input type="checkbox" id="is_mpegts_supported"
+               onchange="localStorage.setItem('is_mpegts_supported', this.checked); location.reload();">
+            <label for="is_mpegts_supported">Enable mpegts.js</label>
+        </p>
+        <p>
+            <input type="checkbox" id="tv_low_latency_mode"
+               onchange="localStorage.setItem('tv_low_latency_mode', this.checked); location.reload();">
+            <label for="tv_low_latency_mode">Enable Low Latency Mode (mpegts.js)</label>
+        </p>
+    </div>
+
     <h2>在 dialog 中承载视频</h2>
     <h3 id="dplayer-dialog" class="show-dialog">Show Dialog</h3>
     <div id="float-dplayer" class="float-dplayer">

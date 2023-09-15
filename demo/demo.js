@@ -36,6 +36,224 @@ function handleEvent() {
 }
 
 function initPlayers() {
+
+    // ===== for KonomiTV =====
+
+    // デフォルト値
+    if (localStorage.getItem('api_base_url') === null) {
+        localStorage.setItem('api_base_url', 'https://192-168-1-47.local.konomi.tv:7000/api');
+    }
+    if (localStorage.getItem('display_channel_id') === null) {
+        localStorage.setItem('display_channel_id', 'gr011');
+    }
+    if (localStorage.getItem('tv_streaming_quality') === null) {
+        localStorage.setItem('tv_streaming_quality', '1080p-60fps');
+    }
+    if (localStorage.getItem('is_radiochannel') === null) {
+        localStorage.setItem('is_radiochannel', 'false');
+    }
+    if (localStorage.getItem('is_mpegts_supported') === null) {
+        localStorage.setItem('is_mpegts_supported', 'true');
+    }
+    if (localStorage.getItem('tv_low_latency_mode') === null) {
+        localStorage.setItem('tv_low_latency_mode', 'true');
+    }
+    if (localStorage.getItem('tv_data_saver_mode') === null) {
+        localStorage.setItem('tv_data_saver_mode', 'false');
+    }
+
+    const api_base_url = localStorage.getItem('api_base_url');
+    document.querySelector('#api_base_url').value = api_base_url;
+    const display_channel_id = localStorage.getItem('display_channel_id');
+    document.querySelector('#display_channel_id').value = display_channel_id;
+    const tv_streaming_quality = localStorage.getItem('tv_streaming_quality');
+    document.querySelector('#tv_streaming_quality').value = tv_streaming_quality;
+    const is_radiochannel = localStorage.getItem('is_radiochannel') === 'true';
+    document.querySelector('#is_radiochannel').checked = is_radiochannel;
+    const tv_data_saver_mode = localStorage.getItem('tv_data_saver_mode') === 'true';
+    document.querySelector('#tv_data_saver_mode').checked = tv_data_saver_mode;
+    const is_mpegts_supported = localStorage.getItem('is_mpegts_supported') === 'true';
+    document.querySelector('#is_mpegts_supported').checked = is_mpegts_supported;
+    const tv_low_latency_mode = localStorage.getItem('tv_low_latency_mode') === 'true';
+    document.querySelector('#tv_low_latency_mode').checked = tv_low_latency_mode;
+
+    // 低遅延モードオン時の再生バッファ (秒単位)
+    // 0.7 秒程度余裕を持たせる
+    const PLAYBACK_BUFFER_SEC_LOW_LATENCY = 0.7;
+
+    // 低遅延モードオフ時の再生バッファ (秒単位)
+    // 5秒程度の遅延を許容する
+    const PLAYBACK_BUFFER_SEC = 5.0;
+
+    // 低遅延モードであれば低遅延向けの再生バッファを、そうでなければ通常の再生バッファをセット (秒単位)
+    const playback_buffer_sec = tv_low_latency_mode ?
+        PLAYBACK_BUFFER_SEC_LOW_LATENCY : PLAYBACK_BUFFER_SEC;
+
+    // DPlayer を初期化
+    window.KonomiTVDPlayer = new DPlayer({
+        container: document.getElementById('dplayer0'),
+        theme: '#E64F97',  // テーマカラー
+        lang: 'ja-jp',  // 言語
+        live: true,  // ライブモード
+        liveSyncMinBufferSize: is_mpegts_supported ? playback_buffer_sec - 0.1 : 0,  // ライブモードで同期する際の最小バッファサイズ
+        loop: false,  // ループ再生 (ライブのため無効化)
+        airplay: false,  // AirPlay 機能 (うまく動かないため無効化)
+        autoplay: true,  // 自動再生
+        hotkey: false,  // ショートカットキー（こちらで制御するため無効化）
+        screenshot: false,  // スクリーンショット (こちらで制御するため無効化)
+        volume: 1.0,  // 音量の初期値
+        // 映像
+        video: {
+            // デフォルトの品質
+            // ラジオチャンネルでは常に 48KHz/192kbps に固定する
+            defaultQuality: (is_radiochannel) ?
+            '48kHz/192kbps' : tv_streaming_quality,
+            // 品質リスト
+            quality: (() => {
+                const qualities = [];
+
+                // ラジオチャンネル
+                // API が受け付ける品質の値は通常のチャンネルと同じだが (手抜き…)、実際の品質は 48KHz/192kbps で固定される
+                // ラジオチャンネルの場合は、1080p と渡しても 48kHz/192kbps 固定の音声だけの MPEG-TS が配信される
+                if (is_radiochannel) {
+                    // mpegts.js
+                    if (is_mpegts_supported === true) {
+                        qualities.push({
+                            name: '48kHz/192kbps',
+                            type: 'mpegts',
+                            url: `${api_base_url}/streams/live/bs531/1080p/mpegts`,
+                        });
+                    // LL-HLS (mpegts.js がサポートされていない場合)
+                    } else {
+                        qualities.push({
+                            name: '48kHz/192kbps',
+                            type: 'live-llhls-for-KonomiTV',
+                            url: `${api_base_url}/streams/live/bs531/1080p/ll-hls`,
+                        });
+                    }
+
+                // 通常のチャンネル
+                } else {
+
+                    // ブラウザが H.265 / HEVC の再生に対応していて、かつ通信節約モードが有効なとき
+                    // API に渡す画質に -hevc のプレフィックスをつける
+                    let hevc_prefix = '';
+                    if (tv_data_saver_mode === true) {
+                        hevc_prefix = '-hevc';
+                    }
+
+                    // 品質リストを作成
+                    for (const quality of ['1080p-60fps', '1080p', '810p', '720p', '540p', '480p', '360p', '240p']) {
+                        // mpegts.js
+                        if (is_mpegts_supported === true) {
+                            qualities.push({
+                                name: quality === '1080p-60fps' ? '1080p (60fps)' : quality,
+                                type: 'mpegts',
+                                url: `${api_base_url}/streams/live/${display_channel_id}/${quality}${hevc_prefix}/mpegts`,
+                            });
+                        // LL-HLS (mpegts.js がサポートされていない場合)
+                        } else {
+                            qualities.push({
+                                name: quality === '1080p-60fps' ? '1080p (60fps)' : quality,
+                                type: 'live-llhls-for-KonomiTV',
+                                url: `${api_base_url}/streams/live/${display_channel_id}/${quality}${hevc_prefix}/ll-hls`,
+                            });
+                        }
+                    }
+                }
+                return qualities;
+            })(),
+        },
+        // コメント
+        danmaku: {
+            user: 'KonomiTV',  // 便宜上 KonomiTV に固定
+            speedRate: 1.0,  // コメントの流れる速度
+            fontSize: 35  // コメントのフォントサイズ
+        },
+        // コメント API バックエンド
+        apiBackend: {
+            // コメント取得時
+            read: (options) => {
+                // 空の配列を返す (こうするとコメント0件と認識される)
+                options.success([]);
+            },
+            // コメント送信時
+            send: async (options) => {
+                // とりあえず成功としておく
+                options.success();
+            },
+        },
+        // プラグイン
+        pluginOptions: {
+            // mpegts.js
+            mpegts: {
+                config: {
+                    // Web Worker を有効にする
+                    enableWorker: true,
+                    // Media Source Extensions API 向けの Web Worker を有効にする
+                    // メインスレッドから再生処理を分離することで、低スペック端末で DOM 描画の遅延が影響して映像再生が詰まる問題が解消される
+                    // MSE in Workers が使えるかは MediaSource.canConstructInDedicatedWorker が true かどうかで判定できる
+                    // MediaSource.canConstructInDedicatedWorker は TypeScript の仕様上型定義の追加が難しいため any で回避している
+                    // ref: https://developer.mozilla.org/en-US/docs/Web/API/MediaSource/canConstructInDedicatedWorker_static
+                    enableMSEWorker: MediaSource.canConstructInDedicatedWorker === true,
+                    // IO 層のバッファを禁止する
+                    enableStashBuffer: false,
+                    // HTMLMediaElement の内部バッファによるライブストリームの遅延を追跡する
+                    // liveBufferLatencyChasing と異なり、いきなり再生時間をスキップするのではなく、
+                    // 再生速度を少しだけ上げることで再生を途切れさせることなく遅延を追跡する
+                    liveSync: tv_low_latency_mode,
+                    // 許容する HTMLMediaElement の内部バッファの最大値 (秒単位, 3秒)
+                    liveSyncMaxLatency: 3,
+                    // HTMLMediaElement の内部バッファ (遅延) が liveSyncMaxLatency を超えたとき、ターゲットとする遅延時間 (秒単位)
+                    liveSyncTargetLatency: playback_buffer_sec,
+                    // ライブストリームの遅延の追跡に利用する再生速度 (x1.1)
+                    // 遅延が 3 秒を超えたとき、遅延が playback_buffer_sec を下回るまで再生速度が x1.1 に設定される
+                    liveSyncPlaybackRate: 1.1,
+                }
+            },
+            // aribb24.js
+            aribb24: {
+                // 描画フォント
+                normalFont: `"Windows TV MaruGothic", "Rounded M+ 1m for ARIB", sans-serif`,
+                // 縁取りする色
+                forceStrokeColor: true,
+                // 背景色
+                forceBackgroundColor: (() => {
+                    return undefined;
+                })(),
+                // DRCS 文字を対応する Unicode 文字に置換
+                drcsReplacement: true,
+                // 高解像度の字幕 Canvas を取得できるように
+                enableRawCanvas: true,
+                // 縁取りに strokeText API を利用
+                useStroke: true,
+                // Unicode 領域の代わりに私用面の領域を利用 (Windows TV 系フォントのみ)
+                usePUA: (() => {
+                    const font = 'Windows TV MaruGothic';
+                    const context = document.createElement('canvas').getContext('2d');
+                    context.font = '10px "Rounded M+ 1m for ARIB"';
+                    context.fillText('Test', 0, 0);
+                    context.font = `10px "${font}"`;
+                    context.fillText('Test', 0, 0);
+                    if (font.startsWith('Windows TV')) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })(),
+            }
+        },
+        // 字幕
+        subtitle: {
+            type: 'aribb24',  // aribb24.js を有効化
+        }
+    });
+    window.addEventListener('beforeunload', () => {
+        window.KonomiTVDPlayer.destroy();
+    });
+
+    // ====================
+
     // dplayer-float
     window.dpFloat = new DPlayer({
         container: document.getElementById('dplayer-container'),
@@ -54,6 +272,7 @@ function initPlayers() {
             api: 'https://api.prprpr.me/dplayer/'
         }
     });
+
     // dp1
     window.dp1 = new DPlayer({
         container: document.getElementById('dplayer1'),
