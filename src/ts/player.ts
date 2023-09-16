@@ -990,6 +990,7 @@ class DPlayer {
             preload: 'auto',
             url: this.quality.type === 'live-llhls-for-KonomiTV' ? '' : this.quality.url,
             subtitle: this.options.subtitle,
+            crossOrigin: this.options.crossOrigin,
         });
         const videoEle = new DOMParser().parseFromString(videoHTML, 'text/html').body.firstChild as HTMLVideoElement;
         this.template.videoWrapAspect.insertBefore(videoEle, this.template.videoWrapAspect.getElementsByTagName('div')[0]);

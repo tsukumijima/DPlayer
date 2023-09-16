@@ -5,7 +5,7 @@
     {{ if airplay }} x-webkit-airplay="allow" {{ /if }}
     playsinline
     {{ if pic }}poster="{{ pic }}"{{ /if }}
-    {{ if screenshot || enableSubtitle }}crossorigin="anonymous"{{ /if }}
+    {{ if crossOrigin !== null || screenshot || enableSubtitle }}crossorigin="{{ crossOrigin ? crossOrigin : 'anonymous' }}"{{ /if }}
     {{ if preload }}preload="{{ preload }}"{{ /if }}
     {{ if url }}src="{{ url }}"{{ /if }}
     >

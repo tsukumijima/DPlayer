@@ -101,6 +101,7 @@ function initPlayers() {
         autoplay: true,  // 自動再生
         hotkey: false,  // ショートカットキー（こちらで制御するため無効化）
         screenshot: false,  // スクリーンショット (こちらで制御するため無効化)
+        crossOrigin: 'anonymous',  // CORS
         volume: 1.0,  // 音量の初期値
         // 映像
         video: {

@@ -117,6 +117,7 @@ class Template {
                 preload: this.options.preload,
                 url: this.options.video.type === 'live-llhls-for-KonomiTV' ? '' : this.options.video.url,
                 subtitle: this.options.subtitle,
+                crossOrigin: this.options.crossOrigin,
             },
         });
 

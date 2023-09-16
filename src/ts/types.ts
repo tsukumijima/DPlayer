@@ -9,6 +9,7 @@ import DPlayer from './player';
 
 export type Lang = 'en' | 'zh-cn' | 'zh-tw' | 'ja' | 'ja-jp';
 export type Preload = 'none' | 'metadata' | 'auto';
+export type CrossOrigin = 'anonymous' | 'use-credentials' | null;
 export type VideoType = 'auto' | 'hls' | 'live-llhls-for-KonomiTV' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal';
 export type SubtitleType = 'webvtt' | 'aribb24';
 
@@ -146,6 +147,12 @@ export interface Options {
      * @default 'metadata'
      */
     preload?: Preload,
+
+    /**
+     * @description video crossOrigin attribute (disable CORS by specifying null)
+     * @default null
+     */
+    crossOrigin?: CrossOrigin,
 
     /**
      * @description default volume, notice that player will remember user setting, default volume will not work after user set volume themselves
@@ -419,6 +426,7 @@ export interface OptionsInternal {
     airplay: boolean,
     hotkey: boolean,
     preload: Preload,
+    crossOrigin: CrossOrigin,
     volume: number,
     playbackSpeed: number[],
     logo?: string,

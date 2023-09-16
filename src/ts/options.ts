@@ -19,6 +19,7 @@ export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
         airplay: true,
         hotkey: true,
         preload: 'metadata',
+        crossOrigin: null,
         volume: 1.0,
         playbackSpeed: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
         apiBackend: defaultApiBackend,
@@ -102,6 +103,7 @@ export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
         airplay: options.airplay!,
         hotkey: options.hotkey!,
         preload: options.preload!,
+        crossOrigin: options.crossOrigin!,
         volume: options.volume!,
         playbackSpeed: options.playbackSpeed!,
         logo: options.logo,  // optional
