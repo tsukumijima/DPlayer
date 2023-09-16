@@ -98,6 +98,13 @@ declare class DPlayer {
     initMSE(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
     initVideo(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
     switchQuality(index: number): void;
+    /**
+     * Show notice
+     * @param text Notice text
+     * @param time Time to show (ms, if -1 then notice will not hide)
+     * @param opacity Notice opacity
+     * @param color Notice color
+     */
     notice(text: string, time?: number, opacity?: number, color?: string): void;
     resize(): void;
     speed(rate: number): void;

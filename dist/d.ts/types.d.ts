@@ -7,6 +7,7 @@ import * as aribb24js from 'aribb24.js';
 import DPlayer from './player';
 export type Lang = 'en' | 'zh-cn' | 'zh-tw' | 'ja' | 'ja-jp';
 export type Preload = 'none' | 'metadata' | 'auto';
+export type CrossOrigin = 'anonymous' | 'use-credentials' | null;
 export type VideoType = 'auto' | 'hls' | 'live-llhls-for-KonomiTV' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal';
 export type SubtitleType = 'webvtt' | 'aribb24';
 export type Events = VideoEvents | PlayerEvents;
@@ -81,6 +82,11 @@ export interface Options {
      * @default 'metadata'
      */
     preload?: Preload;
+    /**
+     * @description video crossOrigin attribute (disable CORS by specifying null)
+     * @default null
+     */
+    crossOrigin?: CrossOrigin;
     /**
      * @description default volume, notice that player will remember user setting, default volume will not work after user set volume themselves
      * @default 1.0
@@ -264,6 +270,11 @@ export interface Danmaku {
      * @default 35
      */
     fontSize?: number;
+    /**
+     * @description close comment form after send danmaku
+     * @default true
+     */
+    closeCommentFormAfterSend?: boolean;
 }
 export interface ContextMenuItem {
     text: string;
@@ -286,7 +297,9 @@ export interface PluginOptions {
     };
     dash?: dashjs.MediaPlayerSettingClass;
     webtorrent?: WebTorrent.Options;
-    aribb24?: aribb24js.CanvasRendererOption;
+    aribb24?: aribb24js.CanvasRendererOption & {
+        disableSuperimposeRenderer?: boolean;
+    };
 }
 export interface WindowExtend extends Window {
     dashjs?: typeof dashjs;
@@ -309,6 +322,7 @@ export interface OptionsInternal {
     airplay: boolean;
     hotkey: boolean;
     preload: Preload;
+    crossOrigin: CrossOrigin;
     volume: number;
     playbackSpeed: number[];
     logo?: string;
@@ -355,6 +369,7 @@ export interface DanmakuInternal {
     unlimited?: boolean;
     speedRate: number;
     fontSize: number;
+    closeCommentFormAfterSend: boolean;
 }
 export interface Plugins {
     hls?: Hls;
