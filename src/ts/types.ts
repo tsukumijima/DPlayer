@@ -365,6 +365,12 @@ export interface Danmaku {
      * @default 35
      */
     fontSize?: number;
+
+    /**
+     * @description close comment form after send danmaku
+     * @default true
+     */
+    closeCommentFormAfterSend?: boolean;
 }
 
 export interface ContextMenuItem {
@@ -461,6 +467,7 @@ export interface DanmakuInternal {
     unlimited?: boolean;
     speedRate : number;
     fontSize: number;
+    closeCommentFormAfterSend: boolean;
 }
 
 export interface Plugins {

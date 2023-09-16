@@ -75,11 +75,15 @@ class Comment {
     }
 
     send(): void {
-        this.player.template.commentInput.blur();
+
+        // remove focus from comment input form
+        if (this.player.options.danmaku?.closeCommentFormAfterSend === true) {
+            this.player.template.commentInput.blur();
+        }
 
         // text can't be empty
         if (!this.player.template.commentInput.value.replace(/^\s+|\s+$/g, '')) {
-            this.player.notice(this.player.tran('Please input danmaku content!'));
+            this.player.notice(this.player.tran('Please input danmaku content!'), undefined, undefined, '#FF6F6A');
             return;
         }
 
@@ -92,8 +96,10 @@ class Comment {
                     size: this.player.container.querySelector<HTMLInputElement>('.dplayer-comment-setting-size input:checked')!.value as DPlayerType.DanmakuSize,
                 },
                 () => {
-                    this.hide();
-                    this.player.controller.setAutoHide(750);
+                    if (this.player.options.danmaku?.closeCommentFormAfterSend === true) {
+                        this.hide();
+                        this.player.controller.setAutoHide(750);
+                    }
                 },
                 true,
             );
