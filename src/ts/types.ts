@@ -384,7 +384,9 @@ export interface PluginOptions {
     flv?: { config?: FlvJs.Config; mediaDataSource?: FlvJs.MediaDataSource; };
     dash?: dashjs.MediaPlayerSettingClass;
     webtorrent?: WebTorrent.Options;
-    aribb24?: aribb24js.CanvasRendererOption;
+    aribb24?: aribb24js.CanvasRendererOption & {
+        disableSuperimposeRenderer?: boolean;
+    }
 }
 
 // ===== internal types =====
