@@ -10,6 +10,7 @@ class Setting {
     showDanmaku: boolean;
     unlimitDanmaku: boolean;
     currentAudio: 'primary' | 'secondary' = 'primary';
+    resizeObserver: ResizeObserver;
 
     constructor(player: DPlayer) {
         this.player = player;
@@ -22,10 +23,13 @@ class Setting {
         });
 
         // clip setting box
-        window.setTimeout(() => {
+        const clipSettingBox = () => {
             const settingOriginPanelHeight = this.player.template.settingOriginPanel.scrollHeight;
             this.player.template.settingBox.style.clipPath = `inset(calc(100% - ${settingOriginPanelHeight}px) 0 0 round 7px)`;
-        }, 300);
+        };
+        clipSettingBox();
+        this.resizeObserver = new ResizeObserver(clipSettingBox);
+        this.resizeObserver.observe(this.player.template.settingOriginPanel);
 
         // quality
         if (this.player.options.video.quality) {
@@ -214,6 +218,10 @@ class Setting {
         this.player.template.mask.classList.add('dplayer-mask-show');
 
         this.player.controller.disableAutoHide = true;
+    }
+
+    destroy(): void {
+        this.resizeObserver.disconnect();
     }
 }
 

@@ -1122,10 +1122,11 @@ class DPlayer {
         this.contextmenu.destroy();
         this.controller.destroy();
         this.timer.destroy();
+        this.setting.destroy();
+        this.resizeObserver.disconnect();
         this.video.src = '';
         this.container.innerHTML = '';
         this.events.trigger('destroy');
-        this.resizeObserver.disconnect();
     }
 
     static get version(): string {
