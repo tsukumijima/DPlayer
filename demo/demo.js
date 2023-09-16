@@ -170,7 +170,7 @@ function initPlayers() {
             user: 'KonomiTV',  // 便宜上 KonomiTV に固定
             speedRate: 1.0,  // コメントの流れる速度
             fontSize: 35,  // コメントのフォントサイズ
-            closeCommentFormAfterSend: true,
+            closeCommentFormAfterSend: true,  // コメント送信後にコメントフォームを閉じるかどうか
         },
         // コメント API バックエンド
         apiBackend: {
@@ -215,6 +215,8 @@ function initPlayers() {
             },
             // aribb24.js
             aribb24: {
+                // 文字スーパーを有効にする
+                disableSuperimposeRenderer: false,
                 // 描画フォント
                 normalFont: `"Windows TV MaruGothic", "Rounded M+ 1m for ARIB", sans-serif`,
                 // 縁取りする色
