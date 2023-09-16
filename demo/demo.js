@@ -168,7 +168,8 @@ function initPlayers() {
         danmaku: {
             user: 'KonomiTV',  // 便宜上 KonomiTV に固定
             speedRate: 1.0,  // コメントの流れる速度
-            fontSize: 35  // コメントのフォントサイズ
+            fontSize: 35,  // コメントのフォントサイズ
+            closeCommentFormAfterSend: true,
         },
         // コメント API バックエンド
         apiBackend: {
@@ -180,7 +181,7 @@ function initPlayers() {
             // コメント送信時
             send: async (options) => {
                 // とりあえず成功としておく
-                options.success();
+                window.setTimeout(() => options.success(), 500);  // 500ms 後に成功とする
             },
         },
         // プラグイン

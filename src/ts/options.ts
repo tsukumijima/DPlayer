@@ -40,7 +40,7 @@ export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
         !options.danmaku.user && (options.danmaku.user = 'DPlayer');
         !options.danmaku.speedRate && (options.danmaku.speedRate = 1);
         !options.danmaku.fontSize && (options.danmaku.fontSize = 35);
-        !options.danmaku.closeCommentFormAfterSend && (options.danmaku.closeCommentFormAfterSend = true);
+        options.danmaku.closeCommentFormAfterSend !== false && (options.danmaku.closeCommentFormAfterSend = true);
     }
     if (options.subtitle) {
         !options.subtitle.type && (options.subtitle.type = 'webvtt');
