@@ -148,7 +148,7 @@ class DPlayer {
                     }, 0);
                 },
                 error: (msg: string) => {
-                    this.notice(msg);
+                    this.notice(msg, undefined, undefined, '#FF6F6A');
                 },
                 apiBackend: this.options.apiBackend,
                 borderColor: this.options.theme,
@@ -577,10 +577,10 @@ class DPlayer {
                                 }
                             }
                         } else {
-                            this.notice('Error: HLS is not supported.');
+                            this.notice('Error: HLS is not supported.', undefined, undefined, '#FF6F6A');
                         }
                     } else {
-                        this.notice('Error: Can\'t find hls.js.');
+                        this.notice('Error: Can\'t find hls.js.', undefined, undefined, '#FF6F6A');
                     }
                     break;
                 // only for KonomiTV
@@ -787,10 +787,10 @@ class DPlayer {
                                 });
                             }
                         } else {
-                            this.notice('Error: mpegts.js is not supported.');
+                            this.notice('Error: mpegts.js is not supported.', undefined, undefined, '#FF6F6A');
                         }
                     } else {
-                        this.notice('Error: Can\'t find mpegts.js.');
+                        this.notice('Error: Can\'t find mpegts.js.', undefined, undefined, '#FF6F6A');
                     }
                     break;
                 // https://github.com/Bilibili/flv.js
@@ -817,10 +817,10 @@ class DPlayer {
                                 delete this.plugins.flvjs;
                             });
                         } else {
-                            this.notice('Error: flv.js is not supported.');
+                            this.notice('Error: flv.js is not supported.', undefined, undefined, '#FF6F6A');
                         }
                     } else {
-                        this.notice('Error: Can\'t find flv.js.');
+                        this.notice('Error: Can\'t find flv.js.', undefined, undefined, '#FF6F6A');
                     }
                     break;
                 // https://github.com/Dash-Industry-Forum/dash.js
@@ -836,7 +836,7 @@ class DPlayer {
                             delete this.plugins.dash;
                         });
                     } else {
-                        this.notice('Error: Can\'t find dash.js.');
+                        this.notice('Error: Can\'t find dash.js.', undefined, undefined, '#FF6F6A');
                     }
                     break;
 
@@ -867,10 +867,10 @@ class DPlayer {
                                 delete this.plugins.webtorrent;
                             });
                         } else {
-                            this.notice('Error: Webtorrent is not supported.');
+                            this.notice('Error: Webtorrent is not supported.', undefined, undefined, '#FF6F6A');
                         }
                     } else {
-                        this.notice('Error: Can\'t find Webtorrent.');
+                        this.notice('Error: Can\'t find Webtorrent.', undefined, undefined, '#FF6F6A');
                     }
                     break;
             }
@@ -915,7 +915,7 @@ class DPlayer {
                 this.events.trigger('quality_end');
             }
             if (this.tran && this.notice && this.type !== 'webtorrent' && this.type !== 'live-llhls-for-KonomiTV') {
-                this.notice(this.tran('Video load failed'), -1);
+                this.notice(this.tran('Video load failed'), -1, undefined, '#FF6F6A');
             }
             this.container.classList.remove('dplayer-loading');
         });
@@ -1060,6 +1060,13 @@ class DPlayer {
         });
     }
 
+    /**
+     * Show notice
+     * @param text Notice text
+     * @param time Time to show (ms, if -1 then notice will not hide)
+     * @param opacity Notice opacity
+     * @param color Notice color
+     */
     notice(text: string, time = 2000, opacity = 0.8, color?: string): void {
         this.template.notice.textContent = text;
         this.template.notice.style.opacity = `${opacity}`;

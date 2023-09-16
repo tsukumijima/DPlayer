@@ -242,9 +242,9 @@ class Controller {
                     this.player.video.requestPictureInPicture().catch((reason) => {
                         console.error(reason);
                         if (this.player.options.lang === 'ja' || this.player.options.lang === 'ja-jp') {
-                            this.player.notice('Picture-in-Picture を開始できませんでした。');
+                            this.player.notice('Picture-in-Picture を開始できませんでした。', undefined, undefined, '#FF6F6A');
                         } else {
-                            this.player.notice('Picture-in-Picture failed to start.');
+                            this.player.notice('Picture-in-Picture could not be started.', undefined, undefined, '#FF6F6A');
                         }
                     });
                 } else {
@@ -326,7 +326,7 @@ class Controller {
                     const bloburl = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     if (typeof link.download === 'undefined') {
-                        this.player.notice('Error: Screenshot download is not supported.');
+                        this.player.notice('Error: Screenshot download is not supported.', undefined, undefined, '#FF6F6A');
                         return;
                     }
                     link.download = filename;
