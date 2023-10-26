@@ -1120,7 +1120,11 @@ class DPlayer {
         });
     }
 
-    destroy(): void {
+    /**
+     * Destroy DPlayer, and it can not be used again
+     * @param keepContainerInnerHTML If true, do not clean the innerHTML of the container
+     */
+    destroy(keepContainerInnerHTML = false): void {
         instances.splice(instances.indexOf(this), 1);
         this.pause();
         document.removeEventListener('click', this.docClickFun, true);
@@ -1133,7 +1137,9 @@ class DPlayer {
         this.setting.destroy();
         this.resizeObserver.disconnect();
         this.video.src = '';
-        this.container.innerHTML = '';
+        if (!keepContainerInnerHTML) {
+            this.container.innerHTML = '';
+        }
         this.events.trigger('destroy');
     }
 
