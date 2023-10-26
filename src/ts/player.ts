@@ -380,6 +380,13 @@ class DPlayer {
     }
 
     /**
+     * Detach event
+     */
+    off(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
+        this.events.off(name, callback);
+    }
+
+    /**
      * Switch to a new video
      *
      * @param {Object} video - new video info

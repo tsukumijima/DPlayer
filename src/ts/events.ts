@@ -71,6 +71,15 @@ class Events {
         }
     }
 
+    off(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
+        if (this.type(name) && typeof callback === 'function' && this.events[name]) {
+            const index = this.events[name].indexOf(callback);
+            if (index !== -1) {
+                this.events[name].splice(index, 1);
+            }
+        }
+    }
+
     trigger(name: DPlayerType.Events, info?: Event | any): void {
         if (this.events[name] && this.events[name].length) {
             for (let i = 0; i < this.events[name].length; i++) {
