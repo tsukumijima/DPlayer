@@ -78,32 +78,45 @@ function initPlayers() {
     document.querySelector('#tv_low_latency_mode').checked = tv_low_latency_mode;
 
     // 低遅延モードオン時の再生バッファ (秒単位)
-    // 0.7 秒程度余裕を持たせる
-    const PLAYBACK_BUFFER_SEC_LOW_LATENCY = 0.7;
+    // 0.8 秒程度余裕を持たせる
+    const LIVE_PLAYBACK_BUFFER_SECONDS_LOW_LATENCY = 0.8;
 
     // 低遅延モードオフ時の再生バッファ (秒単位)
     // 5秒程度の遅延を許容する
-    const PLAYBACK_BUFFER_SEC = 5.0;
+    const LIVE_PLAYBACK_BUFFER_SECONDS = 5.0;
 
     // 低遅延モードであれば低遅延向けの再生バッファを、そうでなければ通常の再生バッファをセット (秒単位)
-    const playback_buffer_sec = tv_low_latency_mode ?
-        PLAYBACK_BUFFER_SEC_LOW_LATENCY : PLAYBACK_BUFFER_SEC;
+    const playback_buffer_seconds = tv_low_latency_mode ?
+        LIVE_PLAYBACK_BUFFER_SECONDS_LOW_LATENCY : LIVE_PLAYBACK_BUFFER_SECONDS;
 
     // DPlayer を初期化
     window.KonomiTVDPlayer = new DPlayer({
+        // DPlayer を配置する要素
         container: document.getElementById('dplayer0'),
-        theme: '#E64F97',  // テーマカラー
-        lang: 'ja-jp',  // 言語
-        live: true,  // ライブモード
-        liveSyncMinBufferSize: is_mpegts_supported ? playback_buffer_sec - 0.1 : 0,  // ライブモードで同期する際の最小バッファサイズ
-        loop: false,  // ループ再生 (ライブのため無効化)
-        airplay: false,  // AirPlay 機能 (うまく動かないため無効化)
-        autoplay: true,  // 自動再生
-        hotkey: false,  // ショートカットキー（こちらで制御するため無効化）
-        screenshot: false,  // スクリーンショット (こちらで制御するため無効化)
-        crossOrigin: 'anonymous',  // CORS
-        volume: 1.0,  // 音量の初期値
-        // 映像
+        // テーマカラー
+        theme: '#E64F97',
+        // 言語 (日本語固定)
+        lang: 'ja-jp',
+        // ライブモード (ビデオ視聴では無効)
+        live: true,
+        // ライブモードで同期する際の最小バッファサイズ
+        liveSyncMinBufferSize: is_mpegts_supported ? playback_buffer_seconds - 0.1 : 0,
+        // ループ再生 (ライブ視聴では無効)
+        loop: false,
+        // 自動再生
+        autoplay: true,
+        // AirPlay 機能 (うまく動かないため無効化)
+        airplay: false,
+        // ショートカットキー（こちらで制御するため無効化）
+        hotkey: false,
+        // スクリーンショット (こちらで制御するため無効化)
+        screenshot: false,
+        // CORS を有効化
+        crossOrigin: 'anonymous',
+        // 音量の初期値
+        volume: 1.0,
+
+        // 動画の設定
         video: {
             // デフォルトの品質
             // ラジオチャンネルでは常に 48KHz/192kbps に固定する
@@ -165,14 +178,20 @@ function initPlayers() {
                 return qualities;
             })(),
         },
-        // コメント
+
+        // コメントの設定
         danmaku: {
-            user: 'KonomiTV',  // 便宜上 KonomiTV に固定
-            speedRate: 1.0,  // コメントの流れる速度
-            fontSize: 35,  // コメントのフォントサイズ
-            closeCommentFormAfterSend: true,  // コメント送信後にコメントフォームを閉じるかどうか
+            // コメントするユーザー名: 便宜上 KonomiTV に固定 (実際には利用されない)
+            user: 'KonomiTV',
+            // コメントの流れる速度
+            speedRate: 1.0,
+            // コメントのフォントサイズ
+            fontSize: 35,
+            // コメント送信後にコメントフォームを閉じるかどうか
+            closeCommentFormAfterSend: true,
         },
-        // コメント API バックエンド
+
+        // コメント API バックエンドの設定
         apiBackend: {
             // コメント取得時
             read: (options) => {
@@ -185,7 +204,13 @@ function initPlayers() {
                 window.setTimeout(() => options.success(), 500);  // 500ms 後に成功とする
             },
         },
-        // プラグイン
+
+        // 字幕の設定
+        subtitle: {
+            type: 'aribb24',  // aribb24.js を有効化
+        },
+
+        // 再生プラグインの設定
         pluginOptions: {
             // mpegts.js
             mpegts: {
@@ -195,9 +220,8 @@ function initPlayers() {
                     // Media Source Extensions API 向けの Web Worker を有効にする
                     // メインスレッドから再生処理を分離することで、低スペック端末で DOM 描画の遅延が影響して映像再生が詰まる問題が解消される
                     // MSE in Workers が使えるかは MediaSource.canConstructInDedicatedWorker が true かどうかで判定できる
-                    // MediaSource.canConstructInDedicatedWorker は TypeScript の仕様上型定義の追加が難しいため any で回避している
                     // ref: https://developer.mozilla.org/en-US/docs/Web/API/MediaSource/canConstructInDedicatedWorker_static
-                    enableMSEWorker: MediaSource.canConstructInDedicatedWorker === true,
+                    enableWorkerForMSE: window.MediaSource && window.MediaSource.canConstructInDedicatedWorker === true,
                     // IO 層のバッファを禁止する
                     enableStashBuffer: false,
                     // HTMLMediaElement の内部バッファによるライブストリームの遅延を追跡する
@@ -207,7 +231,7 @@ function initPlayers() {
                     // 許容する HTMLMediaElement の内部バッファの最大値 (秒単位, 3秒)
                     liveSyncMaxLatency: 3,
                     // HTMLMediaElement の内部バッファ (遅延) が liveSyncMaxLatency を超えたとき、ターゲットとする遅延時間 (秒単位)
-                    liveSyncTargetLatency: playback_buffer_sec,
+                    liveSyncTargetLatency: playback_buffer_seconds,
                     // ライブストリームの遅延の追跡に利用する再生速度 (x1.1)
                     // 遅延が 3 秒を超えたとき、遅延が playback_buffer_sec を下回るまで再生速度が x1.1 に設定される
                     liveSyncPlaybackRate: 1.1,
@@ -246,10 +270,6 @@ function initPlayers() {
                     }
                 })(),
             }
-        },
-        // 字幕
-        subtitle: {
-            type: 'aribb24',  // aribb24.js を有効化
         }
     });
     window.addEventListener('beforeunload', () => {
