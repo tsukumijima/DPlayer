@@ -413,7 +413,14 @@ class Danmaku {
             this.context = document.createElement('canvas').getContext('2d');
             this.context!.font = `bold ${this.danFontSize}px "Segoe UI", Arial`;
         }
-        return this.context!.measureText(text).width;
+
+        // returns the width of the widest line
+        const lines = text.split('\n');
+        let maxWidth = 0;
+        for (let i = 0; i < lines.length; i++) {
+            maxWidth = Math.max(maxWidth, this.context!.measureText(lines[i]).width);
+        }
+        return maxWidth;
     }
 
     seek(): void {
