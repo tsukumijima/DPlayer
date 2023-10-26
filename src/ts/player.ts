@@ -1082,10 +1082,17 @@ class DPlayer {
         this.events.trigger('notice_show', text);
         if (time > 0) {
             this.noticeTime = window.setTimeout(() => {
-                this.template.notice.style.opacity = '0';
-                this.events.trigger('notice_hide');
+                this.hideNotice();
             }, time);
         }
+    }
+
+    /**
+     * Instantly hide notice
+     */
+    hideNotice(): void {
+        this.template.notice.style.opacity = '0';
+        this.events.trigger('notice_hide');
     }
 
     resize(): void {
