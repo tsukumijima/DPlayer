@@ -1,7 +1,7 @@
 import * as DPlayerType from './types';
 
 class Events {
-    events: {[key: string]: ((info: Event | any) => void)[]};
+    events: {[key: string]: {callback: (info?: Event | any) => void; once: boolean}[]};
     videoEvents: DPlayerType.VideoEvents[];
     playerEvents: DPlayerType.PlayerEvents[];
 
@@ -62,28 +62,35 @@ class Events {
         ];
     }
 
-    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void, once = false): void {
         if (this.type(name) && typeof callback === 'function') {
             if (!this.events[name]) {
                 this.events[name] = [];
             }
-            this.events[name].push(callback);
+            this.events[name].push({
+                callback,
+                once,
+            });
         }
     }
 
     off(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
         if (this.type(name) && typeof callback === 'function' && this.events[name]) {
-            const index = this.events[name].indexOf(callback);
-            if (index !== -1) {
-                this.events[name].splice(index, 1);
+            for (const event of this.events[name]) {
+                if (event.callback === callback) {
+                    this.events[name].splice(this.events[name].indexOf(event), 1);
+                }
             }
         }
     }
 
     trigger(name: DPlayerType.Events, info?: Event | any): void {
         if (this.events[name] && this.events[name].length) {
-            for (let i = 0; i < this.events[name].length; i++) {
-                this.events[name][i](info);
+            for (const event of this.events[name]) {
+                event.callback(info);
+                if (event.once) {
+                    this.off(name, event.callback);
+                }
             }
         }
     }

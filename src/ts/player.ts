@@ -375,8 +375,8 @@ class DPlayer {
     /**
      * Attach event
      */
-    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void {
-        this.events.on(name, callback);
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void, once = false): void {
+        this.events.on(name, callback, once);
     }
 
     /**
