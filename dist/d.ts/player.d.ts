@@ -83,7 +83,11 @@ declare class DPlayer {
     /**
      * Attach event
      */
-    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void;
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void, once?: boolean): void;
+    /**
+     * Detach event
+     */
+    off(name: DPlayerType.Events, callback: (info?: Event | any) => void): void;
     /**
      * Switch to a new video
      *
@@ -106,9 +110,17 @@ declare class DPlayer {
      * @param color Notice color
      */
     notice(text: string, time?: number, opacity?: number, color?: string): void;
+    /**
+     * Instantly hide notice
+     */
+    hideNotice(): void;
     resize(): void;
     speed(rate: number): void;
-    destroy(): void;
+    /**
+     * Destroy DPlayer, and it can not be used again
+     * @param keepContainerInnerHTML If true, do not clean the innerHTML of the container
+     */
+    destroy(keepContainerInnerHTML?: boolean): void;
     static get version(): string;
 }
 export default DPlayer;

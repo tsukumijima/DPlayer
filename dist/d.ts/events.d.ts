@@ -1,12 +1,16 @@
 import * as DPlayerType from './types';
 declare class Events {
     events: {
-        [key: string]: ((info: Event | any) => void)[];
+        [key: string]: {
+            callback: (info?: Event | any) => void;
+            once: boolean;
+        }[];
     };
     videoEvents: DPlayerType.VideoEvents[];
     playerEvents: DPlayerType.PlayerEvents[];
     constructor();
-    on(name: DPlayerType.Events, callback: (info?: Event | any) => void): void;
+    on(name: DPlayerType.Events, callback: (info?: Event | any) => void, once?: boolean): void;
+    off(name: DPlayerType.Events, callback: (info?: Event | any) => void): void;
     trigger(name: DPlayerType.Events, info?: Event | any): void;
     type(name: DPlayerType.Events): 'player' | 'video' | null;
 }
