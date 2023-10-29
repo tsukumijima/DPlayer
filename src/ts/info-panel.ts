@@ -1,6 +1,8 @@
 /* global DPLAYER_VERSION GIT_HASH */
 import DPlayer from './player';
 import Template from './template';
+import Mpegts from 'mpegts.js';
+import FlvJs from 'flv.js';
 
 class InfoPanel {
     player: DPlayer;
@@ -49,15 +51,43 @@ class InfoPanel {
         this.template.infoUrl.textContent = this.player.options.video.url ?? 'N/A';
         this.template.infoResolution.textContent = `${this.player.video.videoWidth} x ${this.player.video.videoHeight}`;
         this.template.infoDuration.textContent = `${this.player.video.duration}`;
-        if (this.player.options.danmaku && this.player.danmaku !== null) {
-            this.template.infoDanmakuId.textContent = this.player.options.danmaku.id ?? 'N/A';
-            this.template.infoDanmakuApi.textContent = this.player.options.danmaku.api ?? 'N/A';
-            this.template.infoDanmakuAmount.textContent = `${this.player.danmaku.dan.length}`;
+
+        // Dropped Frames
+        if (this.player.video['getVideoPlaybackQuality'] != undefined) {
+            const quality = this.player.video.getVideoPlaybackQuality();
+            this.template.infoDroppedFrames.textContent = `${quality.droppedVideoFrames} / ${quality.totalVideoFrames}`;
+        } else if ((this.player.video as any)['webkitDecodedFrameCount'] != undefined) {
+            const decoded: number = (this.player.video as any)['webkitDecodedFrameCount'];
+            const dropped: number = (this.player.video as any)['webkitDroppedFrameCount'];
+            this.template.infoDroppedFrames.textContent = `${dropped} / ${decoded}`;
+        } else {
+            this.template.infoDroppedFrames.textContent = `N/A`;
+        }
+
+        // Buffer Remain
+        if (this.player.video.buffered.length > 0) {
+            const bufferRemain = this.player.video.buffered.end(0) - this.player.video.currentTime;
+            this.template.infoBufferRemain.textContent = `${bufferRemain.toFixed(3)} s`;
+        } else {
+            this.template.infoBufferRemain.textContent = 'N/A';
+        }
+
+        // flv.js / mpegts.js related metrics
+        if (this.player.type === 'mpegts' || this.player.type === 'flv') {
+            const player: Mpegts.Player | Mpegts.MSEPlayer | Mpegts.NativePlayer | FlvJs.Player | undefined =
+                this.player.plugins.mpegts || this.player.plugins.flvjs;
+            if (player) {
+                const mediaInfo = player.mediaInfo as Mpegts.MSEPlayerMediaInfo;
+                const statisticsInfo = player.statisticsInfo as Mpegts.MSEPlayerStatisticsInfo;
+                this.template.infoMimeType.textContent = mediaInfo.mimeType ?? 'N/A';
+                this.template.infoVideoFPS.textContent = `${mediaInfo.fps?.toFixed(3) ?? 'N/A'}`;
+                this.template.infoDownloadSpeed.textContent = statisticsInfo.speed?.toFixed(3).toString() + ' KB/s' ?? 'N/A';
+            }
         }
     }
 
     fps(value: number): void {
-        this.template.infoFPS.textContent = `${value.toFixed(1)}`;
+        this.template.infoPageFPS.textContent = `${value.toFixed(1)}`;
     }
 }
 
