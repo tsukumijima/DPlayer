@@ -315,7 +315,7 @@
         <span class="dplayer-info-panel-item-data"></span>
     </div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-download-speed">
-        <span class="dplayer-info-panel-item-title">Downlaod Speed</span>
+        <span class="dplayer-info-panel-item-title">Download Speed</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
 </div>

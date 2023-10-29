@@ -81,8 +81,16 @@ class InfoPanel {
                 const statisticsInfo = player.statisticsInfo as Mpegts.MSEPlayerStatisticsInfo;
                 this.template.infoMimeType.textContent = mediaInfo.mimeType ?? 'N/A';
                 this.template.infoVideoFPS.textContent = `${mediaInfo.fps?.toFixed(3) ?? 'N/A'}`;
-                this.template.infoDownloadSpeed.textContent = statisticsInfo.speed?.toFixed(3).toString() + ' KB/s' ?? 'N/A';
+                if (statisticsInfo.speed) {
+                    this.template.infoDownloadSpeed.textContent = `${statisticsInfo.speed.toFixed(3)} KB/s`;
+                } else {
+                    this.template.infoDownloadSpeed.textContent = 'N/A';
+                }
             }
+        } else {
+            this.template.infoMimeType.textContent = 'N/A';
+            this.template.infoVideoFPS.textContent = 'N/A';
+            this.template.infoDownloadSpeed.textContent = 'N/A';
         }
     }
 
