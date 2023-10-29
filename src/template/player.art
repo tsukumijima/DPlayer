@@ -275,43 +275,49 @@
 <div class="dplayer-info-panel dplayer-info-panel-hide">
     <div class="dplayer-info-panel-close">[x]</div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-version">
-        <span class="dplayer-info-panel-item-title">Player version</span>
+        <span class="dplayer-info-panel-item-title">Player Version</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
-    <div class="dplayer-info-panel-item dplayer-info-panel-item-fps">
-        <span class="dplayer-info-panel-item-title">Player FPS</span>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-mimetype">
+        <span class="dplayer-info-panel-item-title">Mime Type</span>
+        <span class="dplayer-info-panel-item-data"></span>
+    </div>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-video-fps">
+        <span class="dplayer-info-panel-item-title">Video FPS</span>
+        <span class="dplayer-info-panel-item-data"></span>
+    </div>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-page-fps">
+        <span class="dplayer-info-panel-item-title">Page FPS</span>
+        <span class="dplayer-info-panel-item-data"></span>
+    </div>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-dropped-frames">
+        <span class="dplayer-info-panel-item-title">Dropped Frames</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-type">
-        <span class="dplayer-info-panel-item-title">Video type</span>
+        <span class="dplayer-info-panel-item-title">Video Type</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-url">
-        <span class="dplayer-info-panel-item-title">Video url</span>
+        <span class="dplayer-info-panel-item-title">Video URL</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-resolution">
-        <span class="dplayer-info-panel-item-title">Video resolution</span>
+        <span class="dplayer-info-panel-item-title">Video Resolution</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
     <div class="dplayer-info-panel-item dplayer-info-panel-item-duration">
-        <span class="dplayer-info-panel-item-title">Video duration</span>
+        <span class="dplayer-info-panel-item-title">Video Duration</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
-    {{ if options.danmaku }}
-    <div class="dplayer-info-panel-item dplayer-info-panel-item-danmaku-id">
-        <span class="dplayer-info-panel-item-title">Danmaku id</span>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-buffer-remain">
+        <span class="dplayer-info-panel-item-title">Buffer Remain</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
-    <div class="dplayer-info-panel-item dplayer-info-panel-item-danmaku-api">
-        <span class="dplayer-info-panel-item-title">Danmaku api</span>
+    <div class="dplayer-info-panel-item dplayer-info-panel-item-download-speed">
+        <span class="dplayer-info-panel-item-title">Downlaod Speed</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
-    <div class="dplayer-info-panel-item dplayer-info-panel-item-danmaku-amount">
-        <span class="dplayer-info-panel-item-title">Danmaku amount</span>
-        <span class="dplayer-info-panel-item-data"></span>
-    </div>
-    {{ /if }}
 </div>
 <div class="dplayer-menu">
     {{ each options.contextmenu }}

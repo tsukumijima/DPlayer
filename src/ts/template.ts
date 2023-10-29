@@ -84,15 +84,17 @@ class Template {
     notice!: HTMLElement;
     infoPanel!: HTMLElement;
     infoPanelClose!: HTMLElement;
+    infoMimeType!: HTMLElement;
     infoVersion!: HTMLElement;
-    infoFPS!: HTMLElement;
+    infoVideoFPS!: HTMLElement;
+    infoPageFPS!: HTMLElement;
+    infoDroppedFrames!: HTMLElement;
     infoType!: HTMLElement;
     infoUrl!: HTMLElement;
     infoResolution!: HTMLElement;
     infoDuration!: HTMLElement;
-    infoDanmakuId!: HTMLElement;
-    infoDanmakuApi!: HTMLElement;
-    infoDanmakuAmount!: HTMLElement;
+    infoBufferRemain!: HTMLElement;
+    infoDownloadSpeed!: HTMLElement;
 
     constructor(options: { container: HTMLElement; options: DPlayerType.OptionsInternal; index: number; tran: (text: string) => string; }) {
         this.container = options.container;
@@ -196,15 +198,17 @@ class Template {
         this.notice = this.container.querySelector('.dplayer-notice')!;
         this.infoPanel = this.container.querySelector('.dplayer-info-panel')!;
         this.infoPanelClose = this.container.querySelector('.dplayer-info-panel-close')!;
+        this.infoMimeType = this.container.querySelector('.dplayer-info-panel-item-mimetype .dplayer-info-panel-item-data')!;
         this.infoVersion = this.container.querySelector('.dplayer-info-panel-item-version .dplayer-info-panel-item-data')!;
-        this.infoFPS = this.container.querySelector('.dplayer-info-panel-item-fps .dplayer-info-panel-item-data')!;
+        this.infoVideoFPS = this.container.querySelector('.dplayer-info-panel-item-video-fps .dplayer-info-panel-item-data')!;
+        this.infoPageFPS = this.container.querySelector('.dplayer-info-panel-item-page-fps .dplayer-info-panel-item-data')!;
+        this.infoDroppedFrames = this.container.querySelector('.dplayer-info-panel-item-dropped-frames .dplayer-info-panel-item-data')!;
         this.infoType = this.container.querySelector('.dplayer-info-panel-item-type .dplayer-info-panel-item-data')!;
         this.infoUrl = this.container.querySelector('.dplayer-info-panel-item-url .dplayer-info-panel-item-data')!;
         this.infoResolution = this.container.querySelector('.dplayer-info-panel-item-resolution .dplayer-info-panel-item-data')!;
         this.infoDuration = this.container.querySelector('.dplayer-info-panel-item-duration .dplayer-info-panel-item-data')!;
-        this.infoDanmakuId = this.container.querySelector('.dplayer-info-panel-item-danmaku-id .dplayer-info-panel-item-data')!;
-        this.infoDanmakuApi = this.container.querySelector('.dplayer-info-panel-item-danmaku-api .dplayer-info-panel-item-data')!;
-        this.infoDanmakuAmount = this.container.querySelector('.dplayer-info-panel-item-danmaku-amount .dplayer-info-panel-item-data')!;
+        this.infoBufferRemain = this.container.querySelector('.dplayer-info-panel-item-buffer-remain .dplayer-info-panel-item-data')!;
+        this.infoDownloadSpeed = this.container.querySelector('.dplayer-info-panel-item-download-speed .dplayer-info-panel-item-data')!;
     }
 }
 
