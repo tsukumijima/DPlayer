@@ -66,7 +66,8 @@ class InfoPanel {
 
         // Buffer Remain
         if (this.player.video.buffered.length > 0) {
-            const bufferRemain = this.player.video.buffered.end(0) - this.player.video.currentTime;
+            const bufferedRangeCount = this.player.video.buffered.length;
+            const bufferRemain = this.player.video.buffered.end(bufferedRangeCount - 1) - this.player.video.currentTime;
             this.template.infoBufferRemain.textContent = `${bufferRemain.toFixed(3)} s`;
         } else {
             this.template.infoBufferRemain.textContent = 'N/A';
@@ -81,7 +82,7 @@ class InfoPanel {
                 const statisticsInfo = player.statisticsInfo as Mpegts.MSEPlayerStatisticsInfo;
                 this.template.infoMimeType.textContent = mediaInfo.mimeType ?? 'N/A';
                 this.template.infoVideoFPS.textContent = `${mediaInfo.fps?.toFixed(3) ?? 'N/A'}`;
-                if (statisticsInfo.speed) {
+                if (statisticsInfo.speed != undefined) {
                     this.template.infoDownloadSpeed.textContent = `${statisticsInfo.speed.toFixed(3)} KB/s`;
                 } else {
                     this.template.infoDownloadSpeed.textContent = 'N/A';
