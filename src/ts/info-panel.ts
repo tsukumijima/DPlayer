@@ -82,7 +82,7 @@ class InfoPanel {
                 const statisticsInfo = player.statisticsInfo as Mpegts.MSEPlayerStatisticsInfo;
                 this.template.infoMimeType.textContent = mediaInfo.mimeType ?? 'N/A';
                 this.template.infoVideoFPS.textContent = `${mediaInfo.fps?.toFixed(3) ?? 'N/A'}`;
-                if (statisticsInfo.speed) {
+                if (statisticsInfo.speed != undefined) {
                     this.template.infoDownloadSpeed.textContent = `${statisticsInfo.speed.toFixed(3)} KB/s`;
                 } else {
                     this.template.infoDownloadSpeed.textContent = 'N/A';
