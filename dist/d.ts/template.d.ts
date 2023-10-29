@@ -79,15 +79,17 @@ declare class Template {
     notice: HTMLElement;
     infoPanel: HTMLElement;
     infoPanelClose: HTMLElement;
+    infoMimeType: HTMLElement;
     infoVersion: HTMLElement;
-    infoFPS: HTMLElement;
+    infoVideoFPS: HTMLElement;
+    infoPageFPS: HTMLElement;
+    infoDroppedFrames: HTMLElement;
     infoType: HTMLElement;
     infoUrl: HTMLElement;
     infoResolution: HTMLElement;
     infoDuration: HTMLElement;
-    infoDanmakuId: HTMLElement;
-    infoDanmakuApi: HTMLElement;
-    infoDanmakuAmount: HTMLElement;
+    infoBufferRemain: HTMLElement;
+    infoDownloadSpeed: HTMLElement;
     constructor(options: {
         container: HTMLElement;
         options: DPlayerType.OptionsInternal;
