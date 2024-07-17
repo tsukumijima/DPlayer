@@ -150,7 +150,7 @@ class Danmaku {
                 this.dan.splice(this.danIndex, 0, danmakuData);
                 this.danIndex++;
                 this.draw({
-                    text: this.htmlEncode(danmakuData.text),
+                    text: danmakuData.text,
                     color: danmakuData.color,
                     type: danmakuData.type,
                     size: danmakuData.size,
@@ -444,16 +444,6 @@ class Danmaku {
         this.options.container.innerHTML = '';
 
         this.events && this.events.trigger('danmaku_clear');
-    }
-
-    htmlEncode(str: string): string {
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#x27;')
-            .replace(/\//g, '&#x2f;');
     }
 
     resize(): void {
