@@ -8,7 +8,7 @@ import DPlayer from './player';
 export type Lang = 'en' | 'zh-cn' | 'zh-tw' | 'ja' | 'ja-jp';
 export type Preload = 'none' | 'metadata' | 'auto';
 export type CrossOrigin = 'anonymous' | 'use-credentials' | null;
-export type VideoType = 'auto' | 'hls' | 'live-llhls-for-KonomiTV' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal';
+export type VideoType = 'auto' | 'hls' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal';
 export type SubtitleType = 'webvtt' | 'aribb24';
 export type Events = VideoEvents | PlayerEvents;
 export type VideoEvents = 'abort' | 'canplay' | 'canplaythrough' | 'durationchange' | 'emptied' | 'ended' | 'error' | 'loadeddata' | 'loadedmetadata' | 'loadstart' | 'mozaudioavailable' | 'pause' | 'play' | 'playing' | 'progress' | 'ratechange' | 'seeked' | 'seeking' | 'stalled' | 'suspend' | 'timeupdate' | 'volumechange' | 'waiting';
@@ -175,7 +175,7 @@ export interface Video {
      */
     thumbnails?: string;
     /**
-     * @description values: 'auto' | 'hls' | 'live-llhls-for-KonomiTV' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal' or other custom export type
+     * @description values: 'auto' | 'hls' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal' or other custom export type
      */
     type?: VideoType | string;
     /**
@@ -195,7 +195,7 @@ export interface VideoQuality {
      */
     url: string;
     /**
-     * @description values: 'auto' | 'hls' | 'live-llhls-for-KonomiTV' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal' or other custom export type
+     * @description values: 'auto' | 'hls' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal' or other custom export type
      */
     type?: VideoType | string;
 }

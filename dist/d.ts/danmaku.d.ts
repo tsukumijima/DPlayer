@@ -74,7 +74,6 @@ declare class Danmaku {
     _measure(text: string, itemFontSize: number): number;
     seek(): void;
     clear(): void;
-    htmlEncode(str: string): string;
     resize(): void;
     hide(): void;
     show(): void;
