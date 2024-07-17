@@ -137,13 +137,6 @@ function initPlayers() {
                             type: 'mpegts',
                             url: `${api_base_url}/streams/live/bs531/1080p/mpegts`,
                         });
-                    // LL-HLS (mpegts.js がサポートされていない場合)
-                    } else {
-                        qualities.push({
-                            name: '48kHz/192kbps',
-                            type: 'live-llhls-for-KonomiTV',
-                            url: `${api_base_url}/streams/live/bs531/1080p/ll-hls`,
-                        });
                     }
 
                 // 通常のチャンネル
@@ -164,13 +157,6 @@ function initPlayers() {
                                 name: quality === '1080p-60fps' ? '1080p (60fps)' : quality,
                                 type: 'mpegts',
                                 url: `${api_base_url}/streams/live/${display_channel_id}/${quality}${hevc_prefix}/mpegts`,
-                            });
-                        // LL-HLS (mpegts.js がサポートされていない場合)
-                        } else {
-                            qualities.push({
-                                name: quality === '1080p-60fps' ? '1080p (60fps)' : quality,
-                                type: 'live-llhls-for-KonomiTV',
-                                url: `${api_base_url}/streams/live/${display_channel_id}/${quality}${hevc_prefix}/ll-hls`,
                             });
                         }
                     }

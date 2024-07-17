@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as aribb24js from 'aribb24.js';
 
 import utils from './utils';
@@ -438,8 +437,8 @@ class DPlayer {
                     this.type = 'normal';
                 }
             }
-            if (!(this.type === 'mpegts' || this.type === 'live-llhls-for-KonomiTV')) {
-                // audio switching is enabled only when using mpegts.js or live-llhls-for-KonomiTV
+            if (!(this.type === 'mpegts')) {
+                // audio switching is enabled only when using mpegts.js
                 this.container.classList.add('dplayer-no-audio-switching');
             }
 
@@ -589,117 +588,6 @@ class DPlayer {
                     } else {
                         this.notice('Error: Can\'t find hls.js.', undefined, undefined, '#FF6F6A');
                     }
-                    break;
-                // only for KonomiTV
-                // https://github.com/tsukumijima/KonomiTV
-                case 'live-llhls-for-KonomiTV':
-
-                    // if it has already been initialized, destroy it once
-                    if (this.plugins.liveLLHLSForKonomiTV) {
-                        if (this.plugins.aribb24Caption) {
-                            this.plugins.aribb24Caption.dispose();
-                            delete this.plugins.aribb24Caption;
-                        }
-                        if (this.plugins.aribb24Superimpose) {
-                            this.plugins.aribb24Superimpose.dispose();
-                            delete this.plugins.aribb24Superimpose;
-                        }
-                        axios.delete(`${this.plugins.liveLLHLSForKonomiTV.baseUrl}/${this.plugins.liveLLHLSForKonomiTV.clientId}`);
-                        delete this.plugins.liveLLHLSForKonomiTV;
-                    }
-
-                    (async () => {
-
-                        // initialize LL-HLS streaming session for KonomiTV
-
-                        // get client id (API: /api/streams/live/:channel_id/:quality/ll-hls)
-                        const baseUrl = this.quality !== null ? this.quality.url : this.options.video.url!;
-                        const clientId = (await axios.post(baseUrl)).data.client_id;
-
-                        const switchSource = (secondaryAudio = false) => {
-                            let sourceUrl = baseUrl.replace('/ll-hls', `/ll-hls/${clientId}/primary-audio/playlist.m3u8`);
-                            if (secondaryAudio === true) {
-                                sourceUrl = baseUrl.replace('/ll-hls', `/ll-hls/${clientId}/secondary-audio/playlist.m3u8`);
-                            }
-                            if (video.src === sourceUrl) {
-                                return;
-                            }
-
-                            // load source
-                            const isPaused = video.paused;
-                            video.src = sourceUrl;
-                            video.load();
-
-                            // initialize aribb24.js
-                            // https://github.com/monyone/aribb24.js
-                            if (this.plugins.aribb24Caption) {
-                                this.plugins.aribb24Caption.dispose();
-                            }
-                            if (this.plugins.aribb24Superimpose) {
-                                this.plugins.aribb24Superimpose.dispose();
-                            }
-                            if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
-                                // set options
-                                if (this.options.pluginOptions.aribb24 === undefined) {
-                                    this.options.pluginOptions.aribb24 = {};
-                                }
-                                this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = true; // for Safari native HLS player
-                                const aribb24Options = this.options.pluginOptions.aribb24;
-
-                                // initialize aribb24 caption
-                                const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
-                                    {...aribb24Options, data_identifier: 0x80},
-                                );
-                                aribb24Caption.attachMedia(video);
-                                aribb24Caption.show();
-
-                                // initialize aribb24 superimpose
-                                if (this.options.pluginOptions.aribb24.disableSuperimposeRenderer !== true) {
-                                    const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
-                                        {...aribb24Options, data_identifier: 0x81},
-                                    );
-                                    aribb24Superimpose.attachMedia(video);
-                                    aribb24Superimpose.show();
-                                }
-                            }
-
-                            if (!isPaused) {
-                                video.play();
-                            }
-                        };
-                        const liveLLHLSForKonomiTV = {
-                            baseUrl: baseUrl,
-                            clientId: clientId,
-                            switchPrimaryAudio() {
-                                switchSource(false);
-                            },
-                            switchSecondaryAudio() {
-                                switchSource(true);
-                            },
-                        };
-                        this.plugins.liveLLHLSForKonomiTV = liveLLHLSForKonomiTV;
-
-                        // replace video source
-                        switchSource(false);
-
-                        // processing when destroy
-                        this.events.on('destroy', () => {
-                            // destroy aribb24 caption
-                            if (this.plugins.aribb24Caption) {
-                                this.plugins.aribb24Caption.dispose();
-                                delete this.plugins.aribb24Caption;
-                            }
-                            // destroy aribb24 superimpose
-                            if (this.plugins.aribb24Superimpose) {
-                                this.plugins.aribb24Superimpose.dispose();
-                                delete this.plugins.aribb24Superimpose;
-                            }
-                            axios.delete(`${liveLLHLSForKonomiTV.baseUrl}/${liveLLHLSForKonomiTV.clientId}`);
-                            delete this.plugins.liveLLHLSForKonomiTV;
-                        });
-
-                    })();
-
                     break;
                 // https://github.com/xqq/mpegts.js
                 case 'mpegts':
@@ -921,7 +809,7 @@ class DPlayer {
                 this.switchingQuality = false;
                 this.events.trigger('quality_end');
             }
-            if (this.tran && this.notice && this.type !== 'webtorrent' && this.type !== 'live-llhls-for-KonomiTV') {
+            if (this.tran && this.notice && this.type !== 'webtorrent') {
                 this.notice(this.tran('Video load failed'), -1, undefined, '#FF6F6A');
             }
             this.container.classList.remove('dplayer-loading');
@@ -995,7 +883,7 @@ class DPlayer {
             pic: null,
             screenshot: this.options.screenshot,
             preload: 'auto',
-            url: this.quality.type === 'live-llhls-for-KonomiTV' ? '' : this.quality.url,
+            url: this.quality.url,
             subtitle: this.options.subtitle,
             crossOrigin: this.options.crossOrigin,
         });
