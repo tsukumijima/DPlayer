@@ -133,15 +133,28 @@ class Controller {
 
     initThumbnails(): void {
         if (this.player.options.video.thumbnails) {
+            const thumbnailsConfig = this.player.options.video.thumbnails;
             this.thumbnails = new Thumbnails({
                 container: this.player.template.barPreview,
                 barWidth: this.player.template.barWrap.offsetWidth,
-                url: this.player.options.video.thumbnails,
+                url: thumbnailsConfig.url,
                 events: this.player.events,
+                duration: this.player.video.duration,
+                interval: thumbnailsConfig.interval,
+                totalCount: thumbnailsConfig.totalCount,
+                width: thumbnailsConfig.width,
+                height: thumbnailsConfig.height,
+                columnCount: thumbnailsConfig.columnCount,
             });
 
             this.player.on('loadedmetadata', () => {
-                this.thumbnails!.resize(160, (this.player.video.videoHeight / this.player.video.videoWidth) * 160, this.player.template.barWrap.offsetWidth);
+                const width = thumbnailsConfig.width || 160;
+                const height = thumbnailsConfig.height || Math.floor(width * 9 / 16);
+                this.thumbnails!.resize(
+                    width,
+                    height,
+                    this.player.template.barWrap.offsetWidth,
+                );
             });
         }
     }

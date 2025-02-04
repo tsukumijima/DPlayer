@@ -1001,7 +1001,14 @@ class DPlayer {
             this.plugins.aribb24Superimpose.refresh();
         }
         if (this.controller.thumbnails) {
-            this.controller.thumbnails.resize(160, (this.video.videoHeight / this.video.videoWidth) * 160, this.template.barWrap.offsetWidth);
+            const thumbnailsConfig = this.options.video.thumbnails;
+            const width = thumbnailsConfig && thumbnailsConfig.width || 160;
+            const height = thumbnailsConfig && thumbnailsConfig.height || Math.floor(width * 9 / 16);
+            this.controller.thumbnails.resize(
+                width,
+                height,
+                this.template.barWrap.offsetWidth,
+            );
         }
         this.events.trigger('resize');
     }

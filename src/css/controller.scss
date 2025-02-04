@@ -88,6 +88,9 @@
             background: #fff;
             pointer-events: none;
             background-size: 16000px 100%;
+            background-repeat: no-repeat;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
         .dplayer-bar-preview-canvas {
             position: absolute;

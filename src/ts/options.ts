@@ -36,6 +36,28 @@ export default (options: DPlayerType.Options): DPlayerType.OptionsInternal => {
     }
     if (options.video) {
         !options.video.type && (options.video.type = 'auto');
+
+        // Process thumbnails options
+        if (options.video.thumbnails) {
+            // Convert string to object format
+            if (typeof options.video.thumbnails === 'string') {
+                options.video.thumbnails = { url: options.video.thumbnails };
+            }
+
+            // Set default values
+            !options.video.thumbnails.width && (options.video.thumbnails.width = 160);
+            !options.video.thumbnails.columnCount && (options.video.thumbnails.columnCount = 100);
+
+            // Process interval and totalCount (mutually exclusive)
+            if (options.video.thumbnails.interval) {
+                // If interval is specified, totalCount will be calculated in Thumbnails class
+                // when duration is available
+                delete options.video.thumbnails.totalCount;
+            } else if (!options.video.thumbnails.totalCount) {
+                // If neither interval nor totalCount is specified, use default totalCount
+                options.video.thumbnails.totalCount = 100;
+            }
+        }
     }
     if (typeof options.danmaku === 'object' && options.danmaku) {
         !options.danmaku.user && (options.danmaku.user = 'DPlayer');
