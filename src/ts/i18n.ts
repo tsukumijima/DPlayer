@@ -165,7 +165,7 @@ const tranTxt = {
         'Quality': '画質',
         'quality': '画質',
         'FF': '早送り',
-        'REW': '巻き戻し',
+        'REW': '早戻し',
         'Unlimited danmaku': 'コメントを無制限に表示',
         'Send danmaku': 'コメントする',
         'Setting': '設定',

@@ -212,9 +212,17 @@ class DPlayer {
             time = Math.min(time, duration);
         }
         if (this.video.currentTime < time) {
-            this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
+            if (this.options.lang.includes('ja')) {
+                this.notice(`${(time - this.video.currentTime).toFixed(0)} 秒早送り`);
+            } else {
+                this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
+            }
         } else if (this.video.currentTime > time) {
-            this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
+            if (this.options.lang.includes('ja')) {
+                this.notice(`${(this.video.currentTime - time).toFixed(0)} 秒早戻し`);
+            } else {
+                this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
+            }
         }
 
         if (isFinite(time)) {  // ignore NaN, Infinity, -Infinity
@@ -899,7 +907,7 @@ class DPlayer {
         if (!paused) {
             this.video.play();
         }
-        if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
+        if (this.options.lang.includes('ja')) {
             this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
         } else {
             this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
@@ -928,7 +936,7 @@ class DPlayer {
                     this.video.play();
                 }
                 this.prevVideo = null;
-                if (this.options.lang === 'ja' || this.options.lang === 'ja-jp') {
+                if (this.options.lang.includes('ja')) {
                     this.notice(`画質を ${this.quality!.name} に切り替えました。`, 1000);
                 } else {
                     this.notice(`${this.tran('Switched to')} ${this.quality!.name} ${this.tran('quality')}`);
