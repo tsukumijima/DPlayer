@@ -953,8 +953,6 @@ class DPlayer {
                     // switch secondary audio
                     if (window.mpegts && this.plugins.mpegts && this.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
                         this.plugins.mpegts.switchSecondaryAudio();
-                    } else if (this.plugins.liveLLHLSForKonomiTV) {
-                        this.plugins.liveLLHLSForKonomiTV.switchSecondaryAudio();
                     }
                 }
 
