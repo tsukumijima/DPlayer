@@ -110,7 +110,7 @@
         </div>
     </div>
 </div>
-<div class="dplayer-setting-box" style="{{ options.video.quality ? `--quality-length:${options.video.quality.length}` : '' }}">
+<div class="dplayer-setting-box" style="{{ options.video.quality ? `--quality-length:${options.video.quality.length};` : '' }} {{ options.playbackSpeed ? `--speed-length:${options.playbackSpeed.length};` : '' }}">
     <div class="dplayer-setting-origin-panel">
         {{ if options.video.quality }}
         <div class="dplayer-setting-item dplayer-setting-quality">

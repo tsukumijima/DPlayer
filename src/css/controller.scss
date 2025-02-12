@@ -493,7 +493,7 @@
         }
     }
     &.dplayer-setting-box-speed {
-        clip-path: inset(calc(100% - 294px) 0 0 round 7px) !important;
+        clip-path: inset(calc(100% - (30px * var(--speed-length)) - 54px) 0 0 round 7px) !important;
         .dplayer-setting-origin-panel {
             transform: translateX(-100%);
         }
