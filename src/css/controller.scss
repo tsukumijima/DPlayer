@@ -34,6 +34,18 @@
         padding: 10px 0;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
+        // for preload thumbnails
+        // ref: https://stackoverflow.com/a/14390213/17124142
+        &:after {
+            // load thumbnails (if exists)
+            content: var(--thumbnail-url);
+            // hide the element
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
         &:hover {
             .dplayer-bar .dplayer-played .dplayer-thumb {
                 transform: scale(1);
@@ -88,6 +100,7 @@
             aspect-ratio: 16 / 9;
             border-radius: 6px;
             background: #fff;
+            background-image: var(--thumbnail-url);
             pointer-events: none;
             background-size: 16000px 100%;
             background-repeat: no-repeat;
@@ -100,10 +113,10 @@
             }
             position: absolute;
             left: 0px;
-            top: -17px;
+            top: -22px;
             border-radius: 4px;
-            padding: 5px 7px;
-            background-color: rgba(0, 0, 0, 0.62);
+            padding: 6.5px 7px;
+            background-color: rgba(31, 31, 31, 0.85);
             color: #fff;
             font-size: 12px;
             text-align: center;

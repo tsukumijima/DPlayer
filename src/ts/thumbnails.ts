@@ -8,7 +8,7 @@ class Thumbnails {
     events: Events;
     private readonly viewportWidth = 180;
     private readonly viewportHeight = 101;
-    private readonly thumbnailSpace = 4;
+    private readonly thumbnailSpace = 26;
     private width: number;
     private height: number;
     private interval?: number;
@@ -49,7 +49,7 @@ class Thumbnails {
         this.magnificationScale = this.viewportWidth / this.width;
 
         // Set initial styles
-        this.container.style.backgroundImage = `url('${options.url}')`;
+        this.player.template.barWrap.style.setProperty('--thumbnail-url', `url(${options.url})`);  // preload thumbnails
         this.container.style.width = `${this.viewportWidth}px`;
         this.container.style.height = `${this.viewportHeight}px`;
         this.container.style.top = `${-this.viewportHeight - this.thumbnailSpace}px`;
