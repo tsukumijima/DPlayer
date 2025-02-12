@@ -357,6 +357,11 @@ class Danmaku {
                                 danmakuItem.style.top = itemHeight * tunnel + 8 + 'px';
                                 danmakuItem.style.transform = `translateX(-${danWidth}px)`;
                                 danmakuItem.style.willChange = 'transform';
+                                // In Safari and the WKWebView browser on iOS/iPadOS, a rendering bug causes the
+                                // danmaku to flicker if try to show it right away, so hide it for now.
+                                if (utils.isWebKit) {
+                                    danmakuItem.style.display = 'none';
+                                }
                             }
                             break;
                         case 'top':
@@ -384,6 +389,14 @@ class Danmaku {
 
                         // insert
                         docFragment.appendChild(danmakuItem);
+
+                        // In Safari and the WKWebView browser:
+                        // Wait 0 seconds withsetTimeout() (important!) and then unhide
+                        if (utils.isWebKit && dan.type === 'right') {
+                            setTimeout(() => {
+                                danmakuItem.style.display = '';
+                            }, 0);
+                        }
                     }
                 }
             }

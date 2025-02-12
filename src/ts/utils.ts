@@ -88,7 +88,9 @@ const utils = {
 
     isFirefox: /firefox/i.test(window.navigator.userAgent),
 
-    isChrome: /chrome/i.test(window.navigator.userAgent),
+    // ref: https://rnwest.engineer/detect-webkit/
+    isWebKit: (/AppleWebKit/.test(window.navigator.userAgent) && !/Chrome/.test(window.navigator.userAgent)) ||
+        /\b(iPad|iPhone|iPod)\b/.test(window.navigator.userAgent),
 
     storage: {
         set: (key: string, value: any): void => {
