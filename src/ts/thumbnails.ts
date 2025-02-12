@@ -1,33 +1,39 @@
 import Events from './events';
+import DPlayer from './player';
 
 class Thumbnails {
+    player: DPlayer;
     container: HTMLElement;
     barWidth: number;
     events: Events;
+    private readonly viewportWidth = 160;
+    private readonly viewportHeight = 90;
     private width: number;
     private height: number;
+    private interval?: number;
     private totalCount: number;
     private columnCount: number;
+    private magnificationScale: number;
 
     constructor(options: {
-        container: HTMLElement;
-        barWidth: number;
+        player: DPlayer;
         url: string;
         events: Events;
-        duration?: number;
         interval?: number;
         totalCount?: number;
         width?: number;
         height?: number;
         columnCount?: number;
     }) {
-        this.container = options.container;
-        this.barWidth = options.barWidth;
+        this.player = options.player;
+        this.container = this.player.template.barPreview;
+        this.barWidth = this.player.template.barWrap.offsetWidth;
         this.events = options.events;
+        this.interval = options.interval;
 
         // Calculate total count based on interval or use specified totalCount
-        if (options.interval && options.duration) {
-            this.totalCount = Math.ceil(options.duration / options.interval);
+        if (options.interval) {
+            this.totalCount = Math.ceil(this.player.video.duration / options.interval);
         } else {
             this.totalCount = options.totalCount || 100;
         }
@@ -38,11 +44,14 @@ class Thumbnails {
         this.height = options.height || Math.floor(this.width * 9 / 16);
         this.columnCount = options.columnCount || 100;  // Default to 100 columns if not specified
 
+        // Calculate the magnification factor to make the thumbnail width VIEWPORT_WIDTH
+        this.magnificationScale = this.viewportWidth / this.width;
+
         // Set initial styles
         this.container.style.backgroundImage = `url('${options.url}')`;
-        this.container.style.width = `${this.width}px`;
-        this.container.style.height = `${this.height}px`;
-        this.container.style.top = `${-this.height + 2}px`;
+        this.container.style.width = `${this.viewportWidth}px`;
+        this.container.style.height = `${this.viewportHeight}px`;
+        this.container.style.top = `${-this.viewportHeight + 2}px`;
         this.container.style.backgroundPosition = '0 0';
     }
 
@@ -52,17 +61,22 @@ class Thumbnails {
         this.height = height;
         this.barWidth = barWrapWidth;
 
+        // Recalculate the total count based on the new video duration
+        if (this.interval) {
+            this.totalCount = Math.ceil(this.player.video.duration / this.interval);
+        }
+
         // Calculate the number of rows
         const rowCount = Math.ceil(this.totalCount / this.columnCount);
 
         // Calculate background-size based on the sprite image dimensions
-        const backgroundWidth = this.columnCount * width;
-        const backgroundHeight = rowCount * height;
+        const backgroundWidth = this.columnCount * width * this.magnificationScale;
+        const backgroundHeight = rowCount * height * this.magnificationScale;
 
         // Update container styles
-        this.container.style.width = `${width}px`;
-        this.container.style.height = `${height}px`;
-        this.container.style.top = `${-height + 2}px`;
+        this.container.style.width = `${this.viewportWidth}px`;
+        this.container.style.height = `${this.viewportHeight}px`;
+        this.container.style.top = `${-this.viewportHeight + 2}px`;
         this.container.style.backgroundSize = `${backgroundWidth}px ${backgroundHeight}px`;
     }
 
@@ -84,7 +98,7 @@ class Thumbnails {
         const backgroundY = row * this.height;
 
         // Set the background position
-        this.container.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
+        this.container.style.backgroundPosition = `-${backgroundX * this.magnificationScale}px -${backgroundY * this.magnificationScale}px`;
 
         // Position the container
         const left = Math.min(Math.max(position - this.container.offsetWidth / 2, -10), this.barWidth - 150);

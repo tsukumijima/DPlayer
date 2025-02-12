@@ -143,11 +143,9 @@ class Controller {
         if (this.player.options.video.thumbnails) {
             const thumbnailsConfig = this.player.options.video.thumbnails;
             this.thumbnails = new Thumbnails({
-                container: this.player.template.barPreview,
-                barWidth: this.player.template.barWrap.offsetWidth,
+                player: this.player,
                 url: thumbnailsConfig.url,
                 events: this.player.events,
-                duration: this.player.video.duration,
                 interval: thumbnailsConfig.interval,
                 totalCount: thumbnailsConfig.totalCount,
                 width: thumbnailsConfig.width,

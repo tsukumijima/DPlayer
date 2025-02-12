@@ -84,6 +84,7 @@
         .dplayer-bar-preview {
             display: none;
             position: absolute;
+            aspect-ratio: 16 / 9;
             border-radius: 6px;
             background: #fff;
             pointer-events: none;
@@ -91,13 +92,6 @@
             background-repeat: no-repeat;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
-        }
-        .dplayer-bar-preview-canvas {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
         }
         .dplayer-bar-time {
             &.hidden {
