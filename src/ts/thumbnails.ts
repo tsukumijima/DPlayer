@@ -6,8 +6,8 @@ class Thumbnails {
     container: HTMLElement;
     barWidth: number;
     events: Events;
-    private readonly viewportWidth = 160;
-    private readonly viewportHeight = 90;
+    private readonly viewportWidth = 180;
+    private readonly viewportHeight = 101;
     private readonly thumbnailSpace = 4;
     private width: number;
     private height: number;

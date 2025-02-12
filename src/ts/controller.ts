@@ -220,7 +220,7 @@ class Controller {
                     this.thumbnails && this.thumbnails.show();
                 }
                 this.thumbnails && this.thumbnails.move(relativeX);
-                this.player.template.playedBarTime.style.left = `${relativeX - (time >= 3600 ? 25 : 20)}px`;
+                this.player.template.playedBarTime.style.left = `${relativeX - (time >= 3600 ? 27.5 : 22.5)}px`;
                 this.player.template.playedBarTime.textContent = utils.secondToTime(time);
                 this.player.template.playedBarTime.classList.remove('hidden');
             }
