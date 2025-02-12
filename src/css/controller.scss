@@ -30,9 +30,10 @@
         position: absolute;
         width: calc(100% - 40px);
         height: 3px;
-        bottom: 46px;
-        padding: 5px 0;
+        bottom: 41px;
+        padding: 10px 0;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
         &:hover {
             .dplayer-bar .dplayer-played .dplayer-thumb {
                 transform: scale(1);

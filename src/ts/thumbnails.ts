@@ -8,6 +8,7 @@ class Thumbnails {
     events: Events;
     private readonly viewportWidth = 160;
     private readonly viewportHeight = 90;
+    private readonly thumbnailSpace = 4;
     private width: number;
     private height: number;
     private interval?: number;
@@ -51,7 +52,7 @@ class Thumbnails {
         this.container.style.backgroundImage = `url('${options.url}')`;
         this.container.style.width = `${this.viewportWidth}px`;
         this.container.style.height = `${this.viewportHeight}px`;
-        this.container.style.top = `${-this.viewportHeight + 2}px`;
+        this.container.style.top = `${-this.viewportHeight - this.thumbnailSpace}px`;
         this.container.style.backgroundPosition = '0 0';
     }
 
@@ -76,7 +77,7 @@ class Thumbnails {
         // Update container styles
         this.container.style.width = `${this.viewportWidth}px`;
         this.container.style.height = `${this.viewportHeight}px`;
-        this.container.style.top = `${-this.viewportHeight + 2}px`;
+        this.container.style.top = `${-this.viewportHeight - this.thumbnailSpace}px`;
         this.container.style.backgroundSize = `${backgroundWidth}px ${backgroundHeight}px`;
     }
 

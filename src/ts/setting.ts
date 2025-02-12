@@ -156,6 +156,7 @@ class Setting {
         // danmaku opacity
         if (this.player.danmaku) {
             const barWidth = 190;
+
             this.player.on('danmaku_opacity', (percentage: number) => {
                 this.player.bar.set('danmaku', percentage, 'width');
                 this.player.user.set('opacity', percentage);
@@ -164,9 +165,9 @@ class Setting {
             this.player.danmaku.opacity(this.player.user.get('opacity'));
             this.player.template.danmakuOpacityValue.textContent = this.player.user.get('opacity').toFixed(1);
 
-            const danmakuMove = (event: any) => {
-                const e = event || window.event;
-                let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
+            const danmakuMove = (event: Event) => {
+                const e = event as PointerEvent | TouchEvent | MouseEvent;
+                let percentage = utils.getRelativeX(e, this.player.template.danmakuOpacityBarWrap) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
                 if (this.player.danmaku !== null) {
@@ -179,9 +180,9 @@ class Setting {
                 this.player.template.danmakuOpacityBox.classList.remove('dplayer-setting-danmaku-active');
             };
 
-            this.player.template.danmakuOpacityBarWrapWrap.addEventListener('click', (event: any) => {
-                const e = event || window.event;
-                let percentage = ((e.clientX || e.changedTouches[0].clientX) - utils.getBoundingClientRectViewLeft(this.player.template.danmakuOpacityBarWrap)) / barWidth;
+            this.player.template.danmakuOpacityBarWrapWrap.addEventListener('click', (event: Event) => {
+                const e = event as PointerEvent | TouchEvent | MouseEvent;
+                let percentage = utils.getRelativeX(e, this.player.template.danmakuOpacityBarWrap) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
                 if (this.player.danmaku !== null) {

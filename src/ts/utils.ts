@@ -44,64 +44,28 @@ const utils = {
     },
 
     /**
-     * control play progress
-     * get element's view position
-     *
-     * @param {HTMLElement} element
-     * @returns {Number}
+     * Get the X coordinate of the pointer relative to a container element.
+     * @param event - PointerEvent or TouchEvent.
+     * @param container - The container to calculate relative coordinate for.
+     * @returns The relative X coordinate in pixels.
      */
-    getElementViewLeft: (element: HTMLElement): number => {
-        let actualLeft = element.offsetLeft;
-        let current = element.offsetParent as HTMLElement | null;
-        const elementScrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
-        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-            while (current !== null) {
-                actualLeft += current.offsetLeft;
-                current = current.offsetParent as HTMLElement | null;
+    getRelativeX: (event: PointerEvent | TouchEvent | MouseEvent, container: HTMLElement): number => {
+        const rect = container.getBoundingClientRect();
+        let clientX: number;
+        if ('touches' in event) {
+            // If TouchEvent, use changedTouches if touches is empty
+            if (event.touches.length > 0) {
+                clientX = event.touches[0].clientX;
+            } else if (event.changedTouches && event.changedTouches.length > 0) {
+                clientX = event.changedTouches[0].clientX;
+            } else {
+                // If both are not available, return 0 (should not happen normally)
+                clientX = 0;
             }
         } else {
-            while (current !== null && current !== element) {
-                actualLeft += current.offsetLeft;
-                current = current.offsetParent as HTMLElement | null;
-            }
+            clientX = event.clientX;
         }
-        return actualLeft - elementScrollLeft;
-    },
-
-    /**
-     * optimize control play progress
-     * optimize get element's view position, for float dialog video player
-     * The value returned by getBoundingClientRect in IE8 and below is missing width and height values
-     * The value returned by getBoundingClientRect in Firefox 11 and below will also include the value of transform
-     * The value returned by getBoundingClientRect in Opera 10.5 and below is missing width and height values
-     *
-     * @param {HTMLElement} element
-     * @returns {Number}
-     */
-    getBoundingClientRectViewLeft(element: HTMLElement): number {
-        const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + ((document.documentElement && document.documentElement.scrollTop) || 0);
-
-        if (element.getBoundingClientRect) {
-            // @ts-expect-error TS(2339): Property 'offset' does not exist on type '(element... Remove this comment to see the full error message
-            if (typeof this.getBoundingClientRectViewLeft.offset !== 'number') {
-                let temp = document.createElement('div');
-                temp.style.cssText = 'position:absolute;top:0;left:0;';
-                document.body.appendChild(temp);
-                // @ts-expect-error TS(2339): Property 'offset' does not exist on type '(element... Remove this comment to see the full error message
-                this.getBoundingClientRectViewLeft.offset = -temp.getBoundingClientRect().top - scrollTop;
-                document.body.removeChild(temp);
-                // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'HTMLDivElem... Remove this comment to see the full error message
-                temp = null;
-            }
-            const rect = element.getBoundingClientRect();
-            // @ts-expect-error TS(7022): 'offset' implicitly has type 'any' because it does... Remove this comment to see the full error message
-            const offset = this.getBoundingClientRectViewLeft.offset;
-
-            return rect.left + offset;
-        } else {
-            // not support getBoundingClientRect
-            return this.getElementViewLeft(element);
-        }
+        return clientX - rect.left;
     },
 
     getScrollPosition(): { left: number; top: number } {

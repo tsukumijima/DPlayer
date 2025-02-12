@@ -111,6 +111,7 @@ class DPlayer {
                     }
                 }
             }
+            this.resize();
         });
         this.resizeObserver.observe(this.container);
 
