@@ -17,24 +17,12 @@ declare const utils: {
      */
     getVideoDuration: (video: HTMLVideoElement, template: Template) => number;
     /**
-     * control play progress
-     * get element's view position
-     *
-     * @param {HTMLElement} element
-     * @returns {Number}
+     * Get the X coordinate of the pointer relative to a container element.
+     * @param event - PointerEvent or TouchEvent.
+     * @param container - The container to calculate relative coordinate for.
+     * @returns The relative X coordinate in pixels.
      */
-    getElementViewLeft: (element: HTMLElement) => number;
-    /**
-     * optimize control play progress
-     * optimize get element's view position, for float dialog video player
-     * The value returned by getBoundingClientRect in IE8 and below is missing width and height values
-     * The value returned by getBoundingClientRect in Firefox 11 and below will also include the value of transform
-     * The value returned by getBoundingClientRect in Opera 10.5 and below is missing width and height values
-     *
-     * @param {HTMLElement} element
-     * @returns {Number}
-     */
-    getBoundingClientRectViewLeft(element: HTMLElement): number;
+    getRelativeX: (event: PointerEvent | TouchEvent | MouseEvent, container: HTMLElement) => number;
     getScrollPosition(): {
         left: number;
         top: number;
@@ -45,7 +33,7 @@ declare const utils: {
     }): void;
     isMobile: boolean;
     isFirefox: boolean;
-    isChrome: boolean;
+    isWebKit: boolean;
     storage: {
         set: (key: string, value: any) => void;
         get: (key: string) => string | null;

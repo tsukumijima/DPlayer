@@ -432,12 +432,6 @@ export interface DanmakuInternal {
 }
 export interface Plugins {
     hls?: Hls;
-    liveLLHLSForKonomiTV?: {
-        baseUrl: string;
-        clientId: string;
-        switchPrimaryAudio(): void;
-        switchSecondaryAudio(): void;
-    };
     mpegts?: Mpegts.Player | Mpegts.MSEPlayer | Mpegts.NativePlayer;
     flvjs?: FlvJs.Player;
     dash?: dashjs.MediaPlayerClass;

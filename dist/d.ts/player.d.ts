@@ -58,7 +58,7 @@ declare class DPlayer {
     /**
      * Seek video
      */
-    seek(time: number): void;
+    seek(time: number, hideNotice?: boolean): void;
     /**
      * Sync video (live only)
      */

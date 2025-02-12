@@ -1,18 +1,23 @@
 import Events from './events';
+import DPlayer from './player';
 declare class Thumbnails {
+    player: DPlayer;
     container: HTMLElement;
     barWidth: number;
     events: Events;
+    private readonly viewportWidth;
+    private readonly viewportHeight;
+    private readonly thumbnailSpace;
     private width;
     private height;
+    private interval?;
     private totalCount;
     private columnCount;
+    private magnificationScale;
     constructor(options: {
-        container: HTMLElement;
-        barWidth: number;
+        player: DPlayer;
         url: string;
         events: Events;
-        duration?: number;
         interval?: number;
         totalCount?: number;
         width?: number;
