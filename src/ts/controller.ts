@@ -81,7 +81,7 @@ class Controller {
             this.mobileBackwardTime += 10;
             this.player.seek(this.player.video.currentTime - 10);
             if (this.player.options.lang.includes('ja')) {
-                this.player.notice(`${this.mobileBackwardTime.toFixed(0)} 秒早戻し`);
+                this.player.notice(`${this.mobileBackwardTime.toFixed(0)}秒早戻し`);
             } else {
                 this.player.notice(`${this.player.tran('REW')} ${this.mobileBackwardTime.toFixed(0)} ${this.player.tran('s')}`);
             }
@@ -99,7 +99,7 @@ class Controller {
             this.mobileForwardTime += 10;
             this.player.seek(this.player.video.currentTime + 10);
             if (this.player.options.lang.includes('ja')) {
-                this.player.notice(`${this.mobileForwardTime.toFixed(0)} 秒早送り`);
+                this.player.notice(`${this.mobileForwardTime.toFixed(0)}秒早送り`);
             } else {
                 this.player.notice(`${this.player.tran('FF')} ${this.mobileForwardTime.toFixed(0)} ${this.player.tran('s')}`);
             }
@@ -192,7 +192,7 @@ class Controller {
             percentage = Math.min(percentage, 1);
             this.player.bar.set('played', percentage, 'width');
             const duration = utils.getVideoDuration(this.player.video, this.player.template);
-            this.player.seek(this.player.bar.get('played') * duration);
+            this.player.seek(this.player.bar.get('played') * duration, true);  // hide notice
             if (!paused) {
                 this.player.video.play();
             }

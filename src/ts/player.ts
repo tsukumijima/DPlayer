@@ -206,23 +206,25 @@ class DPlayer {
     /**
      * Seek video
      */
-    seek(time: number): void {
+    seek(time: number, hideNotice = false): void {
         time = Math.max(time, 0);
         const duration = utils.getVideoDuration(this.video, this.template);
         if (duration) {
             time = Math.min(time, duration);
         }
-        if (this.video.currentTime < time) {
-            if (this.options.lang.includes('ja')) {
-                this.notice(`${(time - this.video.currentTime).toFixed(0)} 秒早送り`);
-            } else {
-                this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
-            }
-        } else if (this.video.currentTime > time) {
-            if (this.options.lang.includes('ja')) {
-                this.notice(`${(this.video.currentTime - time).toFixed(0)} 秒早戻し`);
-            } else {
-                this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
+        if (!hideNotice) {
+            if (this.video.currentTime < time) {
+                if (this.options.lang.includes('ja')) {
+                    this.notice(`${(time - this.video.currentTime).toFixed(0)}秒早送り`);
+                } else {
+                    this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
+                }
+            } else if (this.video.currentTime > time) {
+                if (this.options.lang.includes('ja')) {
+                    this.notice(`${(this.video.currentTime - time).toFixed(0)}秒早戻し`);
+                } else {
+                    this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
+                }
             }
         }
 
