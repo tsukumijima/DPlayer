@@ -54,6 +54,15 @@ class Thumbnails {
         this.container.style.height = `${this.viewportHeight}px`;
         this.container.style.top = `${-this.viewportHeight - this.thumbnailSpace}px`;
         this.container.style.backgroundPosition = '0 0';
+
+        // Resize thumbnails when video duration changes
+        this.player.on('durationchange', () => {
+            this.resize(
+                this.width,
+                this.height,
+                this.barWidth,
+            );
+        });
     }
 
     resize(width: number, height: number, barWrapWidth: number): void {
