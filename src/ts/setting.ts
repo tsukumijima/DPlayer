@@ -155,8 +155,6 @@ class Setting {
 
         // danmaku opacity
         if (this.player.danmaku) {
-            const barWidth = 190;
-
             this.player.on('danmaku_opacity', (percentage: number) => {
                 this.player.bar.set('danmaku', percentage, 'width');
                 this.player.user.set('opacity', percentage);
@@ -167,6 +165,7 @@ class Setting {
 
             const danmakuMove = (event: Event) => {
                 const e = event as PointerEvent | TouchEvent | MouseEvent;
+                const barWidth = this.player.template.danmakuOpacityBarWrap.clientWidth;
                 let percentage = utils.getRelativeX(e, this.player.template.danmakuOpacityBarWrap) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
@@ -185,6 +184,7 @@ class Setting {
 
             this.player.template.danmakuOpacityBarWrapWrap.addEventListener('click', (event: Event) => {
                 const e = event as PointerEvent | TouchEvent | MouseEvent;
+                const barWidth = this.player.template.danmakuOpacityBarWrap.clientWidth;
                 let percentage = utils.getRelativeX(e, this.player.template.danmakuOpacityBarWrap) / barWidth;
                 percentage = Math.max(percentage, 0);
                 percentage = Math.min(percentage, 1);
