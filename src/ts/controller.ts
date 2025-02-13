@@ -187,6 +187,9 @@ class Controller {
             const event = e as TouchEvent | MouseEvent;
             document.removeEventListener(utils.nameMap.dragEnd, thumbUp);
             document.removeEventListener(utils.nameMap.dragMove, thumbMove);
+            // fallback for Document Picture-in-Picture window
+            this.player.container.removeEventListener(utils.nameMap.dragEnd, thumbUp);
+            this.player.container.removeEventListener(utils.nameMap.dragMove, thumbMove);
             let percentage = utils.getRelativeX(event, this.player.template.playedBarWrap) / this.player.template.playedBarWrap.clientWidth;
             percentage = Math.max(percentage, 0);
             percentage = Math.min(percentage, 1);
@@ -204,6 +207,9 @@ class Controller {
             paused = this.player.video.paused;
             document.addEventListener(utils.nameMap.dragMove, thumbMove, { passive: false });
             document.addEventListener(utils.nameMap.dragEnd, thumbUp);
+            // fallback for Document Picture-in-Picture window
+            this.player.container.addEventListener(utils.nameMap.dragMove, thumbMove, { passive: false });
+            this.player.container.addEventListener(utils.nameMap.dragEnd, thumbUp);
         }, { passive: false });
 
         this.player.template.playedBarWrap.addEventListener(utils.nameMap.dragMove, (e: Event) => {
@@ -291,6 +297,9 @@ class Controller {
         const volumeUp = () => {
             document.removeEventListener(utils.nameMap.dragEnd, volumeUp);
             document.removeEventListener(utils.nameMap.dragMove, volumeMove);
+            // fallback for Document Picture-in-Picture window
+            this.player.container.removeEventListener(utils.nameMap.dragEnd, volumeUp);
+            this.player.container.removeEventListener(utils.nameMap.dragMove, volumeMove);
             this.player.template.volumeButton.classList.remove('dplayer-volume-active');
         };
 
@@ -302,6 +311,9 @@ class Controller {
         this.player.template.volumeBarWrapWrap.addEventListener(utils.nameMap.dragStart, () => {
             document.addEventListener(utils.nameMap.dragMove, volumeMove);
             document.addEventListener(utils.nameMap.dragEnd, volumeUp);
+            // fallback for Document Picture-in-Picture window
+            this.player.container.addEventListener(utils.nameMap.dragMove, volumeMove);
+            this.player.container.addEventListener(utils.nameMap.dragEnd, volumeUp);
             this.player.template.volumeButton.classList.add('dplayer-volume-active');
         });
         this.player.template.volumeButtonIcon.addEventListener('click', () => {

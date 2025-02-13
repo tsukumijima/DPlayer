@@ -177,6 +177,9 @@ class Setting {
             const danmakuUp = () => {
                 document.removeEventListener(utils.nameMap.dragEnd, danmakuUp);
                 document.removeEventListener(utils.nameMap.dragMove, danmakuMove);
+                // fallback for Document Picture-in-Picture window
+                this.player.container.removeEventListener(utils.nameMap.dragEnd, danmakuUp);
+                this.player.container.removeEventListener(utils.nameMap.dragMove, danmakuMove);
                 this.player.template.danmakuOpacityBox.classList.remove('dplayer-setting-danmaku-active');
             };
 
@@ -192,6 +195,9 @@ class Setting {
             this.player.template.danmakuOpacityBarWrapWrap.addEventListener(utils.nameMap.dragStart, () => {
                 document.addEventListener(utils.nameMap.dragMove, danmakuMove);
                 document.addEventListener(utils.nameMap.dragEnd, danmakuUp);
+                // fallback for Document Picture-in-Picture window
+                this.player.container.addEventListener(utils.nameMap.dragMove, danmakuMove);
+                this.player.container.addEventListener(utils.nameMap.dragEnd, danmakuUp);
                 this.player.template.danmakuOpacityBox.classList.add('dplayer-setting-danmaku-active');
             });
         }
