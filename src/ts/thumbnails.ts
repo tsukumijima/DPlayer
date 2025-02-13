@@ -1,5 +1,6 @@
 import Events from './events';
 import DPlayer from './player';
+import utils from './utils';
 
 class Thumbnails {
     player: DPlayer;
@@ -8,7 +9,7 @@ class Thumbnails {
     events: Events;
     private readonly viewportWidth = 180;
     private readonly viewportHeight = 101;
-    private readonly thumbnailSpace = 26;
+    private readonly thumbnailSpace = utils.isMobile ? 6 : 26;
     private width: number;
     private height: number;
     private interval?: number;
@@ -111,7 +112,7 @@ class Thumbnails {
         this.container.style.backgroundPosition = `-${backgroundX * this.magnificationScale}px -${backgroundY * this.magnificationScale}px`;
 
         // Position the container
-        const left = Math.min(Math.max(position - this.container.offsetWidth / 2, -10), this.barWidth - 150);
+        const left = Math.min(Math.max(position - this.container.offsetWidth / 2, -10), this.barWidth - (this.viewportWidth - 10));
         this.container.style.left = `${left}px`;
     }
 
