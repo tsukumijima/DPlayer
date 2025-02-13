@@ -487,6 +487,14 @@ class DPlayer {
                             hls.loadSource(video.src);
                             hls.attachMedia(video);
 
+                            // Listen for audio tracks updates
+                            hls.on(window.Hls.Events.AUDIO_TRACKS_UPDATED, () => {
+                                if (hls.audioTracks.length > 1) {
+                                    // Remove no-audio-switching class if multiple audio tracks are available
+                                    this.container.classList.remove('dplayer-no-audio-switching');
+                                }
+                            });
+
                             // processing when destroy
                             this.events.on('destroy', () => {
                                 // destroy aribb24 caption
@@ -956,6 +964,20 @@ class DPlayer {
                     // switch secondary audio
                     if (window.mpegts && this.plugins.mpegts && this.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
                         this.plugins.mpegts.switchSecondaryAudio();
+                    // switch secondary audio for HLS
+                    } else if (window.Hls && this.plugins.hls && this.plugins.hls instanceof window.Hls) {
+                        const hls = this.plugins.hls;
+                        if (hls.audioTracks.length > 1) {
+                            hls.audioTrack = 1;  // Switch to secondary audio track
+                        }
+                    }
+                } else {
+                    // switch primary audio for HLS
+                    if (window.Hls && this.plugins.hls && this.plugins.hls instanceof window.Hls) {
+                        const hls = this.plugins.hls;
+                        if (hls.audioTracks.length > 1) {
+                            hls.audioTrack = 0;  // Switch to primary audio track
+                        }
                     }
                 }
 

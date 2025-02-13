@@ -72,9 +72,10 @@ class Setting {
         });
         for (let i = 0; i < this.player.template.audioItem.length; i++) {
             this.player.template.audioItem[i].addEventListener('click', () => {
-                if (this.player.plugins.mpegts) {
+                // for mpegts
+                if (this.player.plugins.mpegts && window.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
                     if (this.player.template.audioItem[i].dataset.audio === this.currentAudio) {
-                        return;
+                        return;  // already on this audio
                     }
                     if (this.player.template.audioItem[i].dataset.audio === 'primary') {
                         // switch primary audio
@@ -82,18 +83,39 @@ class Setting {
                         this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Primary audio');
-                        if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                            this.player.plugins.mpegts.switchPrimaryAudio();
-                        }
+                        this.player.plugins.mpegts.switchPrimaryAudio();
                     } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
                         // switch secondary audio
                         this.currentAudio = 'secondary';
                         this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
                         this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
                         this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
-                        if (window.mpegts && this.player.plugins.mpegts && this.player.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                            this.player.plugins.mpegts.switchSecondaryAudio();
-                        }
+                        this.player.plugins.mpegts.switchSecondaryAudio();
+                    }
+                    this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
+                // for hls.js
+                } else if (this.player.plugins.hls && window.Hls && this.player.plugins.hls instanceof window.Hls) {
+                    const hls = this.player.plugins.hls;
+                    if (hls.audioTracks.length <= 1) {
+                        return;  // no multiple audio tracks
+                    }
+                    if (this.player.template.audioItem[i].dataset.audio === this.currentAudio) {
+                        return;  // already on this audio
+                    }
+                    if (this.player.template.audioItem[i].dataset.audio === 'primary') {
+                        // switch to primary audio track (index 0)
+                        this.currentAudio = 'primary';
+                        this.player.template.audioItem[0].classList.add('dplayer-setting-audio-current');
+                        this.player.template.audioItem[1].classList.remove('dplayer-setting-audio-current');
+                        this.player.template.audioValue.textContent = this.player.tran('Primary audio');
+                        hls.audioTrack = 0;
+                    } else if (this.player.template.audioItem[i].dataset.audio === 'secondary') {
+                        // switch to secondary audio track (index 1)
+                        this.currentAudio = 'secondary';
+                        this.player.template.audioItem[0].classList.remove('dplayer-setting-audio-current');
+                        this.player.template.audioItem[1].classList.add('dplayer-setting-audio-current');
+                        this.player.template.audioValue.textContent = this.player.tran('Secondary audio');
+                        hls.audioTrack = 1;
                     }
                     this.player.template.settingBox.classList.remove('dplayer-setting-box-audio');
                 }

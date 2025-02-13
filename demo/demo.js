@@ -402,7 +402,7 @@ function initPlayers() {
         container: document.getElementById('dplayer4'),
         preload: 'none',
         video: {
-            url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            url: 'https://cdn.bitmovin.com/content/assets/sintel/hls/playlist.m3u8',
             type: 'hls'
         }
     });
