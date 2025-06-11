@@ -11,8 +11,8 @@ declare class User {
     };
     constructor(player: DPlayer);
     init(): void;
-    get(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle'): number;
-    set(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle', value: number): void;
+    get(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle' | 'speed' | 'loop'): number;
+    set(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle' | 'speed' | 'loop', value: number): void;
 }
 export default User;
 //# sourceMappingURL=user.d.ts.map
