@@ -13,6 +13,8 @@ class User {
             unlimited: 'dplayer-danmaku-unlimited',
             danmaku: 'dplayer-danmaku-show',
             subtitle: 'dplayer-subtitle-show',
+            speed: 'dplayer-speed',
+            loop: 'dplayer-loop',
         };
         this.default = {
             opacity: 1.0,
@@ -20,6 +22,8 @@ class User {
             unlimited: (player.options.danmaku && player.options.danmaku.unlimited ? 1 : 0) || 0,
             danmaku: 1,
             subtitle: 1,
+            speed: 1.0,
+            loop: player.options.loop ? 1 : 0,
         };
         this.data = {};
 
@@ -33,11 +37,11 @@ class User {
         }
     }
 
-    get(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle'): number {
+    get(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle' | 'speed' | 'loop'): number {
         return this.data[key];
     }
 
-    set(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle', value: number): void {
+    set(key: 'opacity' | 'volume' | 'unlimited' | 'danmaku' | 'subtitle' | 'speed' | 'loop', value: number): void {
         this.data[key] = value;
         utils.storage.set(this.storageName[key], value);
     }

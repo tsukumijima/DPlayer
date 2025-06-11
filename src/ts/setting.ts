@@ -123,7 +123,7 @@ class Setting {
         }
 
         // loop
-        this.loop = this.player.options.loop;
+        this.loop = this.player.user.get('loop') === 1;
         this.player.template.loopToggle.checked = this.loop;
         this.player.template.loop.addEventListener('click', () => {
             this.player.template.loopToggle.checked = !this.player.template.loopToggle.checked;
@@ -132,6 +132,7 @@ class Setting {
             } else {
                 this.loop = false;
             }
+            this.player.user.set('loop', this.loop ? 1 : 0);
         });
 
         // show danmaku

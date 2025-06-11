@@ -875,7 +875,14 @@ class DPlayer {
             });
         }
 
+        // restore volume setting from LocalStorage
         this.volume(this.user.get('volume'), true, true);
+
+        // restore speed setting from LocalStorage
+        const savedSpeed = this.user.get('speed');
+        if (savedSpeed && savedSpeed !== 1.0) {
+            this.speed(savedSpeed);
+        }
 
         if (this.options.subtitle) {
             this.subtitle = new Subtitle(this.template.subtitle, this.video, this.plugins, this.options.subtitle, this.events);
@@ -1046,6 +1053,7 @@ class DPlayer {
 
     speed(rate: number): void {
         this.video.playbackRate = rate;
+        this.user.set('speed', rate);
         this.template.speedItem.forEach((elem) => {
             elem.classList.remove('dplayer-setting-speed-current');
             if (parseFloat(elem.dataset.speed!) === rate) {
