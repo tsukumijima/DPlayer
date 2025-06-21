@@ -24,6 +24,7 @@ class Template {
     video!: HTMLVideoElement;
     bezel!: HTMLElement;
     playButton!: HTMLElement;
+    playIcon!: HTMLElement;
     mobileBackwardButton!: HTMLElement;
     mobilePlayButton!: HTMLElement;
     mobileForwardButton!: HTMLElement;
@@ -138,6 +139,7 @@ class Template {
         this.video = this.container.querySelector<HTMLVideoElement>('.dplayer-video-current')!;
         this.bezel = this.container.querySelector('.dplayer-bezel-icon')!;
         this.playButton = this.container.querySelector('.dplayer-play-icon')!;
+        this.playIcon = this.container.querySelector('.dplayer-play-icon .dplayer-icon-content')!;
         this.mobileBackwardButton = this.container.querySelector('.dplayer-mobile-icon-backward')!;
         this.mobilePlayButton = this.container.querySelector('.dplayer-mobile-icon-play')!;
         this.mobileForwardButton = this.container.querySelector('.dplayer-mobile-icon-forward')!;
