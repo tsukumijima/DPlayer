@@ -84,9 +84,10 @@ class Danmaku {
         }
         const endpoints = (this.options.api.addition || []).slice(0);
         if (apiurl) endpoints.push(apiurl);
+        if (this.options.apiBackend) endpoints.push('apiBackend');
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
-        endpoints.length > 0 && this._readAllEndpoints(endpoints, (results) => {
+        this._readAllEndpoints(endpoints, (results) => {
             this.dan = ([] as DPlayerType.Dan[]).concat(...results).sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
