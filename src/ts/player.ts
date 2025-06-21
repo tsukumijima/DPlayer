@@ -59,7 +59,7 @@ class DPlayer {
     qualityIndex: number | null = null;
     switchingQuality = false;
     resizeObserver: ResizeObserver;
-    tran: (text: string) => string;
+    tran: (text: string, ...arg: Array<string | number>) => string;
     type: DPlayerType.VideoType | string = 'auto';
     video: HTMLVideoElement;
 
@@ -214,17 +214,10 @@ class DPlayer {
         }
         if (!hideNotice) {
             if (this.video.currentTime < time) {
-                if (this.options.lang.includes('ja')) {
-                    this.notice(`${(time - this.video.currentTime).toFixed(0)}秒早送り`);
-                } else {
-                    this.notice(`${this.tran('FF')} ${(time - this.video.currentTime).toFixed(0)} ${this.tran('s')}`);
-                }
+
+                this.notice(this.tran('FF progress', (time - this.video.currentTime).toFixed(0)));
             } else if (this.video.currentTime > time) {
-                if (this.options.lang.includes('ja')) {
-                    this.notice(`${(this.video.currentTime - time).toFixed(0)}秒早戻し`);
-                } else {
-                    this.notice(`${this.tran('REW')} ${(this.video.currentTime - time).toFixed(0)} ${this.tran('s')}`);
-                }
+                this.notice(this.tran('REW progress', (this.video.currentTime - time).toFixed(0)));
             }
         }
 
@@ -925,11 +918,7 @@ class DPlayer {
         if (!paused) {
             this.video.play();
         }
-        if (this.options.lang.includes('ja')) {
-            this.notice(`画質を ${this.quality.name} に切り替えています…`, -1);
-        } else {
-            this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
-        }
+        this.notice(this.tran('Switching to quality', this.quality.name), -1);
         this.container.classList.add('dplayer-loading');
         this.events.trigger('quality_start', this.quality);
 
@@ -954,11 +943,7 @@ class DPlayer {
                     this.video.play();
                 }
                 this.prevVideo = null;
-                if (this.options.lang.includes('ja')) {
-                    this.notice(`画質を ${this.quality!.name} に切り替えました。`, 1000);
-                } else {
-                    this.notice(`${this.tran('Switched to')} ${this.quality!.name} ${this.tran('quality')}`);
-                }
+                this.notice(this.tran('Switched to quality', this.quality!.name), 1000);
                 this.switchingQuality = false;
 
                 // restore speed

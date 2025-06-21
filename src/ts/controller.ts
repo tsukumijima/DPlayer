@@ -80,11 +80,7 @@ class Controller {
         this.player.template.mobileBackwardButton.addEventListener('click', () => {
             this.mobileBackwardTime += 10;
             this.player.seek(this.player.video.currentTime - 10);
-            if (this.player.options.lang.includes('ja')) {
-                this.player.notice(`${this.mobileBackwardTime.toFixed(0)}秒早戻し`);
-            } else {
-                this.player.notice(`${this.player.tran('REW')} ${this.mobileBackwardTime.toFixed(0)} ${this.player.tran('s')}`);
-            }
+            this.player.notice(this.player.tran('REW progress', this.mobileBackwardTime.toFixed(0)));
             // extend count reset
             // if the REW button is not pressed within 1 second, the count will be reset automatically
             window.clearTimeout(this.mobileSkipTimer);
@@ -98,11 +94,7 @@ class Controller {
         this.player.template.mobileForwardButton.addEventListener('click', () => {
             this.mobileForwardTime += 10;
             this.player.seek(this.player.video.currentTime + 10);
-            if (this.player.options.lang.includes('ja')) {
-                this.player.notice(`${this.mobileForwardTime.toFixed(0)}秒早送り`);
-            } else {
-                this.player.notice(`${this.player.tran('FF')} ${this.mobileForwardTime.toFixed(0)} ${this.player.tran('s')}`);
-            }
+            this.player.notice(this.player.tran('FF progress', this.mobileForwardTime.toFixed(0)));
             // extend count reset
             // if the FF button is not pressed within 1 second, the count will be reset automatically
             window.clearTimeout(this.mobileSkipTimer);
@@ -271,11 +263,7 @@ class Controller {
                 if (!document.pictureInPictureElement) {
                     this.player.video.requestPictureInPicture().catch((reason) => {
                         console.error(reason);
-                        if (this.player.options.lang.includes('ja')) {
-                            this.player.notice('Picture-in-Picture を開始できませんでした。', undefined, undefined, '#FF6F6A');
-                        } else {
-                            this.player.notice('Picture-in-Picture could not be started.', undefined, undefined, '#FF6F6A');
-                        }
+                        this.player.notice(this.player.tran('PIP not supported'), undefined, undefined, '#FF6F6A');
                     });
                 } else {
                     document.exitPictureInPicture();

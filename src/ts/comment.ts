@@ -83,7 +83,7 @@ class Comment {
 
         // text can't be empty
         if (!this.player.template.commentInput.value.replace(/^\s+|\s+$/g, '')) {
-            this.player.notice(this.player.tran('Please input danmaku content!'), undefined, undefined, '#FF6F6A');
+            this.player.notice(this.player.tran('Please input danmaku content'), undefined, undefined, '#FF6F6A');
             return;
         }
 
