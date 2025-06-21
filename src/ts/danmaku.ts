@@ -72,16 +72,21 @@ class Danmaku {
 
     load(): void {
         let apiurl;
-        if (this.options.api.maximum) {
-            apiurl = `${this.options.api.address}?id=${this.options.api.id}&max=${this.options.api.maximum}`;
-        } else {
-            apiurl = `${this.options.api.address}?id=${this.options.api.id}`;
+        if (this.options.api.address) {
+            const apiParamsObj = Object.assign({},
+                this.options.api.id ? { id: this.options.api.id } : {},
+                this.options.api.maximum ? { max: this.options.api.maximum } : {}
+            );
+            const apiParamsStr = Object.entries(apiParamsObj)
+                .map(([key, value]) => `${key}=${value}`)
+                .join('&');
+            apiurl = apiParamsStr ? `${this.options.api.address}?${apiParamsStr}` : this.options.api.address;
         }
         const endpoints = (this.options.api.addition || []).slice(0);
-        endpoints.push(apiurl);
+        if (apiurl) endpoints.push(apiurl);
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
-        this._readAllEndpoints(endpoints, (results) => {
+        endpoints.length > 0 && this._readAllEndpoints(endpoints, (results) => {
             this.dan = ([] as DPlayerType.Dan[]).concat(...results).sort((a, b) => a.time - b.time);
             window.requestAnimationFrame(() => {
                 this.frame();
