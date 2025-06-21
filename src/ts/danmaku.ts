@@ -75,7 +75,7 @@ class Danmaku {
         if (this.options.api.address) {
             const apiParamsObj = Object.assign({},
                 this.options.api.id ? { id: this.options.api.id } : {},
-                this.options.api.maximum ? { max: this.options.api.maximum } : {}
+                this.options.api.maximum ? { max: this.options.api.maximum } : {},
             );
             const apiParamsStr = Object.entries(apiParamsObj)
                 .map(([key, value]) => `${key}=${value}`)
@@ -110,6 +110,7 @@ class Danmaku {
      */
     _readAllEndpoints(endpoints: string[], callback: (results: DPlayerType.Dan[][]) => void): void {
         const results: DPlayerType.Dan[][] = [];
+        let errorCount = 0;
         let readCount = 0;
 
         for (let i = 0; i < endpoints.length; ++i) {
@@ -124,11 +125,17 @@ class Danmaku {
                     }
                 },
                 error: (message) => {
-                    this.options.error(message || this.options.tran('Danmaku load failed'));
+                    if (message) this.options.error(message);
                     results[i] = [];
 
+                    ++errorCount;
                     ++readCount;
                     if (readCount === endpoints.length) {
+                        if (errorCount !== endpoints.length) {
+                            this.options.error(this.options.tran('Danmaku load partial failed'));
+                        } else {
+                            this.options.error(this.options.tran('Danmaku load failed'));
+                        }
                         callback(results);
                     }
                 },
