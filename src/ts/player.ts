@@ -364,7 +364,12 @@ class DPlayer {
      * @param {Object | boolean} danmaku - new danmaku info
      * @param {Boolean} remember - whether to remember the current video time and speed
      */
-    switchVideo(video: { url: string; type?: DPlayerType.VideoType | string; pic?: string; }, danmakuAPI?: DPlayerType.Danmaku | boolean, remember = false): void {
+    switchVideo(
+        video: { url: string; type?: DPlayerType.VideoType | string; pic?: string; },
+        danmakuAPI?: DPlayerType.Danmaku | boolean,
+        remember = false,
+        apiBackend: DPlayerType.APIBackend = defaultApiBackend,
+    ): void {
         this.pause();
         const seek = this.video.currentTime;
         const speed = this.video.playbackRate;
@@ -377,8 +382,8 @@ class DPlayer {
                 if (!remember) this.bar.set('loaded', 0, 'width');
                 if (!remember) this.template.ptime.textContent = '00:00';
                 this.template.danmaku.innerHTML = '';
+                this.danmaku.options.apiBackend = apiBackend;
                 if (typeof danmakuAPI === 'object') {
-                    this.danmaku.options.apiBackend = defaultApiBackend;
                     this.danmaku.reload({
                         id: danmakuAPI.id,
                         address: danmakuAPI.api,
@@ -387,9 +392,11 @@ class DPlayer {
                         addition: danmakuAPI.addition,
                         user: danmakuAPI.user,
                     });
+                } else {
+                    this.danmaku.reload({});
                 }
             } else {
-                this.initDanmaku(danmakuAPI as DPlayerType.Danmaku);
+                this.initDanmaku(danmakuAPI as DPlayerType.Danmaku, apiBackend);
             }
         }
 
