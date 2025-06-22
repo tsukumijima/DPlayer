@@ -1,6 +1,7 @@
 import DPlayer from './player';
 import Events from './events';
 import utils from './utils';
+import defaultApiBackend from './api';
 import * as DPlayerType from './types';
 
 interface DanmakuOptions {
@@ -84,7 +85,7 @@ class Danmaku {
         }
         const endpoints = (this.options.api.addition || []).slice(0);
         if (apiurl) endpoints.push(apiurl);
-        if (this.options.apiBackend) endpoints.push('apiBackend');
+        if (this.options.apiBackend !== defaultApiBackend) endpoints.push('apiBackend');
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
         this._readAllEndpoints(endpoints, (results) => {
