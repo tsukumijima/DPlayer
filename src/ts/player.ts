@@ -375,7 +375,7 @@ class DPlayer {
      * Set volume muted
      */
     muted(muted?: boolean): boolean {
-        if (muted && typeof muted === 'boolean') {
+        if (typeof muted === 'boolean') {
             if (muted) {
                 this.video.muted = true;
                 this.template.volumeIcon.innerHTML = Icons.volumeOff;
