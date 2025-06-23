@@ -372,6 +372,25 @@ class DPlayer {
     }
 
     /**
+     * Set volume muted
+     */
+    muted(muted?: boolean): boolean {
+        if (typeof muted === 'boolean') {
+            if (muted) {
+                this.video.muted = true;
+                this.template.volumeIcon.innerHTML = Icons.volumeOff;
+                this.bar.set('volume', 0, 'width');
+            } else {
+                this.video.muted = false;
+                this.switchVolumeIcon();
+                this.bar.set('volume', this.volume(), 'width');
+            }
+        }
+
+        return this.video.muted;
+    }
+
+    /**
      * Toggle between play and pause
      */
     toggle(): void {
