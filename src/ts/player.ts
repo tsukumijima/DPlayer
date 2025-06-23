@@ -1103,7 +1103,7 @@ class DPlayer {
         this.timer.destroy();
         this.setting.destroy();
         this.resizeObserver.disconnect();
-        this.video.src = '';
+        this.video.removeAttribute('src');
         if (!keepContainerInnerHTML) {
             this.container.innerHTML = '';
         }
