@@ -1,6 +1,6 @@
 {
     "name": "dplayer",
-    "version": "1.32.4",
+    "version": "1.32.5",
     "description": "Wow, such a lovely HTML5 danmaku video player",
     "main": "dist/DPlayer.min.js",
     "types": "dist/d.ts/index.d.ts",
@@ -68,6 +68,7 @@
         "git-revision-webpack-plugin": "^5.0.0",
         "hls.js": "^1.5.13",
         "mini-css-extract-plugin": "2.9.0",
+        "minimatch": "^10.0.3",
         "mpegts.js": "github:tsukumijima/mpegts.js#726d91becfa178a68bbea154175213ab6b3dfdba",
         "patch-package": "^7.0.2",
         "postcss": "^8.4.39",

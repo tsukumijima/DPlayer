@@ -19,6 +19,7 @@ declare class Template {
     video: HTMLVideoElement;
     bezel: HTMLElement;
     playButton: HTMLElement;
+    playIcon: HTMLElement;
     mobileBackwardButton: HTMLElement;
     mobilePlayButton: HTMLElement;
     mobileForwardButton: HTMLElement;

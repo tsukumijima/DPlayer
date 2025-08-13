@@ -77,6 +77,10 @@ declare class DPlayer {
      */
     volume(percentage?: number | string, nostorage?: boolean, nonotice?: boolean): number;
     /**
+     * Set volume muted
+     */
+    muted(muted?: boolean): boolean;
+    /**
      * Toggle between play and pause
      */
     toggle(): void;
