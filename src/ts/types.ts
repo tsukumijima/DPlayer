@@ -1,7 +1,7 @@
 import Hls, { HlsConfig } from 'hls.js';
 import Mpegts from 'mpegts.js';
 import FlvJs from 'flv.js';
-import dashjs from 'dashjs';
+import * as dashjs from 'dashjs';
 import WebTorrent from 'webtorrent';
 import * as aribb24js from 'aribb24.js';
 
