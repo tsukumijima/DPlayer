@@ -1,6 +1,7 @@
 import DPlayer from './player';
 import Events from './events';
 import utils from './utils';
+import defaultApiBackend from './api';
 import * as DPlayerType from './types';
 
 interface DanmakuOptions {
@@ -72,13 +73,19 @@ class Danmaku {
 
     load(): void {
         let apiurl;
-        if (this.options.api.maximum) {
-            apiurl = `${this.options.api.address}?id=${this.options.api.id}&max=${this.options.api.maximum}`;
-        } else {
-            apiurl = `${this.options.api.address}?id=${this.options.api.id}`;
+        if (this.options.api.address) {
+            const apiParamsObj = Object.assign({},
+                this.options.api.id ? { id: this.options.api.id } : {},
+                this.options.api.maximum ? { max: this.options.api.maximum } : {},
+            );
+            const apiParamsStr = Object.entries(apiParamsObj)
+                .map(([key, value]) => `${key}=${value}`)
+                .join('&');
+            apiurl = apiParamsStr ? `${this.options.api.address}?${apiParamsStr}` : this.options.api.address;
         }
         const endpoints = (this.options.api.addition || []).slice(0);
-        endpoints.push(apiurl);
+        if (apiurl) endpoints.push(apiurl);
+        if (this.options.apiBackend !== defaultApiBackend) endpoints.push('apiBackend');
         this.events && this.events.trigger('danmaku_load_start', endpoints);
 
         this._readAllEndpoints(endpoints, (results) => {
@@ -105,6 +112,7 @@ class Danmaku {
      */
     _readAllEndpoints(endpoints: string[], callback: (results: DPlayerType.Dan[][]) => void): void {
         const results: DPlayerType.Dan[][] = [];
+        let errorCount = 0;
         let readCount = 0;
 
         for (let i = 0; i < endpoints.length; ++i) {
@@ -119,11 +127,17 @@ class Danmaku {
                     }
                 },
                 error: (message) => {
-                    this.options.error(message || this.options.tran('Danmaku load failed'));
+                    if (message) this.options.error(message);
                     results[i] = [];
 
+                    ++errorCount;
                     ++readCount;
                     if (readCount === endpoints.length) {
+                        if (errorCount !== endpoints.length) {
+                            this.options.error(this.options.tran('Danmaku load partial failed'));
+                        } else {
+                            this.options.error(this.options.tran('Danmaku load failed'));
+                        }
                         callback(results);
                     }
                 },
