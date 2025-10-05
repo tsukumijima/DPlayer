@@ -14,9 +14,7 @@
     <div class="dplayer-subtitle"></div>
     <div class="dplayer-bezel">
         <span class="dplayer-bezel-icon"></span>
-        {{ if options.danmaku }}
-        <span class="dplayer-danloading">{{ tran('Danmaku is loading') }}</span>
-        {{ /if }}
+        <span class="dplayer-danloading" style="display: none">{{ tran('Danmaku is loading') }}</span>
         <span class="dplayer-loading-icon">{{@ icons.loading }}</span>
     </div>
 </div>
