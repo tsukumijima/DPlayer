@@ -75,7 +75,7 @@ class FullScreen {
                 // lock screen to landscape (if supported)
                 if (screen.orientation) {
                     try {
-                        (screen.orientation as any).lock('landscape').catch(() => {
+                        screen.orientation.lock('landscape').catch(() => {
                             // pass
                         });
                     } catch (e) {
