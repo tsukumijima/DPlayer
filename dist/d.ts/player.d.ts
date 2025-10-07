@@ -96,13 +96,16 @@ declare class DPlayer {
      * Switch to a new video
      *
      * @param {Object} video - new video info
-     * @param {Object} danmaku - new danmaku info
+     * @param {Object | boolean} danmakuAPI - new danmaku info
+     * @param {Boolean} remember - whether to remember the current video time and speed
+     * @param {Object} apiBackend - new danmaku api backend info
      */
     switchVideo(video: {
         url: string;
         type?: DPlayerType.VideoType | string;
         pic?: string;
-    }, danmakuAPI?: DPlayerType.Danmaku): void;
+    }, danmakuAPI?: DPlayerType.Danmaku | boolean, remember?: boolean, apiBackend?: DPlayerType.APIBackend): void;
+    initDanmaku(danmakuAPI?: DPlayerType.Danmaku | boolean, apiBackend?: DPlayerType.APIBackend): void;
     initMSE(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
     initVideo(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
     switchQuality(index: number): void;
