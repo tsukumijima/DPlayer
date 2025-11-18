@@ -505,13 +505,7 @@ class DPlayer {
                 // https://github.com/video-dev/hls.js
                 case 'hls':
                     if (window.Hls) {
-                        // iPad Safari supports hls.js (MSE), but it's unstable and should be disabled
-                        const isiPadSafari = (
-                            /Safari/i.test(navigator.userAgent) &&
-                            (/iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document) &&
-                            (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL'))
-                        );
-                        if (window.Hls.isSupported() && !isiPadSafari) {
+                        if (window.Hls.isSupported()) {
                             // if it has already been initialized, destroy it once
                             if (this.plugins.hls) {
                                 // destroy aribb24 caption
