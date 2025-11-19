@@ -47,15 +47,14 @@ KonomiTV や TVRemotePlus 向けではありますが、できるだけ汎用的
 
 今のところ npm には公開していませんが、その代わりに dist/ 以下を Git 管理に含め、リリース時に毎回ビルド済みファイルの更新とタグ付けを行っています。
 
-以下のように GitHub リポジトリの URL を package.json に記述すれば、本家 DPlayer の代わりとして利用できます。
+以下のように GitHub のリポジトリ名を package.json に記述すれば、本家 DPlayer の代わりとして利用できます。
 
 ```json
 {
-    ...
+    "name": "example-project",
     "dependencies": {
-        "dplayer": "github:tsukumijima/DPlayer#v1.32.7",
-    },
-    ...
+        "dplayer": "github:tsukumijima/DPlayer#v1.32.7"
+    }
 }
 ```
 
