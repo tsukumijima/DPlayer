@@ -405,7 +405,7 @@ class Danmaku {
                         docFragment.appendChild(danmakuItem);
 
                         // In Safari and the WKWebView browser:
-                        // Wait 0 seconds withsetTimeout() (important!) and then unhide
+                        // Wait 0 seconds with setTimeout() (important!) and then unhide
                         if (utils.isWebKit && dan.type === 'right') {
                             setTimeout(() => {
                                 danmakuItem.style.display = '';
