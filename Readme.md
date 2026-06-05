@@ -53,7 +53,7 @@ KonomiTV や TVRemotePlus 向けではありますが、できるだけ汎用的
 {
     "name": "example-project",
     "dependencies": {
-        "dplayer": "github:tsukumijima/DPlayer#v1.32.7"
+        "dplayer": "github:tsukumijima/DPlayer#v1.32.8"
     }
 }
 ```
