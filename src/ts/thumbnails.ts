@@ -16,6 +16,8 @@ class Thumbnails {
     private totalCount: number;
     private columnCount: number;
     private magnificationScale: number;
+    // When totalCount is explicitly specified, do not recalculate the count from video.duration
+    private readonly fixedTotalCount: boolean;
 
     constructor(options: {
         player: DPlayer;
@@ -32,12 +34,15 @@ class Thumbnails {
         this.barWidth = this.player.template.barWrap.offsetWidth;
         this.events = options.events;
         this.interval = options.interval;
+        this.fixedTotalCount = options.totalCount !== undefined;
 
-        // Calculate total count based on interval or use specified totalCount
-        if (options.interval) {
-            this.totalCount = Math.ceil(this.player.video.duration / options.interval);
+        // Determine the initial value of totalCount
+        if (this.fixedTotalCount === true) {
+            this.totalCount = options.totalCount!;
+        } else if (options.interval !== undefined) {
+            this.totalCount = this.calculateTotalCountFromInterval(options.interval, 100);
         } else {
-            this.totalCount = options.totalCount || 100;
+            this.totalCount = 100;
         }
 
         // Set dimensions
@@ -56,14 +61,28 @@ class Thumbnails {
         this.container.style.top = `${-this.viewportHeight - this.thumbnailSpace}px`;
         this.container.style.backgroundPosition = '0 0';
 
-        // Resize thumbnails when video duration changes
-        this.player.on('durationchange', () => {
-            this.resize(
-                this.width,
-                this.height,
-                this.barWidth,
-            );
-        });
+        // Finalize background-size at construction time to avoid the CSS default (16000px 100%) display
+        this.resize(this.width, this.height, this.barWidth);
+
+        // Only in interval mode, update the count after duration is known
+        if (this.fixedTotalCount === false && options.interval !== undefined) {
+            this.player.on('durationchange', () => {
+                this.resize(
+                    this.width,
+                    this.height,
+                    this.barWidth,
+                );
+            });
+        }
+    }
+
+    private calculateTotalCountFromInterval(interval: number, fallback: number): number {
+        const duration = this.player.video.duration;
+        // Same as durationchange in player.ts: do not use 1 / Infinity before duration is known for count calculation
+        if (Number.isFinite(duration) === false || duration <= 1) {
+            return fallback;
+        }
+        return Math.ceil(duration / interval);
     }
 
     resize(width: number, height: number, barWrapWidth: number): void {
@@ -72,13 +91,13 @@ class Thumbnails {
         this.height = height;
         this.barWidth = barWrapWidth;
 
-        // Recalculate the total count based on the new video duration
-        if (this.interval) {
-            this.totalCount = Math.ceil(this.player.video.duration / this.interval);
+        // Only in interval mode without a fixed totalCount, recalculate the count from the known duration
+        if (this.fixedTotalCount === false && this.interval !== undefined) {
+            this.totalCount = this.calculateTotalCountFromInterval(this.interval, this.totalCount);
         }
 
         // Calculate the number of rows
-        const rowCount = Math.ceil(this.totalCount / this.columnCount);
+        const rowCount = Math.max(1, Math.ceil(this.totalCount / this.columnCount));
 
         // Calculate background-size based on the sprite image dimensions
         const backgroundWidth = this.columnCount * width * this.magnificationScale;
