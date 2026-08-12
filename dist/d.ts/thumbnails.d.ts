@@ -14,6 +14,7 @@ declare class Thumbnails {
     private totalCount;
     private columnCount;
     private magnificationScale;
+    private readonly fixedTotalCount;
     constructor(options: {
         player: DPlayer;
         url: string;
@@ -24,6 +25,7 @@ declare class Thumbnails {
         height?: number;
         columnCount?: number;
     });
+    private calculateTotalCountFromInterval;
     resize(width: number, height: number, barWrapWidth: number): void;
     show(): void;
     move(position: number): void;
