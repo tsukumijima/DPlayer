@@ -49,6 +49,7 @@ class DPlayer {
     containerClickFun: () => void;
     docClickFun: () => void;
     focus = false;
+    mediaBackendDestroy: (() => void) | null = null;
     narrow = false;
     noticeTime: number | null = null;
     options: DPlayerType.OptionsInternal;
@@ -475,6 +476,8 @@ class DPlayer {
     }
 
     initMSE(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void {
+        // A video element has exactly one media backend, so switching formats releases the previous owner first
+        this.destroyMediaBackend();
         this.type = type;
         if (this.options.video.customType && this.options.video.customType[type]) {
             if (Object.prototype.toString.call(this.options.video.customType[type]) === '[object Function]') {
@@ -506,22 +509,6 @@ class DPlayer {
                 case 'hls':
                     if (window.Hls) {
                         if (window.Hls.isSupported()) {
-                            // if it has already been initialized, destroy it once
-                            if (this.plugins.hls) {
-                                // destroy aribb24 caption
-                                if (this.plugins.aribb24Caption) {
-                                    this.plugins.aribb24Caption.dispose();
-                                    delete this.plugins.aribb24Caption;
-                                }
-                                // destroy aribb24 superimpose
-                                if (this.plugins.aribb24Superimpose) {
-                                    this.plugins.aribb24Superimpose.dispose();
-                                    delete this.plugins.aribb24Superimpose;
-                                }
-                                this.plugins.hls.destroy();
-                                delete this.plugins.hls;
-                            }
-
                             // initialize hls.js
                             const hlsOptions = this.options.pluginOptions.hls;
                             const hls = new window.Hls(hlsOptions);
@@ -539,8 +526,8 @@ class DPlayer {
                                 }
                             });
 
-                            // processing when destroy
-                            this.events.on('destroy', () => {
+                            // Keep the cleanup paired with this exact instance across quality and format switches
+                            this.mediaBackendDestroy = () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -552,8 +539,10 @@ class DPlayer {
                                     delete this.plugins.aribb24Superimpose;
                                 }
                                 hls.destroy();
-                                delete this.plugins.hls;
-                            });
+                                if (this.plugins.hls === hls) {
+                                    delete this.plugins.hls;
+                                }
+                            };
 
                             // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
@@ -595,18 +584,8 @@ class DPlayer {
                             }
                         } else if (video.canPlayType('application/x-mpegURL') || video.canPlayType('application/vnd.apple.mpegURL')) {
                             // normal playback
-                            // if it has already been initialized, destroy it once
-                            if (this.plugins.aribb24Caption) {
-                                this.plugins.aribb24Caption.dispose();
-                                delete this.plugins.aribb24Caption;
-                            }
-                            if (this.plugins.aribb24Superimpose) {
-                                this.plugins.aribb24Superimpose.dispose();
-                                delete this.plugins.aribb24Superimpose;
-                            }
-
-                            // processing when destroy
-                            this.events.on('destroy', () => {
+                            // Native HLS has no plugin instance, but its renderers still follow the media backend lifetime
+                            this.mediaBackendDestroy = () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -617,7 +596,7 @@ class DPlayer {
                                     this.plugins.aribb24Superimpose.dispose();
                                     delete this.plugins.aribb24Superimpose;
                                 }
-                            });
+                            };
 
                             // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
@@ -656,24 +635,6 @@ class DPlayer {
                 case 'mpegts':
                     if (window.mpegts) {
                         if (window.mpegts.isSupported()) {
-                            // if it has already been initialized, destroy it once
-                            if (this.plugins.mpegts) {
-                                // destroy aribb24 caption
-                                if (this.plugins.aribb24Caption) {
-                                    this.plugins.aribb24Caption.dispose();
-                                    delete this.plugins.aribb24Caption;
-                                }
-                                // destroy aribb24 superimpose
-                                if (this.plugins.aribb24Superimpose) {
-                                    this.plugins.aribb24Superimpose.dispose();
-                                    delete this.plugins.aribb24Superimpose;
-                                }
-                                this.plugins.mpegts.unload();
-                                this.plugins.mpegts.detachMediaElement();
-                                this.plugins.mpegts.destroy();
-                                delete this.plugins.mpegts;
-                            }
-
                             // initialize mpegts.js
                             if (this.options.pluginOptions.mpegts === undefined) {
                                 this.options.pluginOptions.mpegts = {};
@@ -690,8 +651,8 @@ class DPlayer {
                             mpegtsPlayer.attachMediaElement(video);
                             mpegtsPlayer.load();
 
-                            // processing when destroy
-                            this.events.on('destroy', () => {
+                            // Preserve mpegts.js's established unload and detach order for this instance
+                            this.mediaBackendDestroy = () => {
                                 // destroy aribb24 caption
                                 if (this.plugins.aribb24Caption) {
                                     this.plugins.aribb24Caption.dispose();
@@ -705,8 +666,10 @@ class DPlayer {
                                 mpegtsPlayer.unload();
                                 mpegtsPlayer.detachMediaElement();
                                 mpegtsPlayer.destroy();
-                                delete this.plugins.mpegts;
-                            });
+                                if (this.plugins.mpegts === mpegtsPlayer) {
+                                    delete this.plugins.mpegts;
+                                }
+                            };
 
                             // initialize aribb24.js
                             // https://github.com/monyone/aribb24.js
@@ -768,12 +731,15 @@ class DPlayer {
                             this.plugins.flvjs = flvPlayer;
                             flvPlayer.attachMediaElement(video);
                             flvPlayer.load();
-                            this.events.on('destroy', () => {
+                            // Preserve flv.js's established unload and detach order for this instance
+                            this.mediaBackendDestroy = () => {
                                 flvPlayer.unload();
                                 flvPlayer.detachMediaElement();
                                 flvPlayer.destroy();
-                                delete this.plugins.flvjs;
-                            });
+                                if (this.plugins.flvjs === flvPlayer) {
+                                    delete this.plugins.flvjs;
+                                }
+                            };
                         } else {
                             this.notice('Error: flv.js is not supported.', undefined, undefined, '#FF6F6A');
                         }
@@ -789,10 +755,13 @@ class DPlayer {
                         const options = this.options.pluginOptions.dash;
                         dashjsPlayer.updateSettings(options ?? {});
                         this.plugins.dash = dashjsPlayer;
-                        this.events.on('destroy', () => {
+                        // reset() is the teardown API provided by the supported dash.js version
+                        this.mediaBackendDestroy = () => {
                             dashjsPlayer.reset();
-                            delete this.plugins.dash;
-                        });
+                            if (this.plugins.dash === dashjsPlayer) {
+                                delete this.plugins.dash;
+                            }
+                        };
                     } else {
                         this.notice('Error: Can\'t find dash.js.', undefined, undefined, '#FF6F6A');
                     }
@@ -819,11 +788,14 @@ class DPlayer {
                                     });
                                 }
                             });
-                            this.events.on('destroy', () => {
+                            // Preserve the removal sequence required by the supported WebTorrent version
+                            this.mediaBackendDestroy = () => {
                                 client.remove(torrentId);
                                 client.destroy();
-                                delete this.plugins.webtorrent;
-                            });
+                                if (this.plugins.webtorrent === client) {
+                                    delete this.plugins.webtorrent;
+                                }
+                            };
                         } else {
                             this.notice('Error: Webtorrent is not supported.', undefined, undefined, '#FF6F6A');
                         }
@@ -1113,6 +1085,16 @@ class DPlayer {
     }
 
     /**
+     * Release the media backend currently attached to the video element
+     */
+    destroyMediaBackend(): void {
+        // Clear the callback before running plugin code so reentrant teardown remains idempotent
+        const mediaBackendDestroy = this.mediaBackendDestroy;
+        this.mediaBackendDestroy = null;
+        mediaBackendDestroy?.();
+    }
+
+    /**
      * Destroy DPlayer, and it can not be used again
      * @param keepContainerInnerHTML If true, do not clean the innerHTML of the container
      */
@@ -1128,6 +1110,7 @@ class DPlayer {
         this.timer.destroy();
         this.setting.destroy();
         this.resizeObserver.disconnect();
+        this.destroyMediaBackend();
         this.video.removeAttribute('src');
         if (!keepContainerInnerHTML) {
             this.container.innerHTML = '';
