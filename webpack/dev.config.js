@@ -49,12 +49,32 @@ module.exports = {
         historyApiFallback: {
             disableDotRule: true,
         },
-        static: {
-            directory: path.resolve(__dirname, '..', 'demo'),
-            watch: {
-                ignored: /node_modules/,
+        static: [
+            {
+                directory: path.resolve(__dirname, '..', 'demo'),
+                watch: {
+                    ignored: /node_modules/,
+                },
             },
-        }
+            {
+                // Serve the prebuilt mpeg2toh264 ESM and resolve its worker relative to the package
+                directory: path.resolve(__dirname, '..', 'node_modules', 'mpeg2toh264', 'packages', 'player', 'dist'),
+                publicPath: '/mpeg2toh264/player',
+                watch: false,
+            },
+            {
+                // Serve the prebuilt YADIF ESM from the same Git dependency outside the DPlayer bundle
+                directory: path.resolve(__dirname, '..', 'node_modules', 'mpeg2toh264', 'packages', 'yadif', 'dist'),
+                publicPath: '/mpeg2toh264/yadif',
+                watch: false,
+            },
+            ...(process.env.DPLAYER_RECORDINGS_DIR ? [{
+                directory: path.resolve(process.env.DPLAYER_RECORDINGS_DIR),
+                publicPath: '/recordings',
+                serveIndex: true,
+                watch: false,
+            }] : []),
+        ],
     },
 
     // resolve modules

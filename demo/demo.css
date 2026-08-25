@@ -121,6 +121,66 @@ body {
     outline: none;
 }
 
+.mpeg2toh264-controls {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.mpeg2toh264-controls label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mpeg2toh264-controls input[type="url"],
+.mpeg2toh264-controls select {
+    flex: 1;
+    min-width: 0;
+}
+
+.mpeg2toh264-stats {
+    min-height: 7em;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color-scheme: dark;
+    }
+
+    .example {
+        background-color: #0d1117;
+        border-color: #30363d;
+    }
+
+    .example:after,
+    .highlight-html:after,
+    .highlight-js:after {
+        background-color: #21262d;
+        color: #8c959f;
+    }
+
+    .highlight {
+        border-color: #30363d;
+    }
+
+    .btn,
+    .example input,
+    .example select {
+        background-color: #21262d;
+        color: #f0f6fc;
+        border-color: #30363d;
+    }
+
+    .mpeg2toh264-stats {
+        background-color: #161b22;
+        color: #e6edf3;
+        border-color: #30363d;
+    }
+}
+
 summary {
     outline: none;
     cursor: pointer;

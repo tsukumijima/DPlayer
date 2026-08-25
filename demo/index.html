@@ -18,6 +18,50 @@
 
 <body class="markdown-body">
 
+    <h2 id="mpeg2toh264-live">mpeg2toh264 Live</h2>
+    <div class="example mpeg2toh264-example">
+        <div class="mpeg2toh264-controls">
+            <label>Service <select id="mpeg2toh264-live-service"></select></label>
+            <label>MediaSource
+                <select id="mpeg2toh264-live-media-source">
+                    <option value="auto">Auto</option>
+                    <option value="worker">Worker</option>
+                    <option value="main">Main</option>
+                </select>
+            </label>
+            <label><input type="checkbox" id="mpeg2toh264-live-yadif"> YADIF</label>
+            <label><input type="checkbox" id="mpeg2toh264-live-double-rate"> Double rate</label>
+            <label><input type="checkbox" id="mpeg2toh264-live-auto-film"> Auto film</label>
+            <button class="btn" id="mpeg2toh264-live-play">Play</button>
+            <button class="btn" id="mpeg2toh264-live-destroy">Destroy</button>
+        </div>
+        <div id="mpeg2toh264-live-player"></div>
+        <pre id="mpeg2toh264-live-stats" class="mpeg2toh264-stats">Loading Mirakurun services...</pre>
+    </div>
+
+    <h2 id="mpeg2toh264-recording">mpeg2toh264 Recording</h2>
+    <div class="example mpeg2toh264-example">
+        <div class="mpeg2toh264-controls">
+            <label>HTTP URL <input type="url" id="mpeg2toh264-recording-url" placeholder="/recordings/example.ts"></label>
+            <label>TS file <input type="file" id="mpeg2toh264-recording-file" accept=".ts,video/mp2t"></label>
+            <label>MediaSource
+                <select id="mpeg2toh264-recording-media-source">
+                    <option value="auto">Auto</option>
+                    <option value="worker">Worker</option>
+                    <option value="main">Main</option>
+                </select>
+            </label>
+            <label><input type="checkbox" id="mpeg2toh264-recording-yadif"> YADIF</label>
+            <label><input type="checkbox" id="mpeg2toh264-recording-double-rate"> Double rate</label>
+            <label><input type="checkbox" id="mpeg2toh264-recording-auto-film"> Auto film</label>
+            <button class="btn" id="mpeg2toh264-recording-play-url">Play URL</button>
+            <button class="btn" id="mpeg2toh264-recording-play-file">Play file</button>
+            <button class="btn" id="mpeg2toh264-recording-destroy">Destroy</button>
+        </div>
+        <div id="mpeg2toh264-recording-player"></div>
+        <pre id="mpeg2toh264-recording-stats" class="mpeg2toh264-stats">Select a recording source.</pre>
+    </div>
+
     <h2 id="for-konomitv">for KonomiTV</h2>
     <div class="example">
         <div id="dplayer0"></div>
@@ -123,6 +167,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/stats.js"></script>
     <script src="demo.js"></script>
+    <script type="module" src="mpeg2toh264-demo.js"></script>
 </body>
 
 </html>
