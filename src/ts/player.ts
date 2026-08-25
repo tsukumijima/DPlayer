@@ -22,6 +22,7 @@ import InfoPanel from './info-panel';
 import tplVideo from '../template/video.art';
 import defaultApiBackend from './api';
 import * as DPlayerType from './types';
+import type { PrivateStream } from 'mpeg2toh264/player';
 
 let index = 0;
 const instances: DPlayer[] = [];
@@ -49,10 +50,10 @@ class DPlayer {
     containerClickFun: () => void;
     docClickFun: () => void;
     focus = false;
-    mediaBackendDestroy: (() => void) | null = null;
     narrow = false;
     noticeTime: number | null = null;
     options: DPlayerType.OptionsInternal;
+    mediaBackendDestroy: (() => void) | null = null;
     paused = false;
     plugins: DPlayerType.Plugins;
     prevVideoCurrentTime = 0;
@@ -60,6 +61,8 @@ class DPlayer {
     quality: DPlayerType.VideoQualityInternal | null = null;
     qualityIndex: number | null = null;
     switchingQuality = false;
+    // A replacement media backend consumes this selection after publishing its audio metadata
+    pendingAudio: DPlayerType.AudioChannel | null = null;
     resizeObserver: ResizeObserver;
     tran: (text: string) => string;
     type: DPlayerType.VideoType | string = 'auto';
@@ -479,6 +482,7 @@ class DPlayer {
         // A video element has exactly one media backend, so switching formats releases the previous owner first
         this.destroyMediaBackend();
         this.type = type;
+
         if (this.options.video.customType && this.options.video.customType[type]) {
             if (Object.prototype.toString.call(this.options.video.customType[type]) === '[object Function]') {
                 this.options.video.customType[type](this.video, this);
@@ -499,8 +503,8 @@ class DPlayer {
                     this.type = 'normal';
                 }
             }
-            if (!(this.type === 'mpegts')) {
-                // audio switching is enabled only when using mpegts.js
+            if (!(this.type === 'mpegts' || this.type === 'mpeg2toh264')) {
+                // audio switching is enabled only for players that expose broadcast audio tracks
                 this.container.classList.add('dplayer-no-audio-switching');
             }
 
@@ -523,6 +527,11 @@ class DPlayer {
                                     this.container.classList.remove('dplayer-no-audio-switching');
                                 } else {
                                     this.container.classList.add('dplayer-no-audio-switching');
+                                }
+
+                                // A quality switch may finish before hls.js publishes its audio tracks
+                                if (this.pendingAudio !== null) {
+                                    this.switchAudio(this.pendingAudio);
                                 }
                             });
 
@@ -712,6 +721,101 @@ class DPlayer {
                         }
                     } else {
                         this.notice('Error: Can\'t find mpegts.js.', undefined, undefined, '#FF6F6A');
+                    }
+                    break;
+                // https://github.com/otya128/mpeg2toh264
+                case 'mpeg2toh264':
+                    if (window.mpeg2toh264) {
+                        const mpeg2toh264 = window.mpeg2toh264;
+
+                        // Forward upstream options unchanged so new transcoder capabilities require no DPlayer release
+                        const mpeg2toh264Player = new mpeg2toh264.Mpeg2TsPlayer(
+                            video,
+                            this.options.pluginOptions.mpeg2toh264,
+                        );
+                        this.plugins.mpeg2toh264 = mpeg2toh264Player;
+
+                        // Conversion failures use DPlayer's existing notice surface while callers can observe the plugin directly
+                        mpeg2toh264Player.addEventListener('error', (event) => {
+                            this.notice(`Error: ${event.detail.error.message}`, undefined, undefined, '#FF6F6A');
+                        });
+
+                        // Keep the existing two-choice UI available for a second PID or dual-mono sub channel
+                        mpeg2toh264Player.addEventListener('audio', (event) => {
+                            const audio = event.detail;
+                            if (audio.available.length >= 2 || audio.available[0]?.dualMono === true) {
+                                this.container.classList.remove('dplayer-no-audio-switching');
+                            } else {
+                                this.container.classList.add('dplayer-no-audio-switching');
+                            }
+
+                            // Apply the requested channel as soon as the replacement backend discovers its audio streams
+                            const pendingAudio = this.pendingAudio;
+                            if (pendingAudio !== null && this.switchAudio(pendingAudio)) {
+                                return;
+                            }
+
+                            // Reflect programme-boundary audio changes in the check mark shown by DPlayer
+                            const isSecondaryAudio = audio.dualMono === true ?
+                                audio.dualMonoSub : audio.current === audio.available[1]?.pid;
+                            this.setting.setCurrentAudio(isSecondaryAudio ? 'secondary' : 'primary');
+                        });
+
+                        // aribb24.js v1 accepts the raw private PES payload under its timed PRIV owner contract
+                        if (this.options.subtitle && this.options.subtitle.type === 'aribb24') {
+                            if (this.options.pluginOptions.aribb24 === undefined) {
+                                this.options.pluginOptions.aribb24 = {};
+                            }
+                            this.options.pluginOptions.aribb24.enableAutoInBandMetadataTextTrackDetection = false;
+                            const aribb24Options = this.options.pluginOptions.aribb24;
+
+                            // Caption and superimpose share PES delivery while data_identifier selects their own payloads
+                            const aribb24Caption = this.plugins.aribb24Caption = new aribb24js.CanvasRenderer(
+                                {...aribb24Options, data_identifier: 0x80},
+                            );
+                            aribb24Caption.attachMedia(video);
+                            aribb24Caption.show();
+                            if (this.options.pluginOptions.aribb24.disableSuperimposeRenderer !== true) {
+                                const aribb24Superimpose = this.plugins.aribb24Superimpose = new aribb24js.CanvasRenderer(
+                                    {...aribb24Options, data_identifier: 0x81},
+                                );
+                                aribb24Superimpose.attachMedia(video);
+                                aribb24Superimpose.show();
+                            }
+
+                            const pushPrivateStream = (event: CustomEvent<PrivateStream>) => {
+                                // A PES without PTS cannot be placed on the media timeline and is ignored by the renderer
+                                if (event.detail.pts === null) {
+                                    return;
+                                }
+                                const data = new Uint8Array(event.detail.data);
+                                this.plugins.aribb24Caption?.pushID3v2PRIVData(event.detail.pts, 'aribb24.js', data);
+                                this.plugins.aribb24Superimpose?.pushID3v2PRIVData(event.detail.pts, 'aribb24.js', data);
+                            };
+                            mpeg2toh264Player.addEventListener('private_stream_1', pushPrivateStream);
+                            mpeg2toh264Player.addEventListener('private_stream_2', pushPrivateStream);
+                        }
+
+                        // Keep Worker, MSE, and subtitle resources under the same backend lifetime
+                        this.mediaBackendDestroy = () => {
+                            if (this.plugins.aribb24Caption) {
+                                this.plugins.aribb24Caption.dispose();
+                                delete this.plugins.aribb24Caption;
+                            }
+                            if (this.plugins.aribb24Superimpose) {
+                                this.plugins.aribb24Superimpose.dispose();
+                                delete this.plugins.aribb24Superimpose;
+                            }
+                            mpeg2toh264Player.destroy();
+                            if (this.plugins.mpeg2toh264 === mpeg2toh264Player) {
+                                delete this.plugins.mpeg2toh264;
+                            }
+                        };
+
+                        // The error event above owns user-visible reporting; catch only consumes the rejected load promise
+                        void mpeg2toh264Player.load(video.src).catch(() => undefined);
+                    } else {
+                        this.notice('Error: Can\'t find mpeg2toh264.', undefined, undefined, '#FF6F6A');
                     }
                     break;
                 // https://github.com/Bilibili/flv.js
@@ -908,6 +1012,60 @@ class DPlayer {
         }
     }
 
+    /**
+     * Apply one of DPlayer's two broadcast audio choices to the active media backend
+     * @param audio Audio channel selected by the viewer
+     * @returns Whether the active backend accepted the requested channel
+     */
+    switchAudio(audio: DPlayerType.AudioChannel): boolean {
+        // hls.js represents the primary and secondary choices as the first two audio tracks
+        if (window.Hls && this.plugins.hls && this.plugins.hls instanceof window.Hls) {
+            if (this.plugins.hls.audioTracks.length < 2) {
+                return false;
+            }
+            this.plugins.hls.audioTrack = audio === 'secondary' ? 1 : 0;
+            this.pendingAudio = null;
+            this.setting.setCurrentAudio(audio);
+            return true;
+        }
+
+        // mpegts.js exposes explicit operations for the two broadcast audio choices
+        if (window.mpegts && this.plugins.mpegts && this.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
+            if (audio === 'secondary') {
+                this.plugins.mpegts.switchSecondaryAudio();
+            } else {
+                this.plugins.mpegts.switchPrimaryAudio();
+            }
+            this.pendingAudio = null;
+            this.setting.setCurrentAudio(audio);
+            return true;
+        }
+
+        // mpeg2toh264 maps the same UI to either two PIDs or two services carried as dual mono
+        if (this.plugins.mpeg2toh264) {
+            const mpeg2toh264Player = this.plugins.mpeg2toh264;
+            const mpeg2toh264Audio = mpeg2toh264Player.audio;
+            if (mpeg2toh264Audio === null) {
+                return false;
+            }
+            if (mpeg2toh264Audio.available.length >= 2) {
+                const audioStream = mpeg2toh264Audio.available[audio === 'secondary' ? 1 : 0];
+                mpeg2toh264Player.selectAudio(audioStream.pid);
+            } else if (mpeg2toh264Audio.dualMono === true) {
+                mpeg2toh264Player.selectDualMono(audio === 'secondary');
+            } else if (audio === 'primary' && mpeg2toh264Audio.available[0] !== undefined) {
+                mpeg2toh264Player.selectAudio(mpeg2toh264Audio.available[0].pid);
+            } else {
+                return false;
+            }
+            this.pendingAudio = null;
+            this.setting.setCurrentAudio(audio);
+            return true;
+        }
+
+        return false;
+    }
+
     switchQuality(index: number): void {
         index = typeof index === 'string' ? parseInt(index) : index;
         if (this.options.video.quality === undefined || this.qualityIndex === index || this.switchingQuality) {
@@ -934,6 +1092,8 @@ class DPlayer {
         this.prevVideoCurrentTime = this.video.currentTime;
         this.prevVideo = this.video;
         this.video = videoEle;
+        // Preserve the selected channel until the replacement backend publishes enough audio metadata
+        this.pendingAudio = this.setting.currentAudio;
         this.initVideo(this.video, this.quality.type || this.options.video.type);
         if (!this.options.live) {
             this.seek(this.prevVideoCurrentTime);
@@ -981,27 +1141,9 @@ class DPlayer {
                 const speed = parseFloat(this.template.settingBox.querySelector<HTMLElement>('.dplayer-setting-speed-current')!.dataset.speed!);
                 this.speed(speed);
 
-                // restore audio
-                const audio = this.template.settingBox.querySelector<HTMLElement>('.dplayer-setting-audio-current')!.dataset.audio!;
-                if (audio === 'secondary') {
-                    // switch secondary audio
-                    if (window.mpegts && this.plugins.mpegts && this.plugins.mpegts instanceof window.mpegts.MSEPlayer) {
-                        this.plugins.mpegts.switchSecondaryAudio();
-                    // switch secondary audio for HLS
-                    } else if (window.Hls && this.plugins.hls && this.plugins.hls instanceof window.Hls) {
-                        const hls = this.plugins.hls;
-                        if (hls.audioTracks.length >= 2) {
-                            hls.audioTrack = 1;  // Switch to secondary audio track
-                        }
-                    }
-                } else {
-                    // switch primary audio for HLS
-                    if (window.Hls && this.plugins.hls && this.plugins.hls instanceof window.Hls) {
-                        const hls = this.plugins.hls;
-                        if (hls.audioTracks.length >= 2) {
-                            hls.audioTrack = 0;  // Switch to primary audio track
-                        }
-                    }
+                // Reapply immediately when metadata is ready, or leave the request for the audio event to consume
+                if (this.pendingAudio !== null) {
+                    this.switchAudio(this.pendingAudio);
                 }
 
                 this.container.classList.remove('dplayer-loading');
