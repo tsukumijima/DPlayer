@@ -70,7 +70,7 @@
         "hls.js": "^1.6.9",
         "mini-css-extract-plugin": "2.9.0",
         "minimatch": "^10.0.3",
-        "mpeg2toh264": "github:tsukumijima/mpeg2toh264#8129163b533e4491e82fe031bc66ccc10861bdfe",
+        "mpeg2toh264": "github:tsukumijima/mpeg2toh264#e09a1a1ac25c836ecadcbbe3ee852e4ac9b51e5d",
         "mpegts.js": "github:tsukumijima/mpegts.js#c69a71c809b6e0a53f7101455333f8b3d98460d0",
         "patch-package": "^7.0.2",
         "postcss": "^8.4.39",
