@@ -4,11 +4,14 @@ import FlvJs from 'flv.js';
 import * as dashjs from 'dashjs';
 import WebTorrent from 'webtorrent';
 import * as aribb24js from 'aribb24.js';
+import type { Mpeg2TsPlayer, Mpeg2TsPlayerOptions } from 'mpeg2toh264/player';
+import type { Deinterlacer } from 'mpeg2toh264/yadif';
 import DPlayer from './player';
 export type Lang = 'en' | 'zh-cn' | 'zh-tw' | 'ja' | 'ja-jp';
 export type Preload = 'none' | 'metadata' | 'auto';
 export type CrossOrigin = 'anonymous' | 'use-credentials' | null;
-export type VideoType = 'auto' | 'hls' | 'mpegts' | 'flv' | 'dash' | 'webtorrent' | 'normal';
+export type VideoType = 'auto' | 'hls' | 'mpegts' | 'mpeg2toh264' | 'flv' | 'dash' | 'webtorrent' | 'normal';
+export type AudioChannel = 'primary' | 'secondary';
 export type SubtitleType = 'webvtt' | 'aribb24';
 export type Events = VideoEvents | PlayerEvents;
 export type VideoEvents = 'abort' | 'canplay' | 'canplaythrough' | 'durationchange' | 'emptied' | 'ended' | 'error' | 'loadeddata' | 'loadedmetadata' | 'loadstart' | 'mozaudioavailable' | 'pause' | 'play' | 'playing' | 'progress' | 'ratechange' | 'seeked' | 'seeking' | 'stalled' | 'suspend' | 'timeupdate' | 'volumechange' | 'waiting';
@@ -343,6 +346,7 @@ export interface PluginOptions {
         config?: Mpegts.Config;
         mediaDataSource?: Mpegts.MediaDataSource;
     };
+    mpeg2toh264?: Mpeg2TsPlayerOptions;
     flv?: {
         config?: FlvJs.Config;
         mediaDataSource?: FlvJs.MediaDataSource;
@@ -358,6 +362,10 @@ export interface WindowExtend extends Window {
     flvjs?: typeof FlvJs;
     Hls?: typeof Hls;
     mpegts?: typeof Mpegts;
+    mpeg2toh264?: {
+        Mpeg2TsPlayer: typeof Mpeg2TsPlayer;
+        Deinterlacer: typeof Deinterlacer;
+    };
     WebTorrent?: typeof WebTorrent;
 }
 export interface OptionsInternal {
@@ -433,6 +441,7 @@ export interface DanmakuInternal {
 export interface Plugins {
     hls?: Hls;
     mpegts?: Mpegts.Player | Mpegts.MSEPlayer | Mpegts.NativePlayer;
+    mpeg2toh264?: Mpeg2TsPlayer;
     flvjs?: FlvJs.Player;
     dash?: dashjs.MediaPlayerClass;
     webtorrent?: WebTorrent.Instance;

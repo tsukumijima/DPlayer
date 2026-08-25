@@ -37,6 +37,7 @@ declare class DPlayer {
     narrow: boolean;
     noticeTime: number | null;
     options: DPlayerType.OptionsInternal;
+    mediaBackendDestroy: (() => void) | null;
     paused: boolean;
     plugins: DPlayerType.Plugins;
     prevVideoCurrentTime: number;
@@ -44,6 +45,7 @@ declare class DPlayer {
     quality: DPlayerType.VideoQualityInternal | null;
     qualityIndex: number | null;
     switchingQuality: boolean;
+    pendingAudio: DPlayerType.AudioChannel | null;
     resizeObserver: ResizeObserver;
     tran: (text: string) => string;
     type: DPlayerType.VideoType | string;
@@ -108,6 +110,12 @@ declare class DPlayer {
     initDanmaku(danmakuAPI?: DPlayerType.Danmaku | boolean, apiBackend?: DPlayerType.APIBackend): void;
     initMSE(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
     initVideo(video: HTMLVideoElement, type: DPlayerType.VideoType | string): void;
+    /**
+     * Apply one of DPlayer's two broadcast audio choices to the active media backend
+     * @param audio Audio channel selected by the viewer
+     * @returns Whether the active backend accepted the requested channel
+     */
+    switchAudio(audio: DPlayerType.AudioChannel): boolean;
     switchQuality(index: number): void;
     /**
      * Show notice
@@ -123,6 +131,10 @@ declare class DPlayer {
     hideNotice(): void;
     resize(): void;
     speed(rate: number): void;
+    /**
+     * Release the media backend currently attached to the video element
+     */
+    destroyMediaBackend(): void;
     /**
      * Destroy DPlayer, and it can not be used again
      * @param keepContainerInnerHTML If true, do not clean the innerHTML of the container
