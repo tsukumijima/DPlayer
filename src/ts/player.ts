@@ -22,7 +22,7 @@ import InfoPanel from './info-panel';
 import tplVideo from '../template/video.art';
 import defaultApiBackend from './api';
 import * as DPlayerType from './types';
-import type { PrivateStream } from 'mpeg2toh264/player';
+import type { PlayerState, PrivateStream, Progress, Stats } from 'mpeg2toh264/player';
 
 let index = 0;
 const instances: DPlayer[] = [];
@@ -154,11 +154,12 @@ class DPlayer {
 
         this.contextmenu = new ContextMenu(this);
 
+        // mpeg2toh264 load() emits statechange before returning, so the panel has to exist first
+        this.infoPanel = new InfoPanel(this);
+
         this.initVideo(this.video, (this.quality && this.quality.type) || this.options.video.type);
 
         this.setting = new Setting(this);
-
-        this.infoPanel = new InfoPanel(this);
 
         if (!this.danmaku && this.options.autoplay) {
             this.play();
@@ -728,10 +729,19 @@ class DPlayer {
                     if (window.mpeg2toh264) {
                         const mpeg2toh264 = window.mpeg2toh264;
 
-                        // Forward upstream options unchanged so new transcoder capabilities require no DPlayer release
+                        const userMpeg2ToH264Options = this.options.pluginOptions.mpeg2toh264 ?? {};
+                        const userDeinterlacer = userMpeg2ToH264Options.deinterlacer;
+                        // The page constructs the deinterlacer; subscribe to its stats event after it exists
                         const mpeg2toh264Player = new mpeg2toh264.Mpeg2TsPlayer(
                             video,
-                            this.options.pluginOptions.mpeg2toh264,
+                            {
+                                ...userMpeg2ToH264Options,
+                                deinterlacer: userDeinterlacer && ((element) => {
+                                    const instance = userDeinterlacer(element);
+                                    this.infoPanel.watchMpeg2ToH264Deinterlacer(instance);
+                                    return instance;
+                                }),
+                            },
                         );
                         this.plugins.mpeg2toh264 = mpeg2toh264Player;
 
@@ -739,6 +749,23 @@ class DPlayer {
                         mpeg2toh264Player.addEventListener('error', (event) => {
                             this.notice(`Error: ${event.detail.error.message}`, undefined, undefined, '#FF6F6A');
                         });
+
+                        const updateStats = (event: CustomEvent<Stats>) => {
+                            this.infoPanel.setMpeg2ToH264Stats(event.detail);
+                        };
+                        const updateState = (event: CustomEvent<{ state: PlayerState }>) => {
+                            this.infoPanel.setMpeg2ToH264State(event.detail.state);
+                        };
+                        const updateProgress = (event: CustomEvent<Progress>) => {
+                            this.infoPanel.setMpeg2ToH264Progress(event.detail);
+                        };
+                        const updateWorkers = (event: CustomEvent<{ pictureWorkers: number }>) => {
+                            this.infoPanel.setMpeg2ToH264PictureWorkers(event.detail.pictureWorkers);
+                        };
+                        mpeg2toh264Player.addEventListener('stats', updateStats);
+                        mpeg2toh264Player.addEventListener('statechange', updateState);
+                        mpeg2toh264Player.addEventListener('progress', updateProgress);
+                        mpeg2toh264Player.addEventListener('workers', updateWorkers);
 
                         // Keep the existing two-choice UI available for a second PID or dual-mono sub channel
                         mpeg2toh264Player.addEventListener('audio', (event) => {
@@ -798,6 +825,11 @@ class DPlayer {
 
                         // Keep Worker, MSE, and subtitle resources under the same backend lifetime
                         this.mediaBackendDestroy = () => {
+                            mpeg2toh264Player.removeEventListener('stats', updateStats);
+                            mpeg2toh264Player.removeEventListener('statechange', updateState);
+                            mpeg2toh264Player.removeEventListener('progress', updateProgress);
+                            mpeg2toh264Player.removeEventListener('workers', updateWorkers);
+                            this.infoPanel.resetMpeg2ToH264();
                             if (this.plugins.aribb24Caption) {
                                 this.plugins.aribb24Caption.dispose();
                                 delete this.plugins.aribb24Caption;

@@ -96,6 +96,20 @@ class Template {
     infoDuration!: HTMLElement;
     infoBufferRemain!: HTMLElement;
     infoDownloadSpeed!: HTMLElement;
+    infoMpeg2ToH264!: HTMLElement;
+    infoMode!: HTMLElement;
+    infoDeinterlaceMode!: HTMLElement;
+    infoConversionState!: HTMLElement;
+    infoBufferAhead!: HTMLElement;
+    infoConversionFPS!: HTMLElement;
+    infoConvertedFrames!: HTMLElement;
+    infoTransportStream!: HTMLElement;
+    infoWorkerTime!: HTMLElement;
+    infoPictureWorkers!: HTMLElement;
+    infoInputRead!: HTMLElement;
+    infoScan!: HTMLElement;
+    infoDeinterlace!: HTMLElement;
+    infoConversionChart!: HTMLCanvasElement;
 
     constructor(options: { container: HTMLElement; options: DPlayerType.OptionsInternal; index: number; tran: (text: string) => string; }) {
         this.container = options.container;
@@ -211,6 +225,20 @@ class Template {
         this.infoDuration = this.container.querySelector('.dplayer-info-panel-item-duration .dplayer-info-panel-item-data')!;
         this.infoBufferRemain = this.container.querySelector('.dplayer-info-panel-item-buffer-remain .dplayer-info-panel-item-data')!;
         this.infoDownloadSpeed = this.container.querySelector('.dplayer-info-panel-item-download-speed .dplayer-info-panel-item-data')!;
+        this.infoMpeg2ToH264 = this.container.querySelector('.dplayer-info-panel-mpeg2toh264')!;
+        this.infoMode = this.container.querySelector('.dplayer-info-panel-item-mode .dplayer-info-panel-item-data')!;
+        this.infoDeinterlaceMode = this.container.querySelector('.dplayer-info-panel-item-deinterlace-mode .dplayer-info-panel-item-data')!;
+        this.infoConversionState = this.container.querySelector('.dplayer-info-panel-item-conversion-state .dplayer-info-panel-item-data')!;
+        this.infoBufferAhead = this.container.querySelector('.dplayer-info-panel-item-buffer-ahead .dplayer-info-panel-item-data')!;
+        this.infoConversionFPS = this.container.querySelector('.dplayer-info-panel-item-conversion-fps .dplayer-info-panel-item-data')!;
+        this.infoConvertedFrames = this.container.querySelector('.dplayer-info-panel-item-converted-frames .dplayer-info-panel-item-data')!;
+        this.infoTransportStream = this.container.querySelector('.dplayer-info-panel-item-transport-stream .dplayer-info-panel-item-data')!;
+        this.infoWorkerTime = this.container.querySelector('.dplayer-info-panel-item-worker-time .dplayer-info-panel-item-data')!;
+        this.infoPictureWorkers = this.container.querySelector('.dplayer-info-panel-item-picture-workers .dplayer-info-panel-item-data')!;
+        this.infoInputRead = this.container.querySelector('.dplayer-info-panel-item-input-read .dplayer-info-panel-item-data')!;
+        this.infoScan = this.container.querySelector('.dplayer-info-panel-item-scan .dplayer-info-panel-item-data')!;
+        this.infoDeinterlace = this.container.querySelector('.dplayer-info-panel-item-deinterlace .dplayer-info-panel-item-data')!;
+        this.infoConversionChart = this.container.querySelector('.dplayer-info-panel-conversion-chart')!;
     }
 }
 

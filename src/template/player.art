@@ -316,6 +316,62 @@
         <span class="dplayer-info-panel-item-title">Download Speed</span>
         <span class="dplayer-info-panel-item-data"></span>
     </div>
+    <div class="dplayer-info-panel-mpeg2toh264 dplayer-info-panel-mpeg2toh264-hide">
+        <div class="dplayer-info-panel-heading">
+            <div class="dplayer-info-panel-item">
+                <span class="dplayer-info-panel-item-title">mpeg2toh264</span>
+            </div>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-mode">
+            <span class="dplayer-info-panel-item-title">Mode</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-deinterlace-mode">
+            <span class="dplayer-info-panel-item-title">Deinterlace Mode</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-conversion-state">
+            <span class="dplayer-info-panel-item-title">Conversion State</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-input-read">
+            <span class="dplayer-info-panel-item-title">Input Read</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-buffer-ahead">
+            <span class="dplayer-info-panel-item-title">Buffer Ahead</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-transport-stream">
+            <span class="dplayer-info-panel-item-title">Transport Stream</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-conversion-fps">
+            <span class="dplayer-info-panel-item-title">Conversion FPS</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-converted-frames">
+            <span class="dplayer-info-panel-item-title">Converted Frames</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-worker-time">
+            <span class="dplayer-info-panel-item-title">Worker Time</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-picture-workers">
+            <span class="dplayer-info-panel-item-title">Picture Workers</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-scan">
+            <span class="dplayer-info-panel-item-title">Scan</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <div class="dplayer-info-panel-item dplayer-info-panel-item-deinterlace">
+            <span class="dplayer-info-panel-item-title">Deinterlace</span>
+            <span class="dplayer-info-panel-item-data"></span>
+        </div>
+        <canvas class="dplayer-info-panel-conversion-chart" width="480" height="160"></canvas>
+    </div>
 </div>
 <div class="dplayer-menu">
     {{ each options.contextmenu }}
