@@ -91,6 +91,20 @@ declare class Template {
     infoDuration: HTMLElement;
     infoBufferRemain: HTMLElement;
     infoDownloadSpeed: HTMLElement;
+    infoMpeg2ToH264: HTMLElement;
+    infoMode: HTMLElement;
+    infoDeinterlaceMode: HTMLElement;
+    infoConversionState: HTMLElement;
+    infoBufferAhead: HTMLElement;
+    infoConversionFPS: HTMLElement;
+    infoConvertedFrames: HTMLElement;
+    infoTransportStream: HTMLElement;
+    infoWorkerTime: HTMLElement;
+    infoPictureWorkers: HTMLElement;
+    infoInputRead: HTMLElement;
+    infoScan: HTMLElement;
+    infoDeinterlace: HTMLElement;
+    infoConversionChart: HTMLCanvasElement;
     constructor(options: {
         container: HTMLElement;
         options: DPlayerType.OptionsInternal;
