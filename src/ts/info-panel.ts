@@ -294,14 +294,14 @@ class InfoPanel {
         // PlayerDeinterlacer does not publish yadif knobs; read them when this instance has them
         const deinterlacer = mpeg2toh264Player?.deinterlacer as Deinterlacer | null | undefined;
         if (deinterlacer && typeof deinterlacer.doubleRate === 'boolean') {
-            const cadence = this.mpeg2toh264DeinterlaceStats?.mode;
+            const filmDetected = this.mpeg2toh264DeinterlaceStats?.film;
             terms.push(`doublerate: ${deinterlacer.doubleRate ? 'on' : 'off'}`);
-            if (!deinterlacer.autoFilm) {
-                terms.push('autofilm: off');
-            } else if (cadence) {
-                terms.push(`autofilm: on (mode: ${cadence})`);
+            if (!deinterlacer.film) {
+                terms.push('film: off');
+            } else if (filmDetected !== undefined) {
+                terms.push(`film: on (mode: ${filmDetected ? 'film' : 'video'})`);
             } else {
-                terms.push('autofilm: on');
+                terms.push('film: on');
             }
         }
         return terms.join(' / ');

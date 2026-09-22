@@ -217,7 +217,7 @@ function createMpeg2ToH264DemoPlayer(options) {
                 deinterlacer: (video) => {
                     // Keep the concrete deinterlacer instance so the YADIF rate and film cadence remain independently switchable
                     deinterlacer = new window.mpeg2toh264.Deinterlacer(video, {
-                        autoFilm: options.autoFilm.checked,
+                        film: options.film.checked,
                         doubleRate: options.doubleRate.checked,
                         onStats: (stats) => {
                             options.deinterlaceStats = stats;
@@ -312,9 +312,9 @@ function createMpeg2ToH264DemoPlayer(options) {
             deinterlacer.doubleRate = options.doubleRate.checked;
         }
     };
-    options.autoFilm.onchange = () => {
+    options.film.onchange = () => {
         if (deinterlacer !== null) {
-            deinterlacer.autoFilm = options.autoFilm.checked;
+            deinterlacer.film = options.film.checked;
         }
     };
     renderStats();
@@ -357,7 +357,7 @@ document.getElementById('mpeg2toh264-live-play').onclick = () => {
         mediaSource: document.getElementById('mpeg2toh264-live-media-source'),
         yadif: document.getElementById('mpeg2toh264-live-yadif'),
         doubleRate: document.getElementById('mpeg2toh264-live-double-rate'),
-        autoFilm: document.getElementById('mpeg2toh264-live-auto-film'),
+        film: document.getElementById('mpeg2toh264-live-film'),
     });
     window.mpeg2toh264LivePlayer = livePlayer;
 };
@@ -384,7 +384,7 @@ function playRecording(url, label) {
         mediaSource: document.getElementById('mpeg2toh264-recording-media-source'),
         yadif: document.getElementById('mpeg2toh264-recording-yadif'),
         doubleRate: document.getElementById('mpeg2toh264-recording-double-rate'),
-        autoFilm: document.getElementById('mpeg2toh264-recording-auto-film'),
+        film: document.getElementById('mpeg2toh264-recording-film'),
     });
     window.mpeg2toh264RecordingPlayer = recordingPlayer;
 }
