@@ -232,7 +232,7 @@ class Danmaku {
             const ratioRate = 1.25; // magic!
             let ratio = this.container.offsetWidth / 1024 * ratioRate;
             if (ratio >= 1) ratio = 1; // ratio should not exceed 1
-            let itemFontSize = this.options.fontSize * ratio;
+            const itemFontSize = this.options.fontSize * ratio;
             const itemHeight = itemFontSize + (6 * ratio); // 6 is the vertical margin of danmaku
 
             const danWidth = this.container.offsetWidth;
@@ -313,12 +313,13 @@ class Danmaku {
                 // set danmaku size
                 // used to calculate danmaku width
                 // danmaku size doesn't affect itemHeight
+                let measureFontSize = itemFontSize;
                 switch (dan.size) {
                     case 'big':
-                        itemFontSize = itemFontSize * 1.25;
+                        measureFontSize = itemFontSize * 1.25;
                         break;
                     case 'small':
-                        itemFontSize = itemFontSize * 0.8;
+                        measureFontSize = itemFontSize * 0.8;
                         break;
                 }
 
@@ -326,7 +327,7 @@ class Danmaku {
                     let measure = 0;
                     // returns the width of the widest line
                     for (const line of dan.text.split('\n')) {
-                        const result = this._measure(line, itemFontSize);
+                        const result = this._measure(line, measureFontSize);
                         if (result > measure) {
                             measure = result;
                         }
