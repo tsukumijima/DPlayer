@@ -20,6 +20,8 @@ declare class InfoPanel {
     mpeg2toh264DeinterlaceStats: DeinterlaceStats | null;
     mpeg2toh264Deinterlacer: EventTarget | null;
     mpeg2toh264DeinterlaceListener: ((event: Event) => void) | null;
+    deinterlaceProgressSince: number | null;
+    mpeg2toh264DeinterlaceStalled: boolean;
     mpeg2toh264DownloadSpeedKBps: number | null;
     lastProgressAt: number;
     lastBytesRead: number;
