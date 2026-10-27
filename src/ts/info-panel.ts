@@ -8,6 +8,7 @@ import type { Deinterlacer, DeinterlaceStats } from 'mpeg2toh264/yadif';
 
 const CONVERSION_CHART_WINDOW_MS = 60_000;
 const DOWNLOAD_SPEED_STALE_MS = 1500;
+const DEINTERLACE_STATS_STALE_MS = 2500;
 const NTSC_FRAME_MS = 1001 / 30;
 
 interface ConversionChartSample {
@@ -29,6 +30,8 @@ class InfoPanel {
     mpeg2toh264DeinterlaceStats: DeinterlaceStats | null = null;
     mpeg2toh264Deinterlacer: EventTarget | null = null;
     mpeg2toh264DeinterlaceListener: ((event: Event) => void) | null = null;
+    deinterlaceProgressSince: number | null = null;
+    mpeg2toh264DeinterlaceStalled = false;
     mpeg2toh264DownloadSpeedKBps: number | null = null;
     lastProgressAt = 0;
     lastBytesRead = 0;
@@ -140,6 +143,18 @@ class InfoPanel {
         const mpeg2toh264Player = this.player.plugins.mpeg2toh264;
         this.template.infoMimeType.textContent = 'video/mp2t';
 
+        // Count missing stats only while video frames advance, excluding pauses and buffering
+        const video = this.player.video;
+        if (mpeg2toh264Player?.deinterlace === true && this.mpeg2toh264Deinterlacer !== null &&
+            !video.paused && !video.ended && !video.seeking && video.readyState >= 2 &&
+            (this.presentedFps ?? 0) > 0) {
+            this.deinterlaceProgressSince ??= performance.now();
+        } else {
+            this.deinterlaceProgressSince = null;
+        }
+        this.mpeg2toh264DeinterlaceStalled = this.deinterlaceProgressSince !== null &&
+            performance.now() - this.deinterlaceProgressSince > DEINTERLACE_STATS_STALE_MS;
+
         // mpeg2toh264 does not publish header FPS; measure frames the element actually presented
         this.template.infoVideoFPS.textContent =
             this.presentedFps === null ? 'N/A' : `${this.presentedFps.toFixed(3)}`;
@@ -237,7 +252,9 @@ class InfoPanel {
         }
 
         const deinterlace = this.mpeg2toh264DeinterlaceStats;
-        if (!deinterlace) {
+        if (this.mpeg2toh264DeinterlaceStalled) {
+            this.template.infoDeinterlace.textContent = 'stalled (no frame updates)';
+        } else if (!deinterlace) {
             this.template.infoDeinterlace.textContent =
                 mpeg2toh264Player?.deinterlace ? 'running' : 'off';
         } else {
@@ -288,13 +305,14 @@ class InfoPanel {
             return 'off';
         }
 
+        const stalled = this.mpeg2toh264DeinterlaceStalled;
         const terms = [
-            `on (state: ${running ? 'active' : 'idle'})`,
+            `on (state: ${stalled ? 'stalled' : running ? 'active' : 'idle'})`,
         ];
         // PlayerDeinterlacer does not publish yadif knobs; read them when this instance has them
         const deinterlacer = mpeg2toh264Player?.deinterlacer as Deinterlacer | null | undefined;
         if (deinterlacer && typeof deinterlacer.doubleRate === 'boolean') {
-            const filmDetected = this.mpeg2toh264DeinterlaceStats?.film;
+            const filmDetected = stalled ? undefined : this.mpeg2toh264DeinterlaceStats?.film;
             terms.push(`doublerate: ${deinterlacer.doubleRate ? 'on' : 'off'}`);
             if (!deinterlacer.film) {
                 terms.push('film: off');
@@ -381,6 +399,7 @@ class InfoPanel {
      */
     watchMpeg2ToH264Deinterlacer(deinterlacer: object): void {
         this.unwatchMpeg2ToH264Deinterlacer();
+        this.setMpeg2ToH264DeinterlaceStats(null);
         if (typeof (deinterlacer as EventTarget).addEventListener !== 'function') {
             return;
         }
@@ -403,6 +422,8 @@ class InfoPanel {
 
     setMpeg2ToH264DeinterlaceStats(stats: DeinterlaceStats | null): void {
         this.mpeg2toh264DeinterlaceStats = stats;
+        this.deinterlaceProgressSince = null;
+        this.mpeg2toh264DeinterlaceStalled = false;
     }
 
     resetMpeg2ToH264(): void {
@@ -411,7 +432,7 @@ class InfoPanel {
         this.mpeg2toh264State = null;
         this.mpeg2toh264Progress = null;
         this.mpeg2toh264PictureWorkers = null;
-        this.mpeg2toh264DeinterlaceStats = null;
+        this.setMpeg2ToH264DeinterlaceStats(null);
         this.mpeg2toh264DownloadSpeedKBps = null;
         this.lastProgressAt = 0;
         this.lastBytesRead = 0;
