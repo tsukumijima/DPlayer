@@ -15,6 +15,11 @@
 - `dist/` contains generated release files. Do not include changes to `dist/` in ordinary source or dependency-update commits. Update and commit these files only when a release or generated-output update is explicitly requested.
 - Pushing requires the user's explicit authorization. Permission to commit does not imply permission to push.
 
+## Release
+
+- Run `npm version patch` (or `minor` / `major`) on a clean working tree. It runs the type check and ESLint, updates the version in `package.json`, `package-lock.json`, and `Readme.md`, builds `dist/` with the new version, and creates the `chore: release vX.Y.Z` commit and the annotated `vX.Y.Z` tag.
+- After the user authorizes the push, run `git push origin master vX.Y.Z` and then `gh release create vX.Y.Z --generate-notes`.
+
 ## Verification
 
 - Run `npm run type-check` and `npm test` for TypeScript changes. `npm test` runs ESLint.

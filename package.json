@@ -36,7 +36,9 @@
         "format": "eslint \"**/*.ts\" --fix",
         "format:check": "eslint \"**/*.ts\"",
         "docs:dev": "vuepress dev docs",
-        "docs:build": "vuepress build docs"
+        "docs:build": "vuepress build docs",
+        "preversion": "npm run type-check && npm test",
+        "version": "node -e \"const fs = require('fs'); const { version } = require('./package.json'); fs.writeFileSync('Readme.md', fs.readFileSync('Readme.md', 'utf8').replace(/DPlayer#v[0-9.]+/, 'DPlayer#v' + version));\" && npm run build && git add Readme.md dist"
     },
     "dependencies": {
         "aribb24.js": "~1.11.5",
