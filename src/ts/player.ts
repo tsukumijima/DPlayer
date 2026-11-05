@@ -212,6 +212,13 @@ class DPlayer {
     sync(quiet = false): void {
         if (this.options.live) {
             const time = utils.getVideoDuration(this.video, this.template) - this.options.liveSyncMinBufferSize;
+
+            // the duration is NaN until the metadata is loaded, and play() syncs before that
+            // WebKit accepts a non-finite currentTime without throwing and keeps returning NaN afterwards, so TextTrack cues never fire
+            if (!Number.isFinite(time)) {
+                return;
+            }
+
             try {
                 this.video.currentTime = time;
             } catch (error) {
