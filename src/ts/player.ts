@@ -213,8 +213,10 @@ class DPlayer {
         if (this.options.live) {
             const time = utils.getVideoDuration(this.video, this.template) - this.options.liveSyncMinBufferSize;
 
-            // the duration is NaN until the metadata is loaded, and play() syncs before that
-            // WebKit accepts a non-finite currentTime without throwing and keeps returning NaN afterwards, so TextTrack cues never fire
+            // the duration is not known until the metadata is loaded, but play() syncs before that
+            // Chromium rejects a non-finite currentTime with a TypeError, while WebKit accepts it: during HAVE_NOTHING it stores NaN as the
+            // default playback start position and does not clear it on loadedmetadata, so currentTime keeps returning NaN and TextTrack cues never fire
+            // https://bugs.webkit.org/show_bug.cgi?id=260738
             if (!Number.isFinite(time)) {
                 return;
             }
